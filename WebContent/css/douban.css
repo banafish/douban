@@ -274,6 +274,10 @@ h1 a{
     height: 26px;
     padding-left: 5px;
 }
+
+input:-webkit-autofill { 
+	box-shadow: 0 0 0px 1000px white inset !important;
+}
 .header_down fieldset .item_password input{
     display: block;
     width: 260px;
@@ -282,9 +286,16 @@ h1 a{
 }
 .header_down fieldset .item_num input{
     display: block;
-    width: 260px;
+    width: 170px;
     height: 26px;
     padding-left: 5px;
+}
+.header_down fieldset .item_num img{
+    width: 80px;
+    height: 40px;
+    position: absolute;
+    right: 13px;
+    top: 97px;
 }
 .header_down fieldset .item_password .item_help{
     width: 48px;
@@ -294,15 +305,15 @@ h1 a{
     top: 68px;
     
 }
-.header_down fieldset .item_num .item_getnum{
+.header_down fieldset .item_num .item_reflesh{
 	font-size: 13px;
     width: 80px;
     height: 26px;
     position: absolute;
-    right: 1px;
+    right: 50px;
     top: 110px;   
 }
-.item_getnum a{
+.item_reflesh a{
 	color:#00ff00;
 }
 .item_help a{
@@ -314,24 +325,12 @@ h1 a{
 }
 .item_login input{
     background-color: #30A080;
-    width: 133px;
+    width: 270px;
     height: 30px;
     border: 0px;
     border-radius: 3px;
     color: white;
     cursor: pointer;
-}
-.register_login input{
-    position: absolute;
-    right: 10px;
-    top: 140px;
-    width: 133px;
-    height: 30px;
-    border-radius: 3px;
-    color: #30A080;
-    border: 1px solid #30A080;
-    cursor: pointer;
-    text-align: center;
 }
 .others{
     font-size: 13px;
@@ -366,4 +365,8 @@ h1 a{
     position: absolute;
     right: 10px;
     top: 175px;
+}
+.others a.register{
+	position: absolute;
+    right: 15px;
 }

@@ -1,0 +1,173 @@
+@CHARSET "UTF-8";
+
+html {
+	color: #111;
+	width: 100%;
+	height: 100%;
+	background-color: #fff
+}
+
+body, button, div, fieldset, form, h1, h2, h3, h4, h5, h6, input, legend,
+	li, textarea, ul {
+	margin: 0;
+	padding: 0
+}
+
+textarea {
+	resize: none
+}
+
+a:active, a:hover, input[type=number]:focus, input[type=password]:focus,
+	input[type=phone]:focus, input[type=text]:focus, textarea:focus {
+	outline: none
+}
+
+button, input[type=button], input[type=submit] {
+	border: none;
+	background-color: transparent;
+	-webkit-appearance: none;
+	font-size: 13px;
+	outline: none;
+	cursor: pointer
+}
+
+label {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none
+}
+
+a {
+	cursor: pointer
+}
+
+body {
+	font: normal 13px/1.618 Helvetica, Arial, Hiragino Sans GB, Microsoft
+		YaHei, WenQuanYi Micro Hei, sans-serif;
+	min-height: 100%;
+	color: #333
+}
+
+a {
+	text-decoration: none;
+	border: none;
+	tap-highlight-color: transparent
+}
+
+a img {
+	border-width: 0;
+	vertical-align: middle
+}
+
+a:focus, button, input {
+	outline: 0
+}
+
+.mrg0 {
+	margin: 0
+}
+
+.account-form-raw {
+	margin-bottom: 20px;
+	position: relative
+}
+
+.account-form-raw:after {
+	content: "";
+	clear: both
+}
+
+.account-form-label {
+	float: left;
+	line-height: 40px;
+	height: 40px;
+	width: 60px;
+	font-size: 13px
+}
+
+.account-form-field {
+	position: relative;
+	margin-bottom: 10px;
+	margin: 0;
+	width: 350px;
+	display: inline-block
+}
+
+
+.account-form-input {
+	width: 280px;
+	font-size: 13px;
+	padding: 10px;
+	border-radius: 3px;
+	box-sizing: border-box;
+	border: 1px solid #e4e6e5
+}
+
+.account-form-error {
+	position: absolute;
+	top: -10px;
+	left: 0
+}
+
+.account-form-error .fatal-msg {
+	color: #fe2617
+}
+
+.account-form-error .error-msg {
+	color: #ccc
+}
+
+.account-form-error .info-msg {
+	color: #41ac52
+}
+
+.account-form-field-submit {
+	position: relative;
+	width: 280px;
+	margin-left: 60px;
+	padding-top: 20px
+}
+
+.account-form-field-submit.mrg0 {
+	margin: 0
+}
+
+.account-form .confirm {
+	display: inline-block;
+	height: 36px;
+	padding: 0 35px;
+	border-radius: 3px;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 36px;
+	text-align: center;
+	outline: 0;
+	cursor: poiter;
+	background-color: #41ac52
+}
+
+.account-side h2 {
+	font-size: 15px;
+	color: #072;
+	margin: 0 0 12px;
+	line-height: 150%
+}
+
+.aside-link a {
+	color: #37a;
+	font-size: 14px
+}
+
+.account-form-label {
+	display: block;
+	width: 100%;
+	font-weight: 700
+}
+
+.account-form-field-tip {
+	display: block;
+	margin-top: 10px;
+	color: #9b9b9b
+}
