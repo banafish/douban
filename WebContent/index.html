@@ -3,7 +3,7 @@
 <head>
 <title>豆瓣</title>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="css/douban.css">
+<link rel="stylesheet" type="text/css" href="css/index.css">
 <script type="text/javascript">
 	function validateForm() {
 		var form = document.getElementById("form");
@@ -14,9 +14,12 @@
 		} else if (form.password.value.length < 6) {
 			alert("密码至少6个字符");
 			return false;
-		}else {
+		} else if (form.num.value.length > 4 || form.num.value.length < 1) {
+			alert("验证码必须为四位");
+			return false;
+		} else {
 			return true;
-		}	
+		}
 	}
 </script>
 </head>
@@ -85,8 +88,8 @@
 						</div>
 					</div>
 					<div class="item item_num">
-						<input type="text" name="num" placeholder="验证码 ">
-						<img src="verifyCodeServlet" id="verify_image">
+						<input type="text" name="num" placeholder="验证码 "> <img
+							src="verifyCodeServlet" id="verify_image">
 						<div class="item_reflesh">
 							<a href="index.html">刷新</a>
 						</div>
@@ -95,8 +98,8 @@
 						<input type="submit" value="登录豆瓣">
 					</div>
 					<div class="others">
-						<input type="checkbox" name="item_remember">下次自动登录
-						<a href="#" class="forget">忘记密码</a>
+						<input type="checkbox" name="item_remember">下次自动登录 <a
+							href="#" class="forget">忘记密码</a>
 						<ul class="item_ul">
 							<li class="item_li_first"><a href="#" target="_blank"></a></li>
 							<li class="item_li_last"><a href="#" target="_blank"></a></li>

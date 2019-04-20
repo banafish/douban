@@ -1,9 +1,11 @@
 package com.xxm.douban.service;
 
+import com.xxm.douban.bean.Msg;
 import com.xxm.douban.dao.AccountDAO;
 import com.xxm.douban.entity.Account;
 
 public class UserService {
+  
 	private AccountDAO accountDAO;
 
 	public UserService(AccountDAO userDAO) {
@@ -11,13 +13,13 @@ public class UserService {
 	}
 
 	// 添加用户
-	public void add(Account account) {
-		accountDAO.addAccount(account);
+	public Msg register(Account account) {
+		return accountDAO.register(account);
 	}
 
-	// 添加用户
-	public void login(Account account) {
-		accountDAO.login(account);
+	// 登录
+	public Msg login(Account account) {
+		return accountDAO.login(account);
 	}
 
 }

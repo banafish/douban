@@ -24,7 +24,6 @@ public class DoubanListener implements ServletContextListener{
 			DataSource dataSource = (DataSource) envContext.lookup("jdbc/douban");
 			ServletContext context = sce.getServletContext();
 			context.setAttribute("userService", new UserService(new AccountDAOJdbcImpl(dataSource)));
-			context.setAttribute("account", new Account());
 		} catch (NamingException e) {
 			throw new RuntimeException(e);
 		}

@@ -4,40 +4,27 @@
 <meta charset="UTF-8">
 
 <title>注册豆瓣帐号</title>
-<style type="text/css">
-#db-nav-sns {
-	position: relative;
-	zoom: 1;
-	background: #edf4ed;
-}
-
-#db-nav-sns .nav-primary {
-	width: 1040px;
-	margin: 0 auto;
-	overflow: hidden;
-	padding: 22px 0 20px;
-	zoom: 1;
-}
-
-.account-wrap {
-	width: 1040px;
-	margin: 20px auto 0;
-	overflow: hidden;
-}
-
-.account-main {
-	float: left;
-	width: 590px;
-}
-
-.account-side {
-	float: right;
-	width: 310px;
-	color: #666;
-}
-</style>
 
 <link type="text/css" rel="stylesheet" href="css/register.css">
+
+<script type="text/javascript">
+	function validateForm() {
+		var form = document.getElementById("form");
+		var mail = /^[A-Za-z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+		if (!mail.test(form.email.value)) {
+			document.getElementById("error").innerHTML = "邮箱地址无效";
+			return false;
+		} else if (form.password.value.length < 6) {
+			document.getElementById("error").innerHTML = "密码至少6个字符";
+			return false;
+		} else if (form.nick.value.length > 7 || form.nick.value.length < 1) {
+			document.getElementById("error").innerHTML = "昵称过长或为空";
+			return false;
+		} else {
+			return true;
+		}	
+	}
+</script>
 
 </head>
 <body>
@@ -57,37 +44,47 @@
 			<div class="account-main">
 
 				<h1>注册豆瓣帐号</h1>
-				<div class="tips">创建密码，设置昵称</div>
+				<div class="tips">输入邮箱，创建密码，设置昵称</div>
 				<div class="account-form">
-				<form id="form" method="post" action="#" onsubmit="return validateForm();">
-					<div class="account-form-raw">
-						<label class="account-form-label">设置密码：</label>
-						<div class="account-form-field">
-							<input id="password" type="password" name="password"
-								maxlength="20" class="account-form-input password"
-								placeholder="密码" tabindex="3" aria-autocomplete="list">
-							<span class="icon openpwd hide"></span> <span
-								class="account-form-field-tip">密码至少6个字符</span>
+					<form id="form" method="post" action="register"
+						onsubmit="return validateForm();">
+						<div class="account-form-raw">
+							<label class="account-form-label">输入邮箱：</label>
+							<div class="account-form-field">
+								<input id="email" name="email" type="text"
+									class="account-form-input" placeholder="邮箱" tabindex="2">
+								<span class="account-form-field-tip">请输入有效邮箱地址</span>
+							</div>
+
+						</div>
+						<div class="account-form-raw">
+							<label class="account-form-label">设置密码：</label>
+							<div class="account-form-field">
+								<input id="password" type="password" name="password"
+									maxlength="20" class="account-form-input password"
+									placeholder="密码" tabindex="3" aria-autocomplete="list">
+								<span class="icon openpwd hide"></span> <span
+									class="account-form-field-tip">密码至少6个字符</span>
+							</div>
+
+						</div>
+						<div class="account-form-raw">
+							<label class="account-form-label">设置昵称：</label>
+							<div class="account-form-field">
+								<input id="nick" name="nick" type="text"
+									class="account-form-input" maxlength="14" placeholder="昵称"
+									tabindex="1"> <span class="account-form-field-tip">昵称最多7个中文字符</span>
+							</div>
+
 						</div>
 
-					</div>
-					<div class="account-form-raw">
-						<label class="account-form-label">设置昵称：</label>
-						<div class="account-form-field">
-							<input id="nick" name="nick" type="text"
-								class="account-form-input" maxlength="14" placeholder="昵称"
-								tabindex="1"> <span class="account-form-field-tip">昵称最多7个中文字符</span>
+						<div class="account-form-field-submit mrg0">
+							<div class="account-form-error">
+								<span id="error"></span>
+							</div>
+							<input type="submit" class="confirm" value="确定">
 						</div>
-
-					</div>
-
-					<div class="account-form-field-submit mrg0">
-						<div class="account-form-error">
-							<span></span>
-						</div>
-						<input type="submit" class="confirm" value="确定">
-					</div>
-				</form>
+					</form>
 				</div>
 
 			</div>

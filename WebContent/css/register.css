@@ -1,5 +1,34 @@
 @CHARSET "UTF-8";
+#db-nav-sns {
+	position: relative;
+	zoom: 1;
+	background: #edf4ed;
+}
 
+#db-nav-sns .nav-primary {
+	width: 1040px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 22px 0 20px;
+	zoom: 1;
+}
+
+.account-wrap {
+	width: 1040px;
+	margin: 20px auto 0;
+	overflow: hidden;
+}
+
+.account-main {
+	float: left;
+	width: 590px;
+}
+
+.account-side {
+	float: right;
+	width: 310px;
+	color: #666;
+}
 html {
 	color: #111;
 	width: 100%;
@@ -110,16 +139,8 @@ a:focus, button, input {
 	left: 0
 }
 
-.account-form-error .fatal-msg {
+.account-form-error span {
 	color: #fe2617
-}
-
-.account-form-error .error-msg {
-	color: #ccc
-}
-
-.account-form-error .info-msg {
-	color: #41ac52
 }
 
 .account-form-field-submit {
