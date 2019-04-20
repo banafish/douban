@@ -16,8 +16,8 @@ import com.xxm.douban.service.UserService;
 /**
  * Servlet implementation class Register
  */
-@WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "index.html"),
-		@WebInitParam(name = "ERROR_VIEW", value = "register.html") })
+@WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "index.jsp"),
+		@WebInitParam(name = "ERROR_VIEW", value = "register.jsp") })
 public class Register extends HttpServlet {
 	private String SUCCESS_VIEW;
 	private String ERROR_VIEW;
@@ -36,13 +36,15 @@ public class Register extends HttpServlet {
 		account.setEmail(request.getParameter("email"));
 		account.setName(request.getParameter("nick"));
 		account.setPassword(request.getParameter("password"));
-	
-		// 把account属性加到session
-		session.setAttribute("account", account);
 
 		UserService userService = (UserService) getServletContext().getAttribute("userService");
 		Msg msg = userService.register(account);
-		System.out.println(msg.getResult());
-		request.getRequestDispatcher(SUCCESS_VIEW).forward(request, response);
+		if (msg.getResult().equals("注册成功")) {
+			// 把account属性加到session
+			session.setAttribute("account", account);
+			request.getRequestDispatcher(SUCCESS_VIEW).forward(request, response);
+		}
+		
+		response.sendRedirect(ERROR_VIEW);
 	}
 }

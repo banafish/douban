@@ -32,9 +32,11 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 			stmt.setString(1, account.getName());
 			stmt.setString(2, account.getPassword());
 			stmt.setString(3, account.getEmail());
-			stmt.executeUpdate();
-			
-			return new Msg("注册成功", null);
+
+			// 判断执行插入语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("注册成功", null);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

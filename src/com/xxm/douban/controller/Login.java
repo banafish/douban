@@ -16,8 +16,8 @@ import com.xxm.douban.service.UserService;
 /**
  * Servlet implementation class Login
  */
-@WebServlet(urlPatterns = { "/login" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "register.html"),
-		@WebInitParam(name = "ERROR_VIEW", value = "index.html") })
+@WebServlet(urlPatterns = { "/login" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "register.jsp"),
+		@WebInitParam(name = "ERROR_VIEW", value = "index.jsp") })
 public class Login extends HttpServlet {
 	private String SUCCESS_VIEW;
 	private String ERROR_VIEW;

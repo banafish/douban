@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title>豆瓣</title>
@@ -9,13 +10,13 @@
 		var form = document.getElementById("form");
 		var mail = /^[A-Za-z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 		if (!mail.test(form.email.value)) {
-			alert("不是一个有效的 e-mail 地址");
+			document.getElementById("error").innerHTML = "邮箱地址无效";
 			return false;
 		} else if (form.password.value.length < 6) {
-			alert("密码至少6个字符");
+			document.getElementById("error").innerHTML = "密码至少6个字符";
 			return false;
 		} else if (form.num.value.length > 4 || form.num.value.length < 1) {
-			alert("验证码必须为四位");
+			document.getElementById("error").innerHTML = "验证码必须为四位";
 			return false;
 		} else {
 			return true;
@@ -74,6 +75,9 @@
 			</div>
 		</div>
 		<div class="field">
+			<div class="account-form-error">
+				<span id="error">${ requestScope.msg.result }</span>
+			</div>
 			<form id="form" method="post" action="login"
 				onsubmit="return validateForm();">
 				<fieldset>
