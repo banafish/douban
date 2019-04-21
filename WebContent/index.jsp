@@ -95,7 +95,7 @@
 						<input type="text" name="num" placeholder="验证码 "> <img
 							src="verifyCodeServlet" id="verify_image">
 						<div class="item_reflesh">
-							<a href="index.html">刷新</a>
+							<a href="index.jsp">刷新</a>
 						</div>
 					</div>
 					<div class="item_login">
@@ -108,7 +108,7 @@
 							<li class="item_li_first"><a href="#" target="_blank"></a></li>
 							<li class="item_li_last"><a href="#" target="_blank"></a></li>
 						</ul>
-						<a href="register.html" class="register">没有账号？去注册</a>
+						<a href="register.jsp" class="register">没有账号？去注册</a>
 					</div>
 				</fieldset>
 			</form>

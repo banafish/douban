@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Account;
 import com.xxm.douban.service.UserService;
+import com.xxm.douban.util.EncrypMD5Util;
 
 /**
  * Servlet implementation class Login
@@ -48,7 +49,7 @@ public class Login extends HttpServlet {
 
 		Account account = new Account();
 		account.setEmail(request.getParameter("email"));
-		account.setPassword(request.getParameter("password"));
+		account.setPassword(EncrypMD5Util.getMD5String(request.getParameter("password")));
 		
 		UserService userService = (UserService) getServletContext().getAttribute("userService");
 		msg = userService.login(account);
