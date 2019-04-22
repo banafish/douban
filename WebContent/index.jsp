@@ -103,7 +103,7 @@
 					</div>
 					<div class="others">
 						<input type="checkbox" name="item_remember">下次自动登录 <a
-							href="#" class="forget">忘记密码</a>
+							href="forgetPassword.jsp" class="forget">忘记密码</a>
 						<ul class="item_ul">
 							<li class="item_li_first"><a href="#" target="_blank"></a></li>
 							<li class="item_li_last"><a href="#" target="_blank"></a></li>

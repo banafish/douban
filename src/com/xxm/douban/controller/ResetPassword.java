@@ -15,11 +15,12 @@ import com.xxm.douban.service.UserService;
 import com.xxm.douban.util.EncrypMD5Util;
 
 /**
- * Servlet implementation class Register
+ * Servlet implementation class ResetPassword
  */
-@WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "index.jsp"),
+@WebServlet(urlPatterns = { "/resetPassword" }, initParams = {
+		@WebInitParam(name = "SUCCESS_VIEW", value = "index.jsp"),
 		@WebInitParam(name = "ERROR_VIEW", value = "register.jsp") })
-public class Register extends HttpServlet {
+public class ResetPassword extends HttpServlet {
 	private String SUCCESS_VIEW;
 	private String ERROR_VIEW;
 
@@ -31,22 +32,18 @@ public class Register extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession(); 
-		
+	
 		Account account = new Account();
-		account.setEmail(request.getParameter("email"));
-		account.setName(request.getParameter("nick"));
+		account.setEmail((String) request.getSession().getAttribute("email"));
 		account.setPassword(EncrypMD5Util.getMD5String(request.getParameter("password")));
-
+		
 		UserService userService = (UserService) getServletContext().getAttribute("userService");
-		Msg msg = userService.register(account);
-		if (msg.getResult().equals("注册成功")) {
-			// 把account属性加到session
-			session.setAttribute("account", account);
-			request.getRequestDispatcher(SUCCESS_VIEW).forward(request, response);
+		Msg msg = userService.resetPassword(account);
+		if (msg.getResult().equals("重置密码成功")) {
+			response.sendRedirect(SUCCESS_VIEW);
 		} else {
 			response.sendRedirect(ERROR_VIEW);
 		}
-		
 	}
+
 }

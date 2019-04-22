@@ -78,4 +78,54 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 		return new Msg("该用户不存在", null);
 	}
 
+	//重置密码
+	@Override
+	public Msg resetPassword(Account account) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "update t_account set password = ? where email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, account.getPassword());
+			stmt.setString(2, account.getEmail());
+
+			// 判断执行插入语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("重置密码成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("重置密码失败", null);
+	}
+
+	//判断是否存在该用户
+	@Override
+	public Msg isExistAccount(String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select email from t_account where email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {				
+				return new Msg("存在", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("该邮箱未注册", null);
+	}
+
 }
