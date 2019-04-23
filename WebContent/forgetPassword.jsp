@@ -6,7 +6,6 @@
 
 <title>找回密码</title>
 
-<link type="text/css" rel="stylesheet" href="css/register.css">
 <link type="text/css" rel="stylesheet" href="css/forgetPassword.css">
 <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script>
@@ -41,6 +40,7 @@
 			return true;
 		}	
 	}
+	
 </script>
 </head>
 <body>

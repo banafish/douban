@@ -6,6 +6,10 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/index.css">
 <script type="text/javascript">
+	function refreshcode(){
+	    document.getElementById("verify_image").src="verifyCodeServlet?a="+Math.random()+100;
+	    return true;
+	}
 	function validateForm() {
 		var form = document.getElementById("form");
 		var mail = /^[A-Za-z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
@@ -92,11 +96,8 @@
 						</div>
 					</div>
 					<div class="item item_num">
-						<input type="text" name="num" placeholder="验证码 "> <img
-							src="verifyCodeServlet" id="verify_image">
-						<div class="item_reflesh">
-							<a href="index.jsp">刷新</a>
-						</div>
+						<input type="text" name="num" placeholder="验证码 "> 
+						<img src="verifyCodeServlet" id="verify_image" onclick="return refreshcode()"/>
 					</div>
 					<div class="item_login">
 						<input type="submit" value="登录豆瓣">
