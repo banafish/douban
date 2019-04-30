@@ -1,0 +1,178 @@
+body {
+	background-color: #333;
+	color: #fff;
+}
+
+.content {
+	margin-bottom: 100px;
+	margin-top: 50px;
+	margin-left: 250px;
+	margin-right: 300px;
+}
+
+.content-title {
+	margin-left: 55px
+}
+
+.content-title-input {
+	color: #fff;
+	background: transparent;
+	overflow: hidden; 
+	height: 20px;
+	width: 870px;
+}
+
+#editor {
+	resize: vertical;
+	overflow: auto;
+	border: 1px solid silver;
+	border-radius: 5px;
+	min-height: 200px;
+	box-shadow: inset 0 0 10px silver;
+	padding: 14px;
+}
+
+.fileupload-box {
+	margin-left: 50px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 14px;
+	border: 2px dashed gainsboro;
+	height: 180px;
+	width: 865px;
+	position: relative
+}
+
+.fileupload-box p {
+	margin: 5px 0 0 5px;
+}
+
+.img-box {
+	position: absolute;
+	height: 120px;
+	left: 0;
+	right: 0;
+	top: 10px;
+	bottom: 0;
+	margin: auto;
+}
+
+.img-box img {
+	margin-left: 10px;
+	display: inline-block;
+	width: 120px;
+	height: 120px;
+}
+
+/* .roundedTwo */
+.roundedTwo {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  margin: 3px auto;
+  background: #fcfff4;
+  background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  -moz-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+}
+.roundedTwo label {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  cursor: pointer;
+  background: -moz-linear-gradient(top, #222222 0%, #45484d 100%);
+  background: -webkit-linear-gradient(top, #222222 0%, #45484d 100%);
+  background: linear-gradient(to bottom, #222222 0%, #45484d 100%);
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px white;
+  -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px white;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px white;
+}
+.roundedTwo label:after {
+  content: '';
+  width: 9px;
+  height: 5px;
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  border: 3px solid #fcfff4;
+  border-top: none;
+  border-right: none;
+  background: transparent;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.roundedTwo label:hover::after {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+  opacity: 0.3;
+}
+.roundedTwo input[type=checkbox] {
+  visibility: hidden;
+}
+.roundedTwo input[type=checkbox]:checked + label:after {
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+}
+
+/* end .roundedTwo */
+
+.content-nav {
+  text-align: center;
+  /*border-bottom: 1px solid gray;*/
+  
+}
+.content-nav section {
+  width: 80px;
+  height: 80px;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  margin-top: 5px;
+  border: 1px solid gray;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+.content-nav section:before {
+  content: 'click it';
+  color: #bbb;
+  font-size: 12px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 0px 1px black;
+}
+.content-nav section:after {
+  content: attr(title);
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 3px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 0px 1px black;
+}
+.btn-summit {
+	margin: 10px;
+	color: #fff;
+	border: 5px;
+	background:transparent
+}

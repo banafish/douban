@@ -1,0 +1,406 @@
+#db-global-nav {
+	font: 12px Helvetica, Arial, sans-serif;
+	line-height: 1.62;
+	font-size: 12px;
+}
+
+#db-global-nav ul {
+	margin: 0;
+	padding: 0;
+}
+
+#db-global-nav table, #db-global-nav td, #db-global-nav th {
+	font-size: 12px;
+}
+
+#db-global-nav a {
+	cursor: pointer;
+	text-decoration: none;
+}
+
+#db-global-nav .bn-more span {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	vertical-align: baseline;
+}
+
+#db-global-nav .arrow {
+	position: relative;
+	top: -2px;
+	left: 2px;
+	border-width: 3px 3px 0;
+	border-color: #d5d5d5 transparent transparent transparent;
+	border-style: solid dashed dashed dashed;
+	width: 0;
+	height: 0;
+	font-size: 0;
+	line-height: 0;
+}
+
+#db-global-nav a:hover .arrow {
+	*top: 0;
+	border-color: #fff transparent transparent transparent;
+}
+
+.nav-user-account {
+	position: relative;
+}
+
+.more-items {
+	position: absolute;
+	z-index: 1;
+} 
+
+#db-global-nav .more-items a:link, #db-global-nav .more-items a:visited
+	{
+	color: #3d3d3d;
+}
+
+#db-global-nav .more-items a:hover {
+	color: #3d3d3d;
+	background-color: #44eb08;
+}
+
+#db-global-nav {
+	height: 28px;
+	color: #d5d5d5;
+	background-color: #545652;
+	min-width: 950px;
+}
+
+#db-global-nav a:link, #db-global-nav a:visited, #db-global-nav a:hover,
+	#db-global-nav a:active {
+	color: #d5d5d5;
+}
+
+#db-global-nav a:hover, #db-global-nav a:active {
+	color: #44eb08;
+	background-color: transparent;
+}
+
+#db-global-nav .global-nav-items {
+	font-size: 0;
+}
+
+#db-global-nav .global-nav-items li {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	line-height: 28px;
+	font-size: 12px;
+	vertical-align: baseline;
+}
+
+#db-global-nav .global-nav-items a {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	padding: 0 12px;
+	height: 28px;
+}
+
+#db-global-nav .top-nav-info {
+	float: right;
+	margin: 0 12px 0 0;
+	line-height: 28px;
+}
+
+#db-global-nav .top-nav-info ul, #db-global-nav .top-nav-info li {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+}
+
+#db-global-nav .top-nav-info a {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	margin: 0;
+	padding: 0 12px;
+	height: 28px;
+}
+
+#db-global-nav .top-nav-reminder {
+	position: relative;
+	float: right;
+	margin-right: 5px;
+	line-height: 28px;
+}
+
+#db-global-nav .top-nav-reminder a {
+	position: relative;
+}
+
+#db-global-nav .top-nav-doubanapp {
+	position: relative;
+	float: right;
+	margin-right: 5px;
+	line-height: 28px;
+}
+
+#db-global-nav .top-nav-doubanapp .lnk-doubanapp {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	padding: 0 8px;
+	height: 28px;
+}
+
+body, div, dl, dt, dd, ul, li, h1, h2, h3, h4, h5, h6, pre, code, form,
+	fieldset, legend, input, button, textarea, blockquote {
+	margin: 0;
+	padding: 0
+}
+
+a:link {
+	color: #37a;
+	text-decoration: none
+}
+
+a:hover {
+	color: #fff;
+	text-decoration: none;
+	background: #37a
+}
+
+.nav {
+	overflow: hidden;
+	width: 100%;
+	min-width: 1040px;
+	zoom: 1;
+	margin-bottom: 50px;
+}
+
+.nav .nav-wrap {	
+	border-bottom: 1px solid #e5ebe4;
+}
+
+.nav .nav-primary, .nav .nav-secondary {
+	width: 1040px;
+	margin: 0 auto;
+	padding-bottom: 0;
+	overflow: hidden;
+	zoom: 1;
+}
+
+.nav .nav-primary {
+	position: relative;
+	padding: 10px 0 5px;
+	overflow: hidden;
+	zoom: 1;
+}
+
+.nav .nav-logo {
+	float: left;
+	height: 56px;
+	width: 145px;
+	margin: 0 13px 0 0;
+	background: url(images/logo_db.png) no-repeat 0 12px;
+}
+
+.nav .nav-logo a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	line-height: 100em;
+}
+
+.nav .nav-logo a:hover, .nav .nav-logo a:active {
+	background: none !important;
+}
+
+.nav-search {
+	position: relative;
+	overflow: hidden;
+	zoom: 1;
+	padding: 10px 0 15px 0;
+}
+
+.nav-search input {
+	-webkit-appearance: none;
+	border: none;
+	background: transparent;
+}
+
+.nav-search label {
+	position: absolute;
+	left: 11px;
+	top: 10px;
+	line-height: 30px;
+	cursor: text;
+	color: #bbb;
+	width: auto;
+}
+
+.nav-search ::-webkit-input-placeholder {
+	/* WebKit browsers */
+	color: #bbb;
+}
+
+.nav-search .inp {
+	float: left;
+	width: 470px;
+	height: 34px;
+	text-align: center;
+	_margin-right: -3px;
+	cursor: text;
+	background: url("images/bn_srh_1.png") no-repeat 0 0;
+}
+
+.nav-search .inp input {
+	background: #fff;
+	width: 96%;
+	margin: 0;
+	text-align: left;
+	height: 30px;
+	padding-left: 10px;
+	height: 28px\9;
+	line-height: 28px\9;
+	outline: none;
+}
+
+.nav-search legend {
+	display: none;
+}
+
+.nav-search fieldset {
+	border: none;
+	padding: 0;
+	margin: 0;
+	position: static;
+}
+
+.nav-search .inp-btn input {
+	width: 100%;
+	height: 100%;
+	font-size: 0;
+	padding: 35px 0 0 0;
+	overflow: hidden;
+	background: url("images/bn_srh_1.png") no-repeat 0 -40px;
+	color: transparent;
+	cursor: pointer;
+}
+
+.nav-search .inp-btn input:hover {
+	background-position: -40px -40px;
+}
+
+#db-nav-sns {
+	position: relative;
+	zoom: 1;
+	background: #edf4ed;
+}
+
+#db-nav-sns a:link, #db-nav-sns a:visited {
+	color: #072;
+}
+
+#db-nav-sns a:hover, #db-nav-sns a:active {
+	background-color: #072;
+	color: #fff;
+}
+
+#db-nav-sns li {
+	display: inline;
+}
+
+#db-nav-sns .nav-wrap {
+	border: none;
+}
+
+#db-nav-sns .nav-primary {
+	overflow: hidden;
+	padding-top: 12px;
+	zoom: 1;
+}
+
+#db-nav-sns .nav-search {
+	position: absolute;
+	right: 0;
+	*width: 282px;
+}
+
+#db-nav-sns .nav-logo {
+	width: 184px;
+	height: 57px;
+	background-position: 0 10px;
+}
+
+#db-nav-sns label {
+	line-height: 28px;
+}
+
+#db-nav-sns .inp {
+	width: 278px;
+	height: 28px;
+	background: #fff;
+	border: 1px solid #e1e9e1;
+	text-align: left;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	border-radius: 0;
+}
+
+#db-nav-sns .inp input {
+	margin: 0;
+	width: 242px;
+	height: 28px;
+	line-height: "26px	";
+}
+
+#db-nav-sns .inp-btn {
+	position: absolute;
+	left: auto;
+	top: 10px;
+	right: 0;
+	width: 30px;
+	height: 28px;
+	*height: 30px;
+	border: 1px solid #e1e9e1;
+	border-left: none;
+	background-color: #fff;
+	font-size: 0;
+	overflow: hidden;
+}
+
+#db-nav-sns .inp-btn {
+	position: absolute;
+	left: auto;
+	top: 10px;
+	right: 0;
+	width: 30px;
+	height: 28px;
+	*height: 30px;
+	border: 1px solid #e1e9e1;
+	border-left: none;
+	background-color: #fff;
+	font-size: 0;
+	overflow: hidden;
+}
+
+#db-nav-sns .inp-btn input {
+	width: 30px;
+	height: 28px;
+	*height: 30px;
+	padding: 0;
+	margin: 0;
+	line-height: 100px;
+	background: transparent url(images/bn_srh_1.png) no-repeat 50% 50%;
+}
+
+#db-nav-sns .nav-items {
+	float: left;
+	margin-top: 15px;
+}
+
+#db-nav-sns .nav-items li {
+	margin-right: 20px;
+	font-size: 16px;
+}
+
+#db-nav-sns .nav-items li a {
+	position: relative;
+}

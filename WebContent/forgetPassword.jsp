@@ -49,7 +49,7 @@
 		<div id="db-nav-sns" class="nav">
 			<div class="nav-wrap">
 				<div class="nav-primary">
-					<a href=""> <img src="images/logo_db.png" width="142" alt="豆瓣">
+					<a href=""> <img src="css/images/logo_db.png" width="142" alt="豆瓣">
 					</a>
 				</div>
 			</div>

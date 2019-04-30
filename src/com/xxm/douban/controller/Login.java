@@ -17,7 +17,7 @@ import com.xxm.douban.util.EncrypMD5Util;
 /**
  * Servlet implementation class Login
  */
-@WebServlet(urlPatterns = { "/login" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "register.jsp"),
+@WebServlet(urlPatterns = { "/login" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "homePage.jsp"),
 		@WebInitParam(name = "ERROR_VIEW", value = "index.jsp") })
 public class Login extends HttpServlet {
 	private String SUCCESS_VIEW;
