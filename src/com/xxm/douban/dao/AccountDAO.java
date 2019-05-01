@@ -12,4 +12,8 @@ public interface AccountDAO {
 	
 	Msg isExistAccount(String email);//判断是否存在该用户
 	
+	Msg addAvatar(String pic, String email);//添加头像
+	
+	Msg addSign(String sign, String email);//添加签名
+	
 }

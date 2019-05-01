@@ -69,10 +69,10 @@
 			<a href="#" class="link_app">下载豆瓣 App</a>
 			<div class="app_qr">
 				<a href="#" class="app_qr_a"> <img
-					src="images/icon_qrcode_green.png" alt="app_qr">
+					src="css/images/icon_qrcode_green.png" alt="app_qr">
 				</a>
 				<div class="app_qr_expand">
-					<img src="./images/doubanapp_qrcode.png" alt=""
+					<img src="css/images/doubanapp_qrcode.png" alt=""
 						class="app_qrExpand">
 					<p>iOS / Android 扫码直接下载</p>
 				</div>

@@ -1,6 +1,6 @@
 package com.xxm.douban.entity;
 
-public class Article1 {
+public class Article {
 	
 	private String user_email;//用户邮箱
 	

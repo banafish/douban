@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Account;
-import com.xxm.douban.entity.Article1;
+import com.xxm.douban.entity.Article;
 import com.xxm.douban.service.ArticleService;
 import com.xxm.douban.util.DateUtil;
 
@@ -34,7 +34,7 @@ public class AddArticle extends HttpServlet {
 			return;
 		}
 
-		Article1 article = new Article1();
+		Article article = new Article();
 		article.setUser_email(account.getEmail());
 		article.setTitle(request.getParameter("title"));
 		article.setType(request.getParameter("contentType"));

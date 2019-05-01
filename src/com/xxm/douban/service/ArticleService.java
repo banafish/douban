@@ -4,7 +4,7 @@ import com.xxm.douban.bean.Msg;
 import com.xxm.douban.dao.ArticleDAO;
 import com.xxm.douban.dao.UploadPicDAO;
 import com.xxm.douban.entity.Account;
-import com.xxm.douban.entity.Article1;
+import com.xxm.douban.entity.Article;
 
 public class ArticleService {
 	private ArticleDAO articleDAO;
@@ -14,8 +14,14 @@ public class ArticleService {
 	}
 
 	// 添加文章
-	public Msg addArticle(Article1 article) {
-		UploadPicDAO uploadPaicDAO = new UploadPicDAO();
-		return articleDAO.addArticle(uploadPaicDAO.uploadPic(article));
+	public Msg addArticle(Article article) {
+		//判断是否有图片
+		if (article.getPicture_urls() != null) {
+			UploadPicDAO uploadPicDAO = new UploadPicDAO();
+			article.setPicture_urls(uploadPicDAO.uploadPic(article.getPicture_urls(), article.getUser_email()));
+		} 
+			
+		return articleDAO.addArticle(article);	
+		
 	}
 }

@@ -6,6 +6,10 @@ public class Account {
 	private String password;
 	
 	private String email;
+	
+	private String avatar;//头像
+	
+	private String sign;//签名
 
 	public String getName() {
 		return name;
@@ -29,6 +33,22 @@ public class Account {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
 	}
 	
 

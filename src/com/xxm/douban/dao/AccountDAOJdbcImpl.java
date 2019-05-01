@@ -27,11 +27,13 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 	public Msg register(Account account) {
 		try {
 			con = dataSource.getConnection();
-			String sql = "insert ignore into t_account(name, password, email) values(?, ?, ?)";
+			String sql = "insert ignore into t_account(name, password, email, avatar, sign) values(?, ?, ?, ?, ?)";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, account.getName());
 			stmt.setString(2, account.getPassword());
 			stmt.setString(3, account.getEmail());
+			stmt.setString(4, account.getAvatar());
+			stmt.setString(5, account.getSign());
 
 			// 判断执行插入语句后受影响语句是否大于0
 			if (stmt.executeUpdate() > 0) {
@@ -62,6 +64,8 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 			if (rs.next()) {
 				if (account.getPassword().equals(rs.getString("password"))) {
 					account.setName(rs.getString("name"));
+					account.setAvatar(rs.getNString("avatar"));
+					account.setSign(rs.getNString("sign"));
 					return new Msg("登录成功", account);
 				}
 				return new Msg("密码错误", null);
@@ -126,6 +130,58 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 			}
 		}
 		return new Msg("该邮箱未注册", null);
+	}
+
+	//添加头像
+	@Override
+	public Msg addAvatar(String pic, String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "update t_account set avatar = ? where email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, pic);
+			stmt.setString(2, email);
+
+			// 判断执行插入语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("上传成功", pic);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("上传失败", null);
+	}
+
+	//添加签名
+	@Override
+	public Msg addSign(String sign, String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "update t_account set sign = ? where email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, sign);
+			stmt.setString(2, email);
+
+			// 判断执行插入语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("签名成功", sign);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("签名失败", null);
 	}
 
 }

@@ -9,12 +9,12 @@
 <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
 	
 </script>
-<script>
-	window.onload = function() {
+<script>	
+		$(document).ready(function() {
+		//账户菜单
 		var moreItems = document.getElementsByClassName("more-items");
 		moreItems.flag = 0;
-		$(document).ready(function() {
-			$(".more-items").hide();
+		$(".more-items").hide();
 			$(".bn-more").click(function() {
 				if (!moreItems.flag) {
 					$(".more-items").show();
@@ -25,7 +25,6 @@
 				}
 			});
 		});
-	}
 </script>
 </head>
 <body>
@@ -42,7 +41,7 @@
 							<table cellpadding="0" cellspacing="0">
 								<tbody>
 									<tr>
-										<td><a href="#">个人主页</a></td>
+										<td><a target="_blank" href="userPage.jsp">个人主页</a></td>
 									</tr>
 									<tr>
 										<td><a>我的订单</a></td>

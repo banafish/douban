@@ -6,32 +6,32 @@ import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Date;
 
-import com.xxm.douban.entity.Article1;
+import com.xxm.douban.entity.Article;
 
 public class UploadPicDAO {
 
 	// 把图片存到项目的WebContent的images中
-	public Article1 uploadPic(Article1 article) {
+	public String uploadPic(String picture_urls, String email) {
 
 		FileOutputStream fos = null;
 		Decoder decoder = Base64.getDecoder();
 		byte[] bytes = null;
 
-		String email = article.getUser_email();
 		String picUrl;// 每张图片的路径
 		StringBuilder picUrls = new StringBuilder();// 每张图片的路径加起来，用逗号隔开
-		String[] picsData = article.getPicture_urls().split(",");
+		String[] picsData = picture_urls.split(",");
 
 		for (int i = 0; i < picsData.length; i++) {
-			picUrl = "D:/javacode/Douban/WebContent/images/" + new Date().getTime() + email.substring(0, email.lastIndexOf("@"))
+			//为每张图片生成路径
+			picUrl = new Date().getTime() + email.substring(0, email.lastIndexOf("@"))
 					+ ".jpg";
-			picUrls.append(picUrl + ",");
+			picUrls.append("/file/" + picUrl + ",");
 
 			// 解码
 			bytes = decoder.decode(picsData[i]);
 			//存储
 			try	{
-				fos = new FileOutputStream(picUrl);
+				fos = new FileOutputStream("D:/javacode/Douban/WebContent/images/" + picUrl);
 				fos.write(bytes);
 			} catch (IOException e)	{
 				e.printStackTrace();
@@ -46,8 +46,7 @@ public class UploadPicDAO {
 			}
 		}
 		
-		article.setPicture_urls(picUrls + "");
-		return article;
+		return picUrls + "";
 
 	}
 

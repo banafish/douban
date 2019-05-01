@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import com.xxm.douban.bean.Msg;
-import com.xxm.douban.entity.Article1;
+import com.xxm.douban.entity.Article;
 import com.xxm.douban.util.DbUtil;
 
 public class ArticleDAOJdbcImpl implements ArticleDAO{
@@ -23,7 +23,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 	
 	//添加文章
 	@Override
-	public Msg addArticle(Article1 article) {
+	public Msg addArticle(Article article) {
 		try {
 			con = dataSource.getConnection();
 			String sql = "insert into t_article(user_email, title, type, content, picture_urls, modify_time) values(?, ?, ?, ?, ?, ?)";

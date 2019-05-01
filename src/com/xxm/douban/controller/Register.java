@@ -37,6 +37,8 @@ public class Register extends HttpServlet {
 		account.setEmail(request.getParameter("email"));
 		account.setName(request.getParameter("nick"));
 		account.setPassword(EncrypMD5Util.getMD5String(request.getParameter("password")));
+		account.setAvatar("D:/javacode/Douban/WebContent/css/images/user_normal.jpg");//设计默认头像
+		account.setSign("添加签名文档");//默认签名
 
 		UserService userService = (UserService) getServletContext().getAttribute("userService");
 		Msg msg = userService.register(account);
