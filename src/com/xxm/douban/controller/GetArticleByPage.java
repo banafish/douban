@@ -25,13 +25,24 @@ public class GetArticleByPage extends HttpServlet {
 		Msg msgCount = articleService.getArticleCount();
 		
 		if (msgCount.getResult().equals("获取文章总数失败")) {
+			response.sendRedirect("homePage.jsp");
 			return;
 		}
 		
-		Msg msg = articleService.getArticleByPage("2");		
-		List<Article> list = (List<Article>)msg.getMessage();
+		//获取当前页数
+		String currentPage = request.getParameter("p");
+		if (currentPage == null) {
+			currentPage = "1";//如果为空默认请求第一页数据
+		}
 		
-		int counts = (int) msgCount.getMessage();
+		Msg msg = articleService.getArticleByPage(currentPage);		
+		List<Article> list = (List<Article>)msg.getMessage();//数据
+		int totalPages = (int) msgCount.getMessage() / 2;//总页数
+		
+		request.setAttribute("list", list);
+		request.setAttribute("totalPages", totalPages);
+		request.getRequestDispatcher("homePage.jsp").forward(request, response);
+		
 	}
 
 }

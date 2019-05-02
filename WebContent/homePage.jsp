@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,22 +10,23 @@
 <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
 	
 </script>
-<script>	
-		$(document).ready(function() {
+<script>
+	$(document).ready(function() {
 		//账户菜单
 		var moreItems = document.getElementsByClassName("more-items");
 		moreItems.flag = 0;
 		$(".more-items").hide();
-			$(".bn-more").click(function() {
-				if (!moreItems.flag) {
-					$(".more-items").show();
-					moreItems.flag = 1;
-				} else {
-					$(".more-items").hide();
-					moreItems.flag = 0;
-				}
-			});
+		$(".bn-more").click(function() {
+			if (!moreItems.flag) {
+				$(".more-items").show();
+				moreItems.flag = 1;
+			} else {
+				$(".more-items").hide();
+				moreItems.flag = 0;
+			}
 		});
+
+	});
 </script>
 </head>
 <body>
@@ -53,7 +55,7 @@
 										<td><a target="_blank" href="#">帐号管理</a></td>
 									</tr>
 									<tr>
-										<td><a href="#">退出登录</a></td>
+										<td><a href="index.jsp">退出登录</a></td>
 									</tr>
 								</tbody>
 							</table>
@@ -97,7 +99,7 @@
 				</div>
 
 				<div class="nav-search">
-					<form action="#" method="get">
+					<form action="getArticleByPage" method="get">
 						<fieldset>
 							<legend>搜索：</legend>
 							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
@@ -125,7 +127,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="wrapper">
 
 		<div id="content">
@@ -137,131 +139,78 @@
 
 						<div class="stream-item">
 							<div>
-								<a href="articleEdit.jsp"><input type="button" value="发文章"></a>
+								<a href="articleEdit.jsp" target="_blank"><input
+									type="button" value="发文章"></a>
 							</div>
-							
-							<div class="new-item-wrapper">
-								<div class="new-item">
-									<div class="new-item-up">		
+
+							<c:forEach var="article" items="${list}">
+								<div class="new-item-wrapper">
+									<div class="new-item">
+										<div class="new-item-up">
 											<div class="user-pic">
-												<img src="images/bananice.jpg"></img>
+												<img src=""></img>
 											</div>
 											<div class="user-name">
-												<a href="#"	target="_blank">bananice</a>
-											</div>								
-									
-									</div>
-
-									<div class="new-item-down">
-										<div class="new-item-down-content">
-											<h4 class="new-item-down-title">
-											<a href="#" title="电子游戏的画面经历哪几个阶段呢？" target="_blank"
-												class="title-link">电子游戏的画面经历哪几个阶段呢？</a>
-											</h4>
-											<h5 class="content-some">
-												最近在补老游戏，对比一下现在的新游，突然觉得日新月异。有没有大佬指条路，让我了解一下电子游戏画面发展史啊</h5>
-
-																				
-											<div class="small-pic">														
-													<img src="images/71849616_p0.png" class="small-pic-list-1">	
-													<img src="images/72072963_p0.png" class="small-pic-list-2">														
-
-											</div>												
-											<h6>2019-4-26 9:53</h6>
-										</div>
-
-										<div class="new-item-down-reply">
-										</div>
-										
-									</div>
-								</div>
-							</div>
-							<div class="new-item-wrapper">
-								<div class="new-item">
-									<div class="new-item-up">		
-											<div class="user-pic">
-												<img src="images/bananice.jpg"></img>
+												<a href="#" target="_blank">${article.user_email}</a>
 											</div>
-											<div class="user-name">
-												<a href="#"	target="_blank">bananice</a>
-											</div>								
-									
-									</div>
 
-									<div class="new-item-down">
-										<div class="new-item-down-content">
-											<h4 class="new-item-down-title">
-											<a href="#" title="电子游戏的画面经历哪几个阶段呢？" target="_blank"
-												class="title-link">电子游戏的画面经历哪几个阶段呢？</a>
-											</h4>
-											<h5 class="content-some">
-												最近在补老游戏，对比一下现在的新游，突然觉得日新月异。有没有大佬指条路，让我了解一下电子游戏画面发展史啊</h5>
-
-																				
-											<div class="small-pic">														
-													<img src="images/71849616_p0.png" class="small-pic-list-1">	
-													<img src="images/72072963_p0.png" class="small-pic-list-2">														
-
-											</div>												
-											<h6>2019-4-26 9:53</h6>
 										</div>
 
-										<div class="new-item-down-reply">
-										</div>
-										
-									</div>
-								</div>
-							</div>
-							<div class="new-item-wrapper">
-								<div class="new-item">
-									<div class="new-item-up">		
-											<div class="user-pic">
-												<img src="images/bananice.jpg"></img>
+										<div class="new-item-down">
+											<div class="new-item-down-content">
+												<h4 class="new-item-down-title">
+													<a href="#" title="${article.title}" target="_blank"
+														class="title-link">${article.title}</a>
+												</h4>
+												<h5 class="content-some">${article.content}</h5>
+
+												<div class="small-pic">
+													<c:forEach var="img" items="${article.picture_urls}">
+														<img src="${img}" class="small-pic-list">
+													</c:forEach>
+												</div>
+												<h6>${article.modify_time}</h6>
 											</div>
-											<div class="user-name">
-												<a href="#"	target="_blank">bananice</a>
-											</div>								
-									
-									</div>
 
-									<div class="new-item-down">
-										<div class="new-item-down-content">
-											<h4 class="new-item-down-title">
-											<a href="#" title="电子游戏的画面经历哪几个阶段呢？" target="_blank"
-												class="title-link">电子游戏的画面经历哪几个阶段呢？</a>
-											</h4>
-											<h5 class="content-some">
-												最近在补老游戏，对比一下现在的新游，突然觉得日新月异。有没有大佬指条路，让我了解一下电子游戏画面发展史啊</h5>
-
-																				
-											<div class="small-pic">														
-													<img src="images/71849616_p0.png" class="small-pic-list-1">	
-													<img src="images/72072963_p0.png" class="small-pic-list-2">														
-
-											</div>												
-											<h6>2019-4-26 9:53</h6>
 										</div>
-
-										<div class="new-item-down-reply">
-										</div>
-										
 									</div>
 								</div>
-							</div>
-							
-							
-						</div>						
+							</c:forEach>
+
+						</div>
 					</div>
-					<div class="paginator">
-						<span class="prev"> &lt;前页 </span> <span class="thispage"
-							data-total-page="9223372036854775807">1</span> <a href="?p=2">2</a>
 
-						<a href="?p=3">3</a> <a href="?p=4">4</a> <a href="?p=5">5</a> <a
-							href="?p=6">6</a> <a href="?p=7">7</a> <a href="?p=8">8</a> <a
-							href="?p=9">9</a> <span class="break">...</span> <span
-							class="next">
-							<link rel="next" href="?p=2"> <a href="?p=2">后页&gt;</a>
-						</span>
+					<div class="paginator">
+
+						<c:choose>
+							<c:when test="${param.p == 1}">
+								<span class="prev"> &lt;前页 </span>
+							</c:when>
+							<c:otherwise>
+								<a href="getArticleByPage?p=${param.p - 1}">&gt;前页</a>
+							</c:otherwise>
+						</c:choose>
+
+						<c:forEach var="i" begin="1" end="9" step="1">
+							<c:choose>
+								<c:when test="${param.p == i}">
+									<span class="thispage">${i}</span>
+								</c:when>
+								<c:otherwise>
+									<a href="getArticleByPage?p=${i}">${i}</a>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+
+						<c:choose>
+							<c:when test="${param.p == requestScope.totalPages}">
+								<span class="next">后页 &lt; </span>
+							</c:when>
+							<c:otherwise>
+								<a href="getArticleByPage?p=${param.p + 1}">后页&gt;</a>
+							</c:otherwise>
+						</c:choose>
+
 
 					</div>
 
