@@ -16,7 +16,7 @@ public class ArticleService {
 	// 添加文章
 	public Msg addArticle(Article article) {
 		//判断是否有图片
-		if (article.getPicture_urls() != null) {
+		if (article.getPicture_urls().length() > 0) {
 			UploadPicDAO uploadPicDAO = new UploadPicDAO();
 			article.setPicture_urls(uploadPicDAO.uploadPic(article.getPicture_urls(), article.getUser_email()));
 		} 

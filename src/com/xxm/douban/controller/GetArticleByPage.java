@@ -37,7 +37,8 @@ public class GetArticleByPage extends HttpServlet {
 		
 		Msg msg = articleService.getArticleByPage(currentPage);		
 		List<Article> list = (List<Article>)msg.getMessage();//数据
-		int totalPages = (int) msgCount.getMessage() / 2;//总页数
+		int totalCounts = (int) msgCount.getMessage();//数据总数
+		int totalPages = ( (totalCounts % 2 == 0) ? (totalCounts / 2) : (totalCounts / 2 + 1));//总页数
 		
 		request.setAttribute("list", list);
 		request.setAttribute("totalPages", totalPages);

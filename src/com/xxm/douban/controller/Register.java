@@ -17,7 +17,7 @@ import com.xxm.douban.util.EncrypMD5Util;
 /**
  * Servlet implementation class Register
  */
-@WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "homePage.jsp"),
+@WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "getArticleByPage?p=1"),
 		@WebInitParam(name = "ERROR_VIEW", value = "register.jsp") })
 public class Register extends HttpServlet {
 	private String SUCCESS_VIEW;
@@ -45,7 +45,7 @@ public class Register extends HttpServlet {
 		if (msg.getResult().equals("注册成功")) {
 			// 把account属性加到session
 			session.setAttribute("account", account);
-			request.getRequestDispatcher(SUCCESS_VIEW).forward(request, response);
+			response.sendRedirect(SUCCESS_VIEW);
 		} else {
 			response.sendRedirect(ERROR_VIEW);
 		}

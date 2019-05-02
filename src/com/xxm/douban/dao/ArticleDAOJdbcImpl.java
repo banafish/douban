@@ -61,9 +61,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 			Article article = null;
 			List<Article> list = new ArrayList<>();
 			con = dataSource.getConnection();
-			String sql = "select * from t_article order by hot desc, modify_time desc limit ?, 2";
+			String sql = " select t_article.*, t_account.name, t_account.avatar  from t_article "
+					+ "inner join t_account on t_article.user_email = t_account.email "
+					+ "order by hot desc, modify_time desc limit ?, 2";
 			stmt = con.prepareStatement(sql);
-			stmt.setInt(1, Integer.valueOf(currentPage) - 1);
+			stmt.setInt(1, (Integer.valueOf(currentPage) - 1) * 2);//每页两条记录
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				article = new Article();
@@ -75,6 +77,8 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 				article.setPicture_urls(rs.getString("picture_urls"));
 				article.setModify_time(rs.getString("modify_time"));
 				article.setHot(rs.getString("hot"));
+				article.setAvatar(rs.getNString("avatar"));
+				article.setName(rs.getNString("name"));
 				list.add(article);
 			}
 			if (list.isEmpty()) {

@@ -148,10 +148,10 @@
 									<div class="new-item">
 										<div class="new-item-up">
 											<div class="user-pic">
-												<img src=""></img>
+												<img src="${article.avatar}"></img>
 											</div>
 											<div class="user-name">
-												<a href="#" target="_blank">${article.user_email}</a>
+												<a href="#" target="_blank">${article.name}</a>
 											</div>
 
 										</div>
@@ -169,7 +169,11 @@
 														<img src="${img}" class="small-pic-list">
 													</c:forEach>
 												</div>
-												<h6>${article.modify_time}</h6>
+												<h6>${article.modify_time}
+													<c:if test="${article.hot == 1}">
+														<span style="color: red">(热)</span>
+													</c:if>
+												</h6>
 											</div>
 
 										</div>
@@ -181,17 +185,35 @@
 					</div>
 
 					<div class="paginator">
-
+						<%--根据当前页数来初始化页码--%>
 						<c:choose>
 							<c:when test="${param.p == 1}">
 								<span class="prev"> &lt;前页 </span>
 							</c:when>
 							<c:otherwise>
-								<a href="getArticleByPage?p=${param.p - 1}">&gt;前页</a>
+								<a href="getArticleByPage?p=${param.p - 1}">&lt;前页</a>
+							</c:otherwise>
+						</c:choose>
+						<%--初始化起始页码--%>
+						<c:choose>
+							<c:when test="${param.p - 5 > 0}">
+								<c:set var="begin" value="${1 + param.p - 5}" />
+							</c:when>
+							<c:otherwise>
+								<c:set var="begin" value="1" />
+							</c:otherwise>
+						</c:choose>
+						<%--初始化终止页码--%>
+						<c:choose>
+							<c:when test="${begin + 8 < requestScope.totalPages}">
+								<c:set var="end" value="${begin + 8}" />
+							</c:when>
+							<c:otherwise>
+								<c:set var="end" value="${requestScope.totalPages}" />
 							</c:otherwise>
 						</c:choose>
 
-						<c:forEach var="i" begin="1" end="9" step="1">
+						<c:forEach var="i" begin="${begin}" end="${end}" step="1">
 							<c:choose>
 								<c:when test="${param.p == i}">
 									<span class="thispage">${i}</span>
@@ -201,16 +223,15 @@
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
-
+						<span class="break">...</span>
 						<c:choose>
-							<c:when test="${param.p == requestScope.totalPages}">
-								<span class="next">后页 &lt; </span>
+							<c:when test="${param.p >= requestScope.totalPages}">
+								<span class="next">后页 &gt; </span>
 							</c:when>
 							<c:otherwise>
 								<a href="getArticleByPage?p=${param.p + 1}">后页&gt;</a>
 							</c:otherwise>
 						</c:choose>
-
 
 					</div>
 

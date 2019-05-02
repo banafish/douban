@@ -17,6 +17,10 @@ public class Article {
 	private String modify_time;//修改时间
 	
 	private String hot;//热门文章
+	
+	private String avatar;//用户头像
+	
+	private String name;//用户名称
 
 	public String getUser_email() {
 		return user_email;
@@ -82,5 +86,20 @@ public class Article {
 		this.id = id;
 	}
 
-	
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

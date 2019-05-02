@@ -17,7 +17,7 @@ import com.xxm.douban.util.EncrypMD5Util;
 /**
  * Servlet implementation class Login
  */
-@WebServlet(urlPatterns = { "/login" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "homePage.jsp"),
+@WebServlet(urlPatterns = { "/login" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "getArticleByPage?p=1"),
 		@WebInitParam(name = "ERROR_VIEW", value = "index.jsp") })
 public class Login extends HttpServlet {
 	private String SUCCESS_VIEW;
@@ -56,7 +56,7 @@ public class Login extends HttpServlet {
 		if (msg.getResult().equals("登录成功")) {
 			//把account属性加到session
 			session.setAttribute("account", msg.getMessage());
-			request.getRequestDispatcher(SUCCESS_VIEW).forward(request, response);
+			response.sendRedirect(SUCCESS_VIEW);
 		} else {
 			request.setAttribute("msg", msg); 
 			request.getRequestDispatcher(ERROR_VIEW).forward(request, response);
