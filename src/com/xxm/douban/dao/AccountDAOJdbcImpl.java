@@ -27,13 +27,11 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 	public Msg register(Account account) {
 		try {
 			con = dataSource.getConnection();
-			String sql = "insert ignore into t_account(name, password, email, avatar, sign) values(?, ?, ?, ?, ?)";
+			String sql = "insert ignore into t_account(name, password, email) values(?, ?, ?)";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, account.getName());
 			stmt.setString(2, account.getPassword());
 			stmt.setString(3, account.getEmail());
-			stmt.setString(4, account.getAvatar());
-			stmt.setString(5, account.getSign());
 
 			// 判断执行插入语句后受影响语句是否大于0
 			if (stmt.executeUpdate() > 0) {

@@ -2,6 +2,8 @@ package com.xxm.douban.entity;
 
 public class Article {
 	
+	private String id;//文章id
+	
 	private String user_email;//用户邮箱
 	
 	private String title;//标题
@@ -13,6 +15,8 @@ public class Article {
 	private String picture_urls;//图片地址
 	
 	private String modify_time;//修改时间
+	
+	private String hot;//热门文章
 
 	public String getUser_email() {
 		return user_email;
@@ -60,6 +64,22 @@ public class Article {
 
 	public void setModify_time(String modify_time) {
 		this.modify_time = modify_time;
+	}
+
+	public String getHot() {
+		return hot;
+	}
+
+	public void setHot(String hot) {
+		this.hot = hot;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	

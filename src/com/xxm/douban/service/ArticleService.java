@@ -24,4 +24,15 @@ public class ArticleService {
 		return articleDAO.addArticle(article);	
 		
 	}
+	
+	//通过当前页数获取文章
+	public Msg getArticleByPage(String currentPage) {
+		return articleDAO.getArticleByPage(currentPage);
+	}
+	
+	//获取文章总数
+	public Msg getArticleCount() {
+		return articleDAO.getArticleCount();
+	}
+	
 }

@@ -17,7 +17,7 @@ import com.xxm.douban.util.EncrypMD5Util;
 /**
  * Servlet implementation class Register
  */
-@WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "index.jsp"),
+@WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "homePage.jsp"),
 		@WebInitParam(name = "ERROR_VIEW", value = "register.jsp") })
 public class Register extends HttpServlet {
 	private String SUCCESS_VIEW;
@@ -37,7 +37,7 @@ public class Register extends HttpServlet {
 		account.setEmail(request.getParameter("email"));
 		account.setName(request.getParameter("nick"));
 		account.setPassword(EncrypMD5Util.getMD5String(request.getParameter("password")));
-		account.setAvatar("D:/javacode/Douban/WebContent/css/images/user_normal.jpg");//设计默认头像
+		account.setAvatar("/file/user_normal.jpg");//默认头像
 		account.setSign("添加签名文档");//默认签名
 
 		UserService userService = (UserService) getServletContext().getAttribute("userService");

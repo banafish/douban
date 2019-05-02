@@ -36,7 +36,7 @@
 		$("#uploadfile").change(function() {
 
 			var files = $(this)[0].files[0]; //获取文件信息
-			if (files && files.size <= 512000 && imgs.length < 5) {//图片小于0.5M
+			if (files && files.size <= 1120000 && imgs.length < 5) {//图片小于1M
 				var reader = new FileReader(); //调用FileReader
 				reader.onload = function(evt) { //读取操作完成时触发。
 					var imgFile = evt.target.result;
@@ -48,7 +48,7 @@
 				}
 				reader.readAsDataURL(files); //将文件读取为 DataURL(base64)
 			} else {
-				alert("上传失败，图片应小于0.5M,不得超过5张");
+				alert("上传失败，图片应小于1M,不得超过5张");
 			}
 		});
 
