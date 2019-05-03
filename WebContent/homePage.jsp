@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -27,6 +27,15 @@
 		});
 
 	});
+	//搜索
+	function validateForm() {
+		if ($("#intp-query").val().length == 0) {
+			alert("不能为空");
+			return false;
+		} else {
+			return true;
+		}
+	}
 </script>
 </head>
 <body>
@@ -43,7 +52,7 @@
 							<table cellpadding="0" cellspacing="0">
 								<tbody>
 									<tr>
-										<td><a target="_blank" href="userPage.jsp">个人主页</a></td>
+										<td><a target="_blank" href="userPage?p=1">个人主页</a></td>
 									</tr>
 									<tr>
 										<td><a>我的订单</a></td>
@@ -99,14 +108,15 @@
 				</div>
 
 				<div class="nav-search">
-					<form action="getArticleByPage" method="get">
+					<form action="searchArticle" method="get"
+						onsubmit="return validateForm();">
 						<fieldset>
 							<legend>搜索：</legend>
 							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
 							<div class="inp">
-								<input type="hidden" name="source" value="suggest"> <input
-									id="inp-query" name="q" size="22" maxlength="60"
-									autocomplete="off" value="" placeholder="搜索你感兴趣的内容和人...">
+								<input name="p" value="1" type="hidden">
+								<input id="intp-query" name="q" size="22" maxlength="60"
+									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
 							</div>
 							<div class="inp-btn">
 								<input type="submit" value="搜索">
@@ -143,7 +153,7 @@
 									type="button" value="发文章"></a>
 							</div>
 
-							<c:forEach var="article" items="${list}">
+							<c:forEach var="article" items="${requestScope.list}">
 								<div class="new-item-wrapper">
 									<div class="new-item">
 										<div class="new-item-up">
@@ -191,7 +201,7 @@
 								<span class="prev"> &lt;前页 </span>
 							</c:when>
 							<c:otherwise>
-								<a href="getArticleByPage?p=${param.p - 1}">&lt;前页</a>
+								<a href="${requestScope.target}p=${param.p - 1}">&lt;前页</a>
 							</c:otherwise>
 						</c:choose>
 						<%--初始化起始页码--%>
@@ -219,7 +229,7 @@
 									<span class="thispage">${i}</span>
 								</c:when>
 								<c:otherwise>
-									<a href="getArticleByPage?p=${i}">${i}</a>
+									<a href="${requestScope.target}p=${i}">${i}</a>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
@@ -229,7 +239,7 @@
 								<span class="next">后页 &gt; </span>
 							</c:when>
 							<c:otherwise>
-								<a href="getArticleByPage?p=${param.p + 1}">后页&gt;</a>
+								<a href="${requestScope.target}p=${param.p + 1}">后页&gt;</a>
 							</c:otherwise>
 						</c:choose>
 

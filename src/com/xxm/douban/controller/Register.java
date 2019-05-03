@@ -32,6 +32,7 @@ public class Register extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(); 
+		request.setCharacterEncoding("UTF-8");
 		
 		Account account = new Account();
 		account.setEmail(request.getParameter("email"));

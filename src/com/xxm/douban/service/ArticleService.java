@@ -15,24 +15,44 @@ public class ArticleService {
 
 	// 添加文章
 	public Msg addArticle(Article article) {
-		//判断是否有图片
+		// 判断是否有图片
 		if (article.getPicture_urls().length() > 0) {
 			UploadPicDAO uploadPicDAO = new UploadPicDAO();
 			article.setPicture_urls(uploadPicDAO.uploadPic(article.getPicture_urls(), article.getUser_email()));
-		} 
-			
-		return articleDAO.addArticle(article);	
-		
+		}
+
+		return articleDAO.addArticle(article);
+
 	}
-	
-	//通过当前页数获取文章
+
+	// 通过当前页数获取文章
 	public Msg getArticleByPage(String currentPage) {
 		return articleDAO.getArticleByPage(currentPage);
 	}
-	
-	//获取文章总数
+
+	// 获取文章总数
 	public Msg getArticleCount() {
 		return articleDAO.getArticleCount();
 	}
-	
+
+	// 通过当前页数获某个用户的取文章
+	public Msg getUserArticleByPage(String currentPage, Account account) {
+		return articleDAO.getUserArticleByPage(currentPage, account);
+	}
+
+	// 获取某个用户的文章总数
+	public Msg getUserArticleCount(String email) {
+		return articleDAO.getUserArticleCount(email);
+	}
+
+	// 获取搜索文章总数
+	public Msg getSearchArticleCount(String keyWord) {
+		return articleDAO.getSearchArticleCount(keyWord);
+	}
+
+	// 搜索文章
+	public Msg getSearchArticleByPage(String currentPage, String keyWord) {
+		return articleDAO.getSearchArticleByPage(currentPage, keyWord);
+	}
+
 }

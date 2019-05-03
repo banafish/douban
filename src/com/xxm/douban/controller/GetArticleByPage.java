@@ -21,6 +21,7 @@ public class GetArticleByPage extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArticleService articleService = (ArticleService) getServletContext().getAttribute("articleService");
+		request.setCharacterEncoding("UTF-8");
 		
 		Msg msgCount = articleService.getArticleCount();
 		
@@ -38,8 +39,9 @@ public class GetArticleByPage extends HttpServlet {
 		Msg msg = articleService.getArticleByPage(currentPage);		
 		List<Article> list = (List<Article>)msg.getMessage();//数据
 		int totalCounts = (int) msgCount.getMessage();//数据总数
-		int totalPages = ( (totalCounts % 2 == 0) ? (totalCounts / 2) : (totalCounts / 2 + 1));//总页数
+		int totalPages = ( (totalCounts % 4 == 0) ? (totalCounts / 4) : (totalCounts / 4 + 1));//总页数，每页四条
 		
+		request.setAttribute("target", "getArticleByPage?");
 		request.setAttribute("list", list);
 		request.setAttribute("totalPages", totalPages);
 		request.getRequestDispatcher("homePage.jsp").forward(request, response);
