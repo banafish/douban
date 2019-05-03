@@ -227,7 +227,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 			if (list.isEmpty()) {
 				return new Msg("无文章", null);
 			} else {
-				return new Msg("分页获取文章成功", list);
+				return new Msg("分页搜索文章成功", list);
 			}
 			
 		} catch (SQLException e) {
@@ -239,7 +239,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 				e.printStackTrace();
 			}
 		}
-		return new Msg("分页获取文章失败", null);
+		return new Msg("分页搜索文章失败", null);
 	}
 
 	//获取搜索文章总数
@@ -265,6 +265,78 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 			}
 		}
 		return new Msg("获取搜索文章总数失败", null);
+	}
+
+	//分类获取文章总数
+	@Override
+	public Msg getTypeArticleCount(String type) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select count(*) from t_article where type like concat('%',?,'%')";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1,type);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("分类获取文章总数成功", rs.getInt(1));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("分类获取文章总数失败", null);
+	}
+
+	//分类获取文章
+	@Override
+	public Msg getTypeArticleByPage(String currentPage, String type) {
+		try {
+			Article article = null;
+			List<Article> list = new ArrayList<>();
+			con = dataSource.getConnection();
+			String sql = " select t_article.*, t_account.name, t_account.avatar  from t_article "
+					+ "inner join t_account on t_article.user_email = t_account.email "
+					+ "where t_article.type like concat('%',?,'%')"					
+					+ "order by hot desc, modify_time desc limit ?, 4";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, type);
+			stmt.setInt(2, (Integer.valueOf(currentPage) - 1) * 4);//每页四条记录
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				article = new Article();
+				article.setId(rs.getString("id"));
+				article.setUser_email(rs.getString("user_email"));
+				article.setTitle(rs.getString("title"));
+				article.setType(rs.getString("type"));
+				article.setContent(rs.getString("content"));
+				article.setPicture_urls(rs.getString("picture_urls"));
+				article.setModify_time(rs.getString("modify_time"));
+				article.setHot(rs.getString("hot"));
+				article.setAvatar(rs.getNString("avatar"));
+				article.setName(rs.getNString("name"));
+				list.add(article);
+			}
+			if (list.isEmpty()) {
+				return new Msg("无文章", null);
+			} else {
+				return new Msg("分类获取文章成功", list);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("分类获取文章失败", null);
 	}
 
 }

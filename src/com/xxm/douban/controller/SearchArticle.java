@@ -22,7 +22,6 @@ import com.xxm.douban.service.ArticleService;
 public class SearchArticle extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
 		
 		ArticleService articleService = (ArticleService) getServletContext().getAttribute("articleService");
 

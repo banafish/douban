@@ -55,4 +55,14 @@ public class ArticleService {
 		return articleDAO.getSearchArticleByPage(currentPage, keyWord);
 	}
 
+	// 分类获取文章总数
+	public Msg getTypeArticleCount(String type) {
+		return articleDAO.getTypeArticleCount(type);
+	}
+
+	// 分类获取文章
+	public Msg getTypeArticleByPage(String currentPage, String type) {
+		return articleDAO.getTypeArticleByPage(currentPage, type);
+	}
+
 }

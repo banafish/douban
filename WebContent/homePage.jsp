@@ -25,6 +25,20 @@
 				moreItems.flag = 0;
 			}
 		});
+		
+		//分类浏览菜单
+		var moreItems = document.getElementsByClassName("more-items1");
+		moreItems.flag = 0;
+		$(".more-items1").hide();
+		$(".bn-more1").click(function() {
+			if (!moreItems.flag) {
+				$(".more-items1").show();
+				moreItems.flag = 1;
+			} else {
+				$(".more-items1").hide();
+				moreItems.flag = 0;
+			}
+		});
 
 	});
 	//搜索
@@ -49,7 +63,7 @@
 							<span>${account.name}的帐号</span><span class="arrow"></span>
 					</a>
 						<div class="more-items">
-							<table cellpadding="0" cellspacing="0">
+							<table>
 								<tbody>
 									<tr>
 										<td><a target="_blank" href="userPage?p=1">个人主页</a></td>
@@ -108,14 +122,15 @@
 				</div>
 
 				<div class="nav-search">
-					<form action="searchArticle" method="get"
+					<form action="homePage" method="get"
 						onsubmit="return validateForm();">
 						<fieldset>
 							<legend>搜索：</legend>
 							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
 							<div class="inp">
-								<input name="p" value="1" type="hidden">
-								<input id="intp-query" name="q" size="22" maxlength="60"
+							    <input name="method" value="getSearchArticleByPage" type="hidden">
+								<input name="p" value="1" type="hidden"> <input
+									id="intp-query" name="q" size="22" maxlength="60"
 									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
 							</div>
 							<div class="inp-btn">
@@ -148,11 +163,41 @@
 					<div id="statuses">
 
 						<div class="stream-item">
-							<div>
-								<a href="articleEdit.jsp" target="_blank"><input
-									type="button" value="发文章"></a>
+						<div class="search-wrap">
+						<a href="articleEdit.jsp" target="_blank"><button
+								type="button" >发文章</button></a>
 							</div>
+							<div class="type-wrap">
+							<button type="button" class="bn-more1" >分类浏览</button>
 
+							<div class="more-items1">
+								<table>
+									<tbody>
+										<tr>
+											<td><a href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></td>
+										</tr>
+										<tr>
+											<td><a href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></td>
+										</tr>
+										<tr>
+											<td><a href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></td>
+										</tr>
+										<tr>
+											<td><a href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></td>
+										</tr>
+										<tr>
+											<td><a href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></td>
+										</tr>
+										<tr>
+											<td><a href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></td>
+										</tr>
+										<tr>
+											<td><a href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></td>
+										</tr>										
+									</tbody>
+								</table>
+							</div>
+							</div>
 							<c:forEach var="article" items="${requestScope.list}">
 								<div class="new-item-wrapper">
 									<div class="new-item">

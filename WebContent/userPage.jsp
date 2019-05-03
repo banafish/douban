@@ -162,15 +162,16 @@
 				</div>
 
 				<div class="nav-search">
-					<form action="searchArticle" method="get"
+					<form action="homePage" method="get"
 						onsubmit="return validateForm();">
 						<fieldset>
 							<legend>搜索：</legend>
 							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
 							<div class="inp">
+							    <input name="method" value="getSearchArticleByPage" type="hidden">
 								<input name="p" value="1" type="hidden"> <input
-									id="inp-query" name="q" size="22" maxlength="60"
-									autocomplete="off" value="" placeholder="搜索你感兴趣的内容和人...">
+									id="intp-query" name="q" size="22" maxlength="60"
+									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
 							</div>
 							<div class="inp-btn">
 								<input type="submit" value="搜索">
