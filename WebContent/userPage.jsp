@@ -264,7 +264,7 @@
 										<div class="new-item-down">
 											<div class="new-item-down-content">
 												<h4 class="new-item-down-title">
-													<a href="#" title="${article.title}" target="_blank"
+													<a href="articleInfoServlet?id=${article.id}" title="${article.title}" target="_blank"
 														class="title-link">${article.title}</a>
 												</h4>
 												<h5 class="content-some">${article.content}</h5>

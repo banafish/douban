@@ -16,4 +16,6 @@ public interface AccountDAO {
 	
 	Msg addSign(String sign, String email);//添加签名
 	
+	Msg getRole(String email);//获得角色
+	
 }

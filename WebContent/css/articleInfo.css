@@ -1,0 +1,70 @@
+#wrapper {
+	width: 1000px;
+	height: 1500px;
+	margin: 0 auto
+}
+
+#wrapper a:hover, #wrapper a:active {
+	background-color: #60c537;
+	color: #f8f3f3
+}
+
+#content {
+	min-height: 420px
+}
+
+.grid-16-8 .article {
+	float: left;
+	width: 590px;
+	padding-bottom: 70px;
+	padding-right: 40px
+}
+
+.new-item-wrapper {
+	width: 675px;
+	margin-top:30px;
+}
+
+.new-item-up {
+	height: 48px
+}
+
+.new-item-up div {
+	overflow: hidden;
+	float: left
+}
+
+.new-item-up .user-pic img{
+	margin-right: 20px;
+	width: 48px;
+	height: 48px
+}
+
+.new-item-down {
+	width:600px;
+	float:right
+}
+
+.new-item-down-type {
+	font-size: 14px
+}
+
+.new-item-down-type span{
+	margin-right: 10px;
+	float: right
+}
+
+.new-item-down-title {
+	margin-top: 10px;
+}
+
+.big-pic img {
+	width: 600px; 
+	margin-top:20px;
+	margin-bottom: 20px
+}
+
+.new-item-down-menu span{
+	margin-right: 10px;
+	float: right
+}

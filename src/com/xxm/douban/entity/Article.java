@@ -4,7 +4,7 @@ public class Article {
 	
 	private String id;//文章id
 	
-	private String user_email;//用户邮箱
+	private String author_email;//作者邮箱
 	
 	private String title;//标题
 	
@@ -21,13 +21,16 @@ public class Article {
 	private String avatar;//用户头像
 	
 	private String name;//用户名称
+	
+	private ArticleInfo articleInfo;//文章的全部信息
 
-	public String getUser_email() {
-		return user_email;
+
+	public String getAuthor_email() {
+		return author_email;
 	}
 
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setAuthor_email(String author_email) {
+		this.author_email = author_email;
 	}
 
 	public String getTitle() {
@@ -100,6 +103,14 @@ public class Article {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public ArticleInfo getArticleInfo() {
+		return articleInfo;
+	}
+
+	public void setArticleInfo(ArticleInfo articleInfo) {
+		this.articleInfo = articleInfo;
 	}
 
 }

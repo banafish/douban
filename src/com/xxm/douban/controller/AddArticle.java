@@ -35,7 +35,7 @@ public class AddArticle extends HttpServlet {
 		}
 
 		Article article = new Article();
-		article.setUser_email(account.getEmail());
+		article.setAuthor_email(account.getEmail());
 		article.setTitle(request.getParameter("title"));
 		article.setType(request.getParameter("contentType"));
 		article.setContent(request.getParameter("content"));

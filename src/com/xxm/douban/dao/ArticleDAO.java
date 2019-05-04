@@ -22,5 +22,7 @@ public interface ArticleDAO {
 	Msg getTypeArticleCount(String type);//分类获取文章总数
 	
 	Msg getTypeArticleByPage(String currentPage, String type);//分类获取文章
+	
+	Msg setArticleHot(String id, int hot);// 置顶/取消置顶
 
 }

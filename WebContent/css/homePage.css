@@ -20,14 +20,17 @@
 }
 
 /*文章上面的两个按钮*/
-.search-wrap {
+.release-type-wrap {
+	height: 30px
+}
+.release-wrap {
 	float: left;
-	margin-right:10px
+	margin-left:10px
+}
+.type-wrap {
+	float: left
 }
 
-.type-wrap {
-	float: left;
-}
 /*文章*/
 .new-item-wrapper {
 	width: 675px;

@@ -25,7 +25,7 @@
 				moreItems.flag = 0;
 			}
 		});
-		
+
 		//分类浏览菜单
 		var moreItems = document.getElementsByClassName("more-items1");
 		moreItems.flag = 0;
@@ -128,9 +128,9 @@
 							<legend>搜索：</legend>
 							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
 							<div class="inp">
-							    <input name="method" value="getSearchArticleByPage" type="hidden">
-								<input name="p" value="1" type="hidden"> <input
-									id="intp-query" name="q" size="22" maxlength="60"
+								<input name="method" value="getSearchArticleByPage"
+									type="hidden"> <input name="p" value="1" type="hidden">
+								<input id="intp-query" name="q" size="22" maxlength="60"
 									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
 							</div>
 							<div class="inp-btn">
@@ -163,40 +163,50 @@
 					<div id="statuses">
 
 						<div class="stream-item">
-						<div class="search-wrap">
-						<a href="articleEdit.jsp" target="_blank"><button
-								type="button" >发文章</button></a>
-							</div>
+							<div class="release-type-wrap">	
+							<div class="release-wrap">
+								<a href="articleEdit.jsp" target="_blank"><button
+										type="button">发文章</button></a>
+							</div>					
 							<div class="type-wrap">
-							<button type="button" class="bn-more1" >分类浏览</button>
+								<button type="button" class="bn-more1">分类浏览</button>
 
-							<div class="more-items1">
-								<table>
-									<tbody>
-										<tr>
-											<td><a href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></td>
-										</tr>
-										<tr>
-											<td><a href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></td>
-										</tr>
-										<tr>
-											<td><a href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></td>
-										</tr>
-										<tr>
-											<td><a href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></td>
-										</tr>
-										<tr>
-											<td><a href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></td>
-										</tr>
-										<tr>
-											<td><a href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></td>
-										</tr>
-										<tr>
-											<td><a href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></td>
-										</tr>										
-									</tbody>
-								</table>
-							</div>
+								<div class="more-items1">
+									<table>
+										<tbody>
+											<tr>
+												<td><a
+													href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></td>
+											</tr>
+											<tr>
+												<td><a
+													href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></td>
+											</tr>
+											<tr>
+												<td><a
+													href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></td>
+											</tr>
+											<tr>
+												<td><a
+													href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></td>
+											</tr>
+											<tr>
+												<td><a
+													href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></td>
+											</tr>
+											<tr>
+												<td><a
+													href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></td>
+											</tr>
+											<tr>
+												<td><a
+													href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>							
+							
 							</div>
 							<c:forEach var="article" items="${requestScope.list}">
 								<div class="new-item-wrapper">
@@ -214,7 +224,8 @@
 										<div class="new-item-down">
 											<div class="new-item-down-content">
 												<h4 class="new-item-down-title">
-													<a href="#" title="${article.title}" target="_blank"
+													<a href="articleInfoServlet?id=${article.id}"
+														title="${article.title}" target="_blank"
 														class="title-link">${article.title}</a>
 												</h4>
 												<h5 class="content-some">${article.content}</h5>

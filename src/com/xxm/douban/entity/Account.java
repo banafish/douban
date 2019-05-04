@@ -10,6 +10,8 @@ public class Account {
 	private String avatar;//头像
 	
 	private String sign;//签名
+	
+	private String role;//角色
 
 	public String getName() {
 		return name;
@@ -49,6 +51,14 @@ public class Account {
 
 	public void setSign(String sign) {
 		this.sign = sign;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 

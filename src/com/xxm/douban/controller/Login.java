@@ -54,6 +54,14 @@ public class Login extends HttpServlet {
 		UserService userService = (UserService) getServletContext().getAttribute("userService");
 		msg = userService.login(account);
 		if (msg.getResult().equals("登录成功")) {
+			//获取用户角色
+			Msg msgRole = userService.getRole(account.getEmail());
+			
+			if (msgRole.getResult().equals("是管理员")) {
+				((Account)msg.getMessage()).setRole("admin");
+			} else {
+				((Account)msg.getMessage()).setRole("member");
+			}
 			//把account属性加到session
 			session.setAttribute("account", msg.getMessage());
 			response.sendRedirect(SUCCESS_VIEW);

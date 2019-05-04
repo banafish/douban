@@ -182,4 +182,28 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 		return new Msg("签名失败", null);
 	}
 
+	//获得角色
+	@Override
+	public Msg getRole(String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select email from t_role where email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {				
+				return new Msg("是管理员", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("", null);
+	}
+
 }

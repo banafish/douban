@@ -18,7 +18,7 @@ public class ArticleService {
 		// 判断是否有图片
 		if (article.getPicture_urls().length() > 0) {
 			UploadPicDAO uploadPicDAO = new UploadPicDAO();
-			article.setPicture_urls(uploadPicDAO.uploadPic(article.getPicture_urls(), article.getUser_email()));
+			article.setPicture_urls(uploadPicDAO.uploadPic(article.getPicture_urls(), article.getAuthor_email()));
 		}
 
 		return articleDAO.addArticle(article);
@@ -64,5 +64,9 @@ public class ArticleService {
 	public Msg getTypeArticleByPage(String currentPage, String type) {
 		return articleDAO.getTypeArticleByPage(currentPage, type);
 	}
-
+	
+	// 置顶/取消置顶
+	public Msg setArticleHot(String id, int hot) {
+		return articleDAO.setArticleHot(id, hot);
+	}
 }

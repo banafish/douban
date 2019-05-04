@@ -44,4 +44,9 @@ public class UserService {
 		return accountDAO.addSign(sign, email);
 	}
 
+	// 获取角色
+	public Msg getRole(String email) {
+		return accountDAO.getRole(email);
+	}
+
 }
