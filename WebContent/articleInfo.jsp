@@ -173,7 +173,7 @@
 													
 													<c:choose>
 														<c:when test="${sessionScope.account.role == 'admin'}">
-															<span class="report"><a	href="javascript:void(0)">删除</a></span>
+															<span class="report"><a	href="articleInfoServlet?method=delete&id=${requestScope.article.id}">删除</a></span>
 														</c:when>
 														<c:otherwise>
 															<span class="report"><a	href="javascript:void(0)">举报</a></span>

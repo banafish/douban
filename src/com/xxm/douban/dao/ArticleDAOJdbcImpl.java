@@ -5,10 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.sql.DataSource;
 
 import com.xxm.douban.bean.Msg;
@@ -361,6 +358,55 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			}
 		}
 		return new Msg("设置失败", null);
+	}
+
+	// 删除文章
+	@Override
+	public Msg deleteArticle(String id) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "delete from t_article where id = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, id);
+
+			// 判断执行删除语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("删除文章成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("删除文章失败", null);
+	}
+
+	// 获取删除文章的图片路径
+	@Override
+	public Msg getArticlePics(String id) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select picture_urls from t_article where id = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("获取删除文章的图片路径成功", rs.getString("picture_urls"));
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获取删除文章的图片路径失败", null);
 	}
 
 }

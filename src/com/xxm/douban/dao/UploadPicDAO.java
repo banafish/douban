@@ -1,11 +1,13 @@
 package com.xxm.douban.dao;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Date;
 
+import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Article;
 
 public class UploadPicDAO {
@@ -44,10 +46,24 @@ public class UploadPicDAO {
 					}
 				}
 			}
-		}
-		
+		}		
 		return picUrls + "";
-
+	}
+	
+	//删除图片
+	public Msg deletePic (String pic_urls) {
+		String[] pics = pic_urls.split(",");
+		String pic =null;
+		File file = null;
+		for (int i = 0; i < pics.length; i++) {
+			pic = pics[i].split("/")[2];
+			file = new File("D:/javacode/Douban/WebContent/images/" + pic);
+			
+			if (file.exists()) {
+				file.delete();
+			}
+		}		
+		return new Msg("删除图片成功", null);
 	}
 
 }

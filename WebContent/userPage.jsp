@@ -278,6 +278,7 @@
 													<c:if test="${article.hot == 1}">
 														<span style="color: red">(热)</span>
 													</c:if>
+													<span class="report"><a	href="userPage?method=delete&id=${article.id}">删除</a></span>
 												</h6>
 											</div>
 

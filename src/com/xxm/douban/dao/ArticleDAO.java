@@ -24,5 +24,9 @@ public interface ArticleDAO {
 	Msg getTypeArticleByPage(String currentPage, String type);//分类获取文章
 	
 	Msg setArticleHot(String id, int hot);// 置顶/取消置顶
+	
+	Msg deleteArticle(String id);// 删除文章
+	
+	public Msg getArticlePics(String id);// 获取删除文章的图片路径
 
 }

@@ -21,6 +21,8 @@ import com.xxm.douban.service.ArticleService;
 @WebServlet("/articleInfoServlet")
 public class ArticleInfoServlet extends HttpServlet {
 	private ArticleInfoService articleInfoService;
+	
+	private ArticleService articleService;
 
 	private Msg msg;
 
@@ -31,6 +33,7 @@ public class ArticleInfoServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		articleInfoService = (ArticleInfoService) getServletContext().getAttribute("articleInfoService");
+		articleService = (ArticleService) getServletContext().getAttribute("articleService");
 		HttpSession session = request.getSession();
 
 		// 获取用户属性
@@ -45,6 +48,12 @@ public class ArticleInfoServlet extends HttpServlet {
 		// 根据不同的method调不同的方法
 		if (method == null) {
 			getArticleInfo(request, response);
+			return;
+		}
+		
+		//删除文章
+		if (method.equals("delete")) {
+			deleteArticle(request, response);
 			return;
 		}
 
@@ -71,6 +80,17 @@ public class ArticleInfoServlet extends HttpServlet {
 		setArticleInfoGCF(request, response, realMethod);
 
 	}
+	
+	//删除文章
+	private void deleteArticle(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		msg = articleService.deleteArticle(id);
+		
+		if (msg.getResult().equals("删除文章成功")) {
+			// 响应
+			getArticleInfo(request, response);
+		}
+	}
+
 
 	// 点赞收藏转发
 	private void setArticleInfoGCF(HttpServletRequest request, HttpServletResponse response, String method)
@@ -78,7 +98,6 @@ public class ArticleInfoServlet extends HttpServlet {
 
 		// 获取文章全部信息
 		msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), method);
-
 		// 响应
 		getArticleInfo(request, response);
 	}
@@ -86,7 +105,6 @@ public class ArticleInfoServlet extends HttpServlet {
 	// 置顶/取消置顶
 	private void setArticleHot(HttpServletRequest request, HttpServletResponse response, int hot)
 			throws ServletException, IOException {
-		ArticleService articleService = (ArticleService) getServletContext().getAttribute("articleService");
 
 		msg = articleService.setArticleHot(id, hot);
 		// 响应

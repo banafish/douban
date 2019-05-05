@@ -69,4 +69,22 @@ public class ArticleService {
 	public Msg setArticleHot(String id, int hot) {
 		return articleDAO.setArticleHot(id, hot);
 	}
+	
+	//删除文章
+	public Msg deleteArticle(String id) {
+		UploadPicDAO uploadPicDAO = null;
+		Msg msgPic = articleDAO.getArticlePics(id);
+		
+		if (msgPic.getResult().equals("获取删除文章的图片路径成功")) {
+			if (((String)msgPic.getMessage()).length() > 0) {//如果有图片
+				uploadPicDAO = new UploadPicDAO();
+				Msg msg = uploadPicDAO.deletePic( (String)msgPic.getMessage());
+				if (msg.getResult().equals("删除图片成功")) {
+					return articleDAO.deleteArticle(id);
+				}
+			}			
+			return articleDAO.deleteArticle(id);
+		}
+		return new Msg("删除失败", null);
+	}
 }
