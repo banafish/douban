@@ -16,6 +16,7 @@ import com.xxm.douban.entity.Account;
 import com.xxm.douban.entity.Article;
 import com.xxm.douban.service.ArticleInfoService;
 import com.xxm.douban.service.ArticleService;
+import com.xxm.douban.service.FriendService;
 
 /**
  * Servlet implementation class HmoePage
@@ -23,8 +24,10 @@ import com.xxm.douban.service.ArticleService;
 @WebServlet("/userPage")
 public class UserPage extends HttpServlet {
 	private ArticleService articleService;
-	
+
 	private ArticleInfoService articleInfoService;
+
+	private FriendService friendService;
 
 	private Msg msg;
 
@@ -47,6 +50,7 @@ public class UserPage extends HttpServlet {
 		HttpSession session = request.getSession();
 		articleService = (ArticleService) getServletContext().getAttribute("articleService");
 		articleInfoService = (ArticleInfoService) getServletContext().getAttribute("articleInfoService");
+		friendService = (FriendService) getServletContext().getAttribute("friendService");
 
 		// 获取用户属性
 		account = (Account) session.getAttribute("account");
@@ -67,16 +71,16 @@ public class UserPage extends HttpServlet {
 			getUserArticleByPage(request);
 			method = "";
 		}
-		
-		//查看关注的文章
+
+		// 查看关注的文章
 		if (method.equals("getFollowArticle")) {
 			getFollowArticle(request);
-		}		
+		}
 		// 查看收藏的文章
 		if (method.equals("getCollect")) {
 			getCollectArticle(request);
 		}
-		//查看赞过的文章
+		// 查看赞过的文章
 		if (method.equals("getGood")) {
 			getGoodArticle(request);
 		}
@@ -84,7 +88,7 @@ public class UserPage extends HttpServlet {
 		if (method.equals("getForword")) {
 			getForwordArticle(request);
 		}
-		
+
 		// 删除文章
 		if (method.equals("delete")) {
 			msg = articleService.deleteArticle(id);
@@ -93,7 +97,7 @@ public class UserPage extends HttpServlet {
 				getUserArticleByPage(request);
 			}
 		}
-		//取消收藏
+		// 取消收藏
 		if (method.equals("deleteCollect")) {
 			msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), "collect", null);
 			if (msg.getResult().equals("操作成功")) {
@@ -101,23 +105,35 @@ public class UserPage extends HttpServlet {
 				getCollectArticle(request);
 			}
 		}
-		//取消点赞
+		// 取消点赞
 		if (method.equals("deleteGood")) {
 			msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), "good", null);
 			if (msg.getResult().equals("操作成功")) {
 				// 响应
-				getGoodArticle(request);			
+				getGoodArticle(request);
 			}
 		}
-		//取消转发
+		// 取消转发
 		if (method.equals("deleteForword")) {
 			msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), "forword", null);
 			if (msg.getResult().equals("操作成功")) {
 				// 响应
-				getForwordArticle(request);			
+				getForwordArticle(request);
 			}
 		}
-		
+
+		// 查看关注的人
+		if (method.equals("getFollow")) {
+			getFollow(request, response);			
+			return;
+		}
+		//取消关注
+		if (method.equals("cancelFollow")) {
+			msg = friendService.cancelFollow(account.getEmail(), id);
+			getFollow(request, response);
+			return;
+		}
+
 		list = (List<Article>) resultMap.get("articleList");// 数据
 		totalCounts = (int) resultMap.get("articleCount");// 数据总数
 		totalPages = ((totalCounts % 4 == 0) ? (totalCounts / 4) : (totalCounts / 4 + 1));// 总页数，每页四条
@@ -129,13 +145,27 @@ public class UserPage extends HttpServlet {
 
 	}
 
-	//查看关注的文章
+	// 查看关注的人
+	private void getFollow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		msg = articleService.getArticleCount("t_follow where user_email = '" + account.getEmail() + "'");
+		totalCounts = (int) msg.getMessage();
+		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
+		
+		msg = friendService.getFollow(currentPage, account.getEmail());
+		
+		request.setAttribute("followList", (List)msg.getMessage());
+		request.setAttribute("totalPages", totalPages);
+		request.setAttribute("target", "userPage?method=getFollow&");
+		request.getRequestDispatcher("userPage.jsp").forward(request, response);
+	}
+
+	// 查看关注的文章
 	private void getFollowArticle(HttpServletRequest request) {
 		resultMap = (Map) ((Msg) articleService.getFollowArticle(currentPage, account)).getMessage();
 		request.setAttribute("target", "userPage?method=getFollowArticle&");
 	}
 
-	//查看赞过的文章
+	// 查看赞过的文章
 	private void getGoodArticle(HttpServletRequest request) {
 		resultMap = (Map) ((Msg) articleService.getCollectArticleByPage(currentPage, account, "good")).getMessage();
 		request.setAttribute("delete", "deleteGood");
@@ -147,7 +177,7 @@ public class UserPage extends HttpServlet {
 		resultMap = (Map) ((Msg) articleService.getCollectArticleByPage(currentPage, account, "forword")).getMessage();
 		request.setAttribute("delete", "deleteForword");
 		request.setAttribute("target", "userPage?method=getForword&");
-		
+
 	}
 
 	// 查看收藏的文章

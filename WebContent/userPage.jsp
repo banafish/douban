@@ -232,7 +232,7 @@
 							<ul>
 								<li><a id="" href="userPage?p=1">我的文章</a></li>
 								<li><a id="" href="userPage?p=1&method=getFollowArticle">关注的文章</a></li>
-								<li><a id="" href="userPage?p=1&method=getFollowPeople">关注的人</a></li>
+								<li><a id="" href="userPage?p=1&method=getFollow">关注的人</a></li>
 								<li><a id="" href="#">好友</a></li>
 								<li><a id="" href="userPage?p=1&method=getCollect">收藏</a></li>
 								<li><a id="" href="userPage?p=1&method=getForword">转发的文章</a></li>
@@ -249,6 +249,7 @@
 
 						<div class="stream-item">
 
+							<%--文章--%>
 							<c:forEach var="article" items="${requestScope.list}">
 								<div class="new-item-wrapper">
 									<div class="new-item">
@@ -280,7 +281,7 @@
 														<span style="color: red">(热)</span>
 													</c:if>
 													<c:if test="${requestScope.delete != null}">
-														<span class="report""><a ref="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
+														<span class="report""><a href="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
 													</c:if>
 												</h6>
 											</div>
@@ -289,6 +290,34 @@
 									</div>
 								</div>
 							</c:forEach>
+							
+							<%--关注的人--%>
+							<c:forEach var="account" items="${requestScope.followList}">
+								<div class="new-item-wrapper" style="height: 130px">
+									<div class="new-item">
+										<div class="new-item-up">
+											<div class="user-pic">
+												<img src="${account.avatar}"></img>
+											</div>
+											<div class="user-name">
+												<a href="javascript:void(0)" target="_blank">${account.name}</a>
+											</div>
+
+										</div>
+
+										<div class="new-item-down">
+											<div class="new-item-down-content">
+												<h4 class="new-item-down-title">
+													<a href="javascript:void(0)" title="${account.sign}" target="_blank"
+														class="title-link">${account.sign}</a>
+												</h4>
+												<span style="float: right"><a href="userPage?method=cancelFollow&id=${account.email}">取消关注</a><span>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</c:forEach>							
 
 						</div>
 					</div>
