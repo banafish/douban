@@ -23,6 +23,8 @@ public class Article {
 	private String name;//用户名称
 	
 	private ArticleInfo articleInfo;//文章的全部信息
+	
+	private String origin_author;//原作者邮箱
 
 
 	public String getAuthor_email() {
@@ -112,5 +114,14 @@ public class Article {
 	public void setArticleInfo(ArticleInfo articleInfo) {
 		this.articleInfo = articleInfo;
 	}
+
+	public String getOrigin_author() {
+		return origin_author;
+	}
+
+	public void setOrigin_author(String origin_author) {
+		this.origin_author = origin_author;
+	}
+	
 
 }

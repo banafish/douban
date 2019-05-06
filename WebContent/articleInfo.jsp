@@ -158,6 +158,7 @@
 										</div>
 										<div class="user-name">
 											<a href="#" target="_blank">${requestScope.article.name}</a>
+											<span style="margin-left: 10px; color:red">${requestScope.msg.result}</span>
 										</div>
 
 									</div>
@@ -169,7 +170,7 @@
 																			
 												<c:if test="${sessionScope.account.email != requestScope.article.author_email}">
 													<span class="add-friend"><a	href="javascript:void(0)">加好友</a></span> 
-													<span class="follow"><a	href="javascript:void(0)">关注</a></span> 
+													<span class="follow"><a	href="articleInfoServlet?method=follow&author_email=${requestScope.article.author_email}&id=${requestScope.article.id}">关注</a></span> 
 													
 													<c:choose>
 														<c:when test="${sessionScope.account.role == 'admin'}">

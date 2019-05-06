@@ -53,58 +53,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 		return new Msg("发布文章失败", null);
 	}
-
-	// 通过当前页数获取文章
+	
+	//在限制条件下获取文章总数
 	@Override
-	public Msg getArticleByPage(String currentPage) {
-		try {
-			Article article = null;
-			List<Article> list = new ArrayList<>();
-			con = dataSource.getConnection();
-			String sql = " select t_article.*, t_account.name, t_account.avatar  from t_article "
-					+ "inner join t_account on t_article.author_email = t_account.email "
-					+ "order by hot desc, modify_time desc limit ?, 4";
-			stmt = con.prepareStatement(sql);
-			stmt.setInt(1, (Integer.valueOf(currentPage) - 1) * 4);// 每页四条记录
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				article = new Article();
-				article.setId(rs.getString("id"));
-				article.setAuthor_email(rs.getString("author_email"));
-				article.setTitle(rs.getString("title"));
-				article.setType(rs.getString("type"));
-				article.setContent(rs.getString("content"));
-				article.setPicture_urls(rs.getString("picture_urls"));
-				article.setModify_time(rs.getString("modify_time"));
-				article.setHot(rs.getString("hot"));
-				article.setAvatar(rs.getNString("avatar"));
-				article.setName(rs.getNString("name"));
-				list.add(article);
-			}
-			if (list.isEmpty()) {
-				return new Msg("无文章", null);
-			} else {
-				return new Msg("分页获取文章成功", list);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				DbUtil.close(stmt, con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return new Msg("分页获取文章失败", null);
-	}
-
-	// 获取文章总数
-	@Override
-	public Msg getArticleCount() {
+	public Msg getArticleCount(String limit) {
 		try {
 			con = dataSource.getConnection();
-			String sql = "select count(*) from t_article";
+			String sql = "select count(*) from " + limit;
 			stmt = con.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -123,17 +78,51 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return new Msg("获取文章总数失败", null);
 	}
 
-	// 获取某个用户的文章总数
+	// 通过当前页数获取文章
 	@Override
-	public Msg getUserArticleCount(String email) {
+	public Msg getArticleByPage(String currentPage) {
 		try {
+			Article article = null;
+			List<Article> list = new ArrayList<>();
 			con = dataSource.getConnection();
-			String sql = "select count(*) from t_article where author_email = ?";
+			//sql语句功能：把用户转发的文章也弄进来和其他文章按hot和时间来排序显示
+			String sql = "SELECT * FROM"
+					+ "( SELECT t_article.id, t_article.author_email, t_article.title, t_article.type,t_article.content, t_article.picture_urls, t_article.modify_time, t_article.hot, "
+					+ "t_account.name, t_account.avatar, t_article.author_email AS origin_author "
+					+ "FROM t_article, t_account "
+					+ "WHERE t_article.author_email = t_account.email "
+					+ "UNION "
+					+ "SELECT t_article.id, t_article_info.user_email AS author_email, t_article.title, t_article.type, t_article.content, t_article.picture_urls, t_article.modify_time, t_article.hot, "
+					+ "t_account.`name`, t_account.avatar, t_article.author_email AS origin_author "
+					+ "FROM t_article, t_account, t_article_info "
+					+ "WHERE t_article_info.forword = 1 "
+					+ "AND t_article_info.article_id = t_article.id "
+					+ "AND t_article_info.user_email = t_account.email) "
+					+ "AS t_sub "
+					+ "ORDER BY hot DESC, modify_time DESC LIMIT ?, 4";
+
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, email);
+			stmt.setInt(1, (Integer.valueOf(currentPage) - 1) * 4);// 每页四条记录
 			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
-				return new Msg("获取某个用户的文章总数成功", rs.getInt(1));
+			while (rs.next()) {
+				article = new Article();
+				article.setId(rs.getString("id"));
+				article.setAuthor_email(rs.getString("author_email"));
+				article.setTitle(rs.getString("title"));
+				article.setType(rs.getString("type"));
+				article.setContent(rs.getString("content"));
+				article.setPicture_urls(rs.getString("picture_urls"));
+				article.setModify_time(rs.getString("modify_time"));
+				article.setHot(rs.getString("hot"));
+				article.setAvatar(rs.getNString("avatar"));
+				article.setName(rs.getNString("name"));
+				article.setOrigin_author(rs.getNString("origin_author"));
+				list.add(article);
+			}
+			if (list.isEmpty()) {
+				return new Msg("无文章", null);
+			} else {
+				return new Msg("分页获取文章成功", list);
 			}
 
 		} catch (SQLException e) {
@@ -145,8 +134,8 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 				e.printStackTrace();
 			}
 		}
-		return new Msg("获取某个用户的文章总数失败", null);
-	}
+		return new Msg("分页获取文章失败", null);
+	}	
 
 	// 通过当前页数获取某个用户的文章
 	@Override
@@ -396,7 +385,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				return new Msg("获取删除文章的图片路径成功", rs.getString("picture_urls"));
-			}			
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -407,6 +396,55 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			}
 		}
 		return new Msg("获取删除文章的图片路径失败", null);
+	}
+
+	//获取收藏转发的文章
+	@Override
+	public Msg getCollectArticleByPage(String currentPage, Account account, String method) {
+		try {
+			Article article = null;
+			List<Article> list = new ArrayList<>();
+			con = dataSource.getConnection();
+			String sql = "SELECT t_article.*, t_account.name, t_account.avatar FROM t_article, t_article_info, t_account "
+					+ "WHERE t_article_info.user_email = ?  "
+					+ "AND t_article_info." + method +" = 1 "
+					+ "AND t_article_info.article_id = t_article.id "
+					+ "AND t_article.author_email = t_account.email "
+					+ "ORDER BY hot DESC, modify_time DESC LIMIT ?, 4 ";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, account.getEmail());
+			stmt.setInt(2, (Integer.valueOf(currentPage) - 1) * 4);// 每页四条记录
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				article = new Article();
+				article.setId(rs.getString("id"));
+				article.setAuthor_email(rs.getString("author_email"));
+				article.setTitle(rs.getString("title"));
+				article.setType(rs.getString("type"));
+				article.setContent(rs.getString("content"));
+				article.setPicture_urls(rs.getString("picture_urls"));
+				article.setModify_time(rs.getString("modify_time"));
+				article.setHot(rs.getString("hot"));
+				article.setAvatar(rs.getString("avatar"));
+				article.setName(rs.getString("name"));
+				list.add(article);
+			}
+			if (list.isEmpty()) {
+				return new Msg("无文章", null);
+			} else {
+				return new Msg("分页获取某个用户的文章成功", list);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("分页获取某个用户的文章失败", null);
 	}
 
 }

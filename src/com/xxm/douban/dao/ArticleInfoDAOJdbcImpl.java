@@ -115,7 +115,7 @@ public class ArticleInfoDAOJdbcImpl implements ArticleInfoDAO {
 
 	//点赞收藏转发
 	@Override
-	public Msg setArticleInfoGCF(String id, String user_email, String method) {
+	public Msg setArticleInfoGCF(String id, String user_email, String method, String value) {
 		try {
 			con = dataSource.getConnection();
 			String sql = "insert into t_article_info (article_id, user_email, "
@@ -127,12 +127,12 @@ public class ArticleInfoDAOJdbcImpl implements ArticleInfoDAO {
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, id);
 			stmt.setString(2, user_email);
-			stmt.setInt(3, 1);
-			stmt.setInt(4, 1);
+			stmt.setString(3, value);
+			stmt.setString(4, value);
 
 			// 判断执行插入语句后受影响语句是否大于0
 			if (stmt.executeUpdate() > 0) {
-				return new Msg("点赞成功", null);
+				return new Msg("操作成功", null);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

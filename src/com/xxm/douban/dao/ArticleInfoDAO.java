@@ -7,6 +7,6 @@ public interface ArticleInfoDAO {
 	
 	Msg getArticleInfoDetail(String id);//统计文章点赞等数量
 	
-	Msg setArticleInfoGCF(String id, String user_email, String method);//点赞收藏转发
+	Msg setArticleInfoGCF(String id, String user_email, String method, String value);//点赞收藏转发
 
 }

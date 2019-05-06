@@ -1,5 +1,8 @@
 package com.xxm.douban.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.xxm.douban.bean.Msg;
 import com.xxm.douban.dao.ArticleDAO;
 import com.xxm.douban.dao.UploadPicDAO;
@@ -25,24 +28,34 @@ public class ArticleService {
 
 	}
 
-	// 通过当前页数获取文章
-	public Msg getArticleByPage(String currentPage) {
-		return articleDAO.getArticleByPage(currentPage);
+	// 在限制条件下获取文章总数
+	public Msg getArticleCount(String limit) {
+		return articleDAO.getArticleCount(limit);
 	}
 
-	// 获取文章总数
-	public Msg getArticleCount() {
-		return articleDAO.getArticleCount();
+	// 通过当前页数获取文章
+	public Msg getArticleByPage(String currentPage) {
+		Map map = new HashMap();
+		Msg msgCount = getArticleCount("t_article");
+		Msg msgCountForword = getArticleCount("t_article_info where forword = 1");
+		Msg msgArticle = articleDAO.getArticleByPage(currentPage);
+		// 原文章总数加上转发的数量
+		int counts = (int) msgCount.getMessage() + (int) msgCountForword.getMessage();
+
+		map.put("articleCount", counts);
+		map.put("articleList", msgArticle.getMessage());
+		return new Msg(msgArticle.getResult(), map);
 	}
 
 	// 通过当前页数获某个用户的取文章
 	public Msg getUserArticleByPage(String currentPage, Account account) {
-		return articleDAO.getUserArticleByPage(currentPage, account);
-	}
+		Map map = new HashMap();
+		Msg msgCount = getArticleCount("t_article where author_email = " + "'" + account.getEmail() + "'");
+		Msg msgArticle = articleDAO.getUserArticleByPage(currentPage, account);
 
-	// 获取某个用户的文章总数
-	public Msg getUserArticleCount(String email) {
-		return articleDAO.getUserArticleCount(email);
+		map.put("articleCount", msgCount.getMessage());
+		map.put("articleList", msgArticle.getMessage());
+		return new Msg(msgArticle.getResult(), map);
 	}
 
 	// 获取搜索文章总数
@@ -64,27 +77,38 @@ public class ArticleService {
 	public Msg getTypeArticleByPage(String currentPage, String type) {
 		return articleDAO.getTypeArticleByPage(currentPage, type);
 	}
-	
+
 	// 置顶/取消置顶
 	public Msg setArticleHot(String id, int hot) {
 		return articleDAO.setArticleHot(id, hot);
 	}
-	
-	//删除文章
+
+	// 删除文章
 	public Msg deleteArticle(String id) {
 		UploadPicDAO uploadPicDAO = null;
 		Msg msgPic = articleDAO.getArticlePics(id);
-		
+
 		if (msgPic.getResult().equals("获取删除文章的图片路径成功")) {
-			if (((String)msgPic.getMessage()).length() > 0) {//如果有图片
+			if (((String) msgPic.getMessage()).length() > 0) {// 如果有图片
 				uploadPicDAO = new UploadPicDAO();
-				Msg msg = uploadPicDAO.deletePic( (String)msgPic.getMessage());
+				Msg msg = uploadPicDAO.deletePic((String) msgPic.getMessage());
 				if (msg.getResult().equals("删除图片成功")) {
 					return articleDAO.deleteArticle(id);
 				}
-			}			
+			}
 			return articleDAO.deleteArticle(id);
 		}
 		return new Msg("删除失败", null);
+	}
+
+	// 通过当前页数获取用户收藏转发的文章
+	public Msg getCollectArticleByPage(String currentPage, Account account, String method) {
+		Map map = new HashMap();
+		Msg msgCount = getArticleCount("t_article_info where " + method + " = 1 and user_email = '" + account.getEmail() + "'");
+		Msg msgArticle = articleDAO.getCollectArticleByPage(currentPage, account, method);
+
+		map.put("articleCount", msgCount.getMessage());
+		map.put("articleList", msgArticle.getMessage());
+		return new Msg(msgArticle.getResult(), map);
 	}
 }

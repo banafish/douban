@@ -14,6 +14,7 @@ import com.xxm.douban.entity.Article;
 import com.xxm.douban.entity.ArticleInfo;
 import com.xxm.douban.service.ArticleInfoService;
 import com.xxm.douban.service.ArticleService;
+import com.xxm.douban.service.FriendService;
 
 /**
  * Servlet implementation class ArticleServlet
@@ -23,17 +24,22 @@ public class ArticleInfoServlet extends HttpServlet {
 	private ArticleInfoService articleInfoService;
 	
 	private ArticleService articleService;
+	
+	private FriendService friendService;
 
 	private Msg msg;
 
 	private Account account;
 
 	private String id;// 文章id
+	
+	private String author_email;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		articleInfoService = (ArticleInfoService) getServletContext().getAttribute("articleInfoService");
 		articleService = (ArticleService) getServletContext().getAttribute("articleService");
+		friendService = (FriendService) getServletContext().getAttribute("friendService");
 		HttpSession session = request.getSession();
 
 		// 获取用户属性
@@ -41,6 +47,9 @@ public class ArticleInfoServlet extends HttpServlet {
 
 		// 获取文章id
 		id = request.getParameter("id");
+		
+		//获取作者email
+		author_email =  request.getParameter("author_email");
 
 		String method = request.getParameter("method");
 		String realMethod = null;// 真实method,防止sql注入
@@ -54,6 +63,12 @@ public class ArticleInfoServlet extends HttpServlet {
 		//删除文章
 		if (method.equals("delete")) {
 			deleteArticle(request, response);
+			return;
+		}
+		
+		//关注
+		if (method.equals("follow")) {
+			setFollow(request, response);
 			return;
 		}
 
@@ -81,11 +96,21 @@ public class ArticleInfoServlet extends HttpServlet {
 
 	}
 	
+	//设置关注
+	private void setFollow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		msg = friendService.setFollow(account.getEmail(), author_email);
+		
+		request.setAttribute("msg", msg);
+		
+		getArticleInfo(request, response);
+	}
+
 	//删除文章
 	private void deleteArticle(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		msg = articleService.deleteArticle(id);
 		
 		if (msg.getResult().equals("删除文章成功")) {
+			request.setAttribute("msg", msg);
 			// 响应
 			getArticleInfo(request, response);
 		}
@@ -96,8 +121,9 @@ public class ArticleInfoServlet extends HttpServlet {
 	private void setArticleInfoGCF(HttpServletRequest request, HttpServletResponse response, String method)
 			throws ServletException, IOException {
 
-		// 获取文章全部信息
-		msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), method);
+		// 点赞收藏转发
+		msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), method, "1");
+		request.setAttribute("msg", msg);
 		// 响应
 		getArticleInfo(request, response);
 	}
@@ -107,6 +133,7 @@ public class ArticleInfoServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		msg = articleService.setArticleHot(id, hot);
+		request.setAttribute("msg", msg);
 		// 响应
 		getArticleInfo(request, response);
 	}

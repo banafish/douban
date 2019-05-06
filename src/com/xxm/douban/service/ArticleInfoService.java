@@ -21,7 +21,7 @@ public class ArticleInfoService {
 	} 
 	
 	//点赞
-	public Msg setArticleInfoGCF(String id, String user_email, String method) {		
-		return articleInfoDAO.setArticleInfoGCF(id, user_email, method);
+	public Msg setArticleInfoGCF(String id, String user_email, String method, String value) {		
+		return articleInfoDAO.setArticleInfoGCF(id, user_email, method, value);
 	}
 }

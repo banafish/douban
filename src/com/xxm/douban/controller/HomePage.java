@@ -2,6 +2,7 @@ package com.xxm.douban.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,10 +66,9 @@ public class HomePage extends HttpServlet {
 			currentPage = "1";// 如果为空默认请求第一页数据
 		}
 
-		msgCount = articleService.getArticleCount();
-		msgList = articleService.getArticleByPage(currentPage);
-		list = (List<Article>) msgList.getMessage();// 数据
-		totalCounts = (int) msgCount.getMessage();// 数据总数
+		Map resultMap = (Map)((Msg)articleService.getArticleByPage(currentPage)).getMessage();
+		list = (List<Article>) resultMap.get("articleList");// 数据
+		totalCounts = (int) resultMap.get("articleCount");// 数据总数
 		totalPages = ((totalCounts % 4 == 0) ? (totalCounts / 4) : (totalCounts / 4 + 1));// 总页数，每页四条
 
 		request.setAttribute("target", "homePage?method=getArticleByPage&");

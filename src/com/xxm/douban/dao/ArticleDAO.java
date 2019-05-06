@@ -9,9 +9,7 @@ public interface ArticleDAO {
 	
 	Msg getArticleByPage(String currentPage);//通过当前页数获取文章
 	
-	Msg getArticleCount();//获取文章总数
-	
-	Msg getUserArticleCount(String email);//获取某个用户的文章总数
+	Msg getArticleCount(String limit);//在限制条件下获取文章总数
 	
 	Msg getUserArticleByPage(String currentPage, Account account);//通过当前页数获取某个用户的文章
 	
@@ -27,6 +25,8 @@ public interface ArticleDAO {
 	
 	Msg deleteArticle(String id);// 删除文章
 	
-	public Msg getArticlePics(String id);// 获取删除文章的图片路径
+	Msg getArticlePics(String id);// 获取删除文章的图片路径
+	
+	Msg getCollectArticleByPage(String currentPage, Account account, String method);//获取收藏转发的文章
 
 }

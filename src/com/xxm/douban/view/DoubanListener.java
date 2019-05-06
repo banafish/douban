@@ -12,9 +12,11 @@ import javax.sql.DataSource;
 import com.xxm.douban.dao.AccountDAOJdbcImpl;
 import com.xxm.douban.dao.ArticleDAOJdbcImpl;
 import com.xxm.douban.dao.ArticleInfoDAOJdbcImpl;
+import com.xxm.douban.dao.FriendDAOJdbcImpl;
 import com.xxm.douban.entity.Account;
 import com.xxm.douban.service.ArticleInfoService;
 import com.xxm.douban.service.ArticleService;
+import com.xxm.douban.service.FriendService;
 import com.xxm.douban.service.UserService;
 
 @WebListener
@@ -30,6 +32,7 @@ public class DoubanListener implements ServletContextListener{
 			context.setAttribute("userService", new UserService(new AccountDAOJdbcImpl(dataSource)));
 			context.setAttribute("articleService", new ArticleService(new ArticleDAOJdbcImpl(dataSource)));
 			context.setAttribute("articleInfoService", new ArticleInfoService(new ArticleInfoDAOJdbcImpl(dataSource)));
+			context.setAttribute("friendService", new FriendService(new FriendDAOJdbcImpl(dataSource)));
 		} catch (NamingException e) {
 			throw new RuntimeException(e);
 		}
