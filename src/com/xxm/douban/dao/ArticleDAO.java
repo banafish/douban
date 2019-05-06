@@ -11,7 +11,7 @@ public interface ArticleDAO {
 	
 	Msg getArticleCount(String limit);//在限制条件下获取文章总数
 	
-	Msg getUserArticleByPage(String currentPage, Account account);//通过当前页数获取某个用户的文章
+	Msg getUserArticleByPage(String currentPage, String limit);//通过当前页数获取某个用户的文章
 	
 	Msg getSearchArticleCount(String keyWord);//获取搜索文章总数
 	

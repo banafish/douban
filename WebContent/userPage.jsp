@@ -231,11 +231,12 @@
 							</h1>
 							<ul>
 								<li><a id="" href="userPage?p=1">我的文章</a></li>
-								<li><a id="usr-profile-nav-statuses" href="#">关注的文章</a></li>
-								<li><a id="usr-profile-nav-photos" href="#">关注的人</a></li>
-								<li><a id="usr-profile-nav-notes" href="#">好友</a></li>
-								<li><a id="usr-profile-nav-doulists" href="userPage?p=1&method=getCollect">收藏</a></li>
+								<li><a id="" href="userPage?p=1&method=getFollowArticle">关注的文章</a></li>
+								<li><a id="" href="userPage?p=1&method=getFollowPeople">关注的人</a></li>
+								<li><a id="" href="#">好友</a></li>
+								<li><a id="" href="userPage?p=1&method=getCollect">收藏</a></li>
 								<li><a id="" href="userPage?p=1&method=getForword">转发的文章</a></li>
+								<li><a id="" href="userPage?p=1&method=getGood">赞过的文章</a></li>
 							</ul>
 						</div>
 					</div>
@@ -278,7 +279,9 @@
 													<c:if test="${article.hot == 1}">
 														<span style="color: red">(热)</span>
 													</c:if>
-													<span class="report"><a	href="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
+													<c:if test="${requestScope.delete != null}">
+														<span class="report""><a ref="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
+													</c:if>
 												</h6>
 											</div>
 

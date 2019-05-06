@@ -64,26 +64,33 @@ public class UserPage extends HttpServlet {
 
 		// 根据不同的method调不同的方法
 		if (method == null) {
-			getUserArticleByPage();
+			getUserArticleByPage(request);
 			method = "";
-			request.setAttribute("delete", "delete");// 设置删除文章的类型
 		}
+		
+		//查看关注的文章
+		if (method.equals("getFollowArticle")) {
+			getFollowArticle(request);
+		}		
 		// 查看收藏的文章
 		if (method.equals("getCollect")) {
-			getCollectArticle();
-			request.setAttribute("delete", "deleteCollect");
+			getCollectArticle(request);
+		}
+		//查看赞过的文章
+		if (method.equals("getGood")) {
+			getGoodArticle(request);
 		}
 		// 查看转发的文章
 		if (method.equals("getForword")) {
-			getForwordArticle();
-			request.setAttribute("delete", "deleteForword");
+			getForwordArticle(request);
 		}
+		
 		// 删除文章
 		if (method.equals("delete")) {
 			msg = articleService.deleteArticle(id);
 			if (msg.getResult().equals("删除文章成功")) {
 				// 响应
-				getUserArticleByPage();
+				getUserArticleByPage(request);
 			}
 		}
 		//取消收藏
@@ -91,8 +98,15 @@ public class UserPage extends HttpServlet {
 			msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), "collect", null);
 			if (msg.getResult().equals("操作成功")) {
 				// 响应
-				getCollectArticle();
-				request.setAttribute("delete", "deleteCollect");
+				getCollectArticle(request);
+			}
+		}
+		//取消点赞
+		if (method.equals("deleteGood")) {
+			msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), "good", null);
+			if (msg.getResult().equals("操作成功")) {
+				// 响应
+				getGoodArticle(request);			
 			}
 		}
 		//取消转发
@@ -100,43 +114,54 @@ public class UserPage extends HttpServlet {
 			msg = articleInfoService.setArticleInfoGCF(id, account.getEmail(), "forword", null);
 			if (msg.getResult().equals("操作成功")) {
 				// 响应
-				getForwordArticle();
-				request.setAttribute("delete", "deleteForword");
+				getForwordArticle(request);			
 			}
 		}
+		
+		list = (List<Article>) resultMap.get("articleList");// 数据
+		totalCounts = (int) resultMap.get("articleCount");// 数据总数
+		totalPages = ((totalCounts % 4 == 0) ? (totalCounts / 4) : (totalCounts / 4 + 1));// 总页数，每页四条
 
 		// 响应
-		request.setAttribute("target", "userPage?");
 		request.setAttribute("list", list);
 		request.setAttribute("totalPages", totalPages);
 		request.getRequestDispatcher("userPage.jsp").forward(request, response);
 
 	}
 
-	// 查看转发的文章
-	private void getForwordArticle() {
-		resultMap = (Map) ((Msg) articleService.getCollectArticleByPage(currentPage, account, "forword")).getMessage();
-		list = (List<Article>) resultMap.get("articleList");// 数据
-		totalCounts = (int) resultMap.get("articleCount");// 数据总数
-		totalPages = ((totalCounts % 4 == 0) ? (totalCounts / 4) : (totalCounts / 4 + 1));// 总页数，每页四条
+	//查看关注的文章
+	private void getFollowArticle(HttpServletRequest request) {
+		resultMap = (Map) ((Msg) articleService.getFollowArticle(currentPage, account)).getMessage();
+		request.setAttribute("target", "userPage?method=getFollowArticle&");
+	}
 
+	//查看赞过的文章
+	private void getGoodArticle(HttpServletRequest request) {
+		resultMap = (Map) ((Msg) articleService.getCollectArticleByPage(currentPage, account, "good")).getMessage();
+		request.setAttribute("delete", "deleteGood");
+		request.setAttribute("target", "userPage?method=getGood&");
+	}
+
+	// 查看转发的文章
+	private void getForwordArticle(HttpServletRequest request) {
+		resultMap = (Map) ((Msg) articleService.getCollectArticleByPage(currentPage, account, "forword")).getMessage();
+		request.setAttribute("delete", "deleteForword");
+		request.setAttribute("target", "userPage?method=getForword&");
+		
 	}
 
 	// 查看收藏的文章
-	private void getCollectArticle() {
+	private void getCollectArticle(HttpServletRequest request) {
 		resultMap = (Map) ((Msg) articleService.getCollectArticleByPage(currentPage, account, "collect")).getMessage();
-		list = (List<Article>) resultMap.get("articleList");// 数据
-		totalCounts = (int) resultMap.get("articleCount");// 数据总数
-		totalPages = ((totalCounts % 4 == 0) ? (totalCounts / 4) : (totalCounts / 4 + 1));// 总页数，每页四条
+		request.setAttribute("delete", "deleteCollect");
+		request.setAttribute("target", "userPage?method=getCollect&");
 	}
 
 	// 获取用户的文章
-	private void getUserArticleByPage() {
+	private void getUserArticleByPage(HttpServletRequest request) {
 		resultMap = (Map) ((Msg) articleService.getUserArticleByPage(currentPage, account)).getMessage();
-		list = (List<Article>) resultMap.get("articleList");// 数据
-		totalCounts = (int) resultMap.get("articleCount");// 数据总数
-		totalPages = ((totalCounts % 4 == 0) ? (totalCounts / 4) : (totalCounts / 4 + 1));// 总页数，每页四条
-
+		request.setAttribute("delete", "delete");// 设置删除文章的类型
+		request.setAttribute("target", "userPage?");
 	}
 
 }

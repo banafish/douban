@@ -139,28 +139,29 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 	// 通过当前页数获取某个用户的文章
 	@Override
-	public Msg getUserArticleByPage(String currentPage, Account account) {
+	public Msg getUserArticleByPage(String currentPage, String limit) {
 		try {
 			Article article = null;
 			List<Article> list = new ArrayList<>();
 			con = dataSource.getConnection();
-			String sql = "select * from t_article where author_email = ? order by hot desc, modify_time desc limit ?, 4 ";
+			String sql = "select t_article.*, t_account.name, t_account.avatar from t_article, t_account "
+					+ limit
+					+ " order by hot desc, modify_time desc limit ?, 4 ";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, account.getEmail());
-			stmt.setInt(2, (Integer.valueOf(currentPage) - 1) * 4);// 每页四条记录
+			stmt.setInt(1, (Integer.valueOf(currentPage) - 1) * 4);// 每页四条记录
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				article = new Article();
 				article.setId(rs.getString("id"));
-				article.setAuthor_email(account.getEmail());
+				article.setAuthor_email(rs.getString("author_email"));
 				article.setTitle(rs.getString("title"));
 				article.setType(rs.getString("type"));
 				article.setContent(rs.getString("content"));
 				article.setPicture_urls(rs.getString("picture_urls"));
 				article.setModify_time(rs.getString("modify_time"));
 				article.setHot(rs.getString("hot"));
-				article.setAvatar(account.getAvatar());
-				article.setName(account.getName());
+				article.setAvatar(rs.getString("avatar"));
+				article.setName(rs.getString("name"));
 				list.add(article);
 			}
 			if (list.isEmpty()) {
@@ -398,7 +399,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return new Msg("获取删除文章的图片路径失败", null);
 	}
 
-	//获取收藏转发的文章
+	//获取收藏转发点赞的文章
 	@Override
 	public Msg getCollectArticleByPage(String currentPage, Account account, String method) {
 		try {
@@ -432,7 +433,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			if (list.isEmpty()) {
 				return new Msg("无文章", null);
 			} else {
-				return new Msg("分页获取某个用户的文章成功", list);
+				return new Msg("获取收藏转发的文章成功", list);
 			}
 
 		} catch (SQLException e) {
@@ -444,7 +445,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 				e.printStackTrace();
 			}
 		}
-		return new Msg("分页获取某个用户的文章失败", null);
+		return new Msg("获取收藏转发的文章失败", null);
 	}
 
 }

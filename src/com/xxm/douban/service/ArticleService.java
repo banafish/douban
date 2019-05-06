@@ -51,7 +51,26 @@ public class ArticleService {
 	public Msg getUserArticleByPage(String currentPage, Account account) {
 		Map map = new HashMap();
 		Msg msgCount = getArticleCount("t_article where author_email = " + "'" + account.getEmail() + "'");
-		Msg msgArticle = articleDAO.getUserArticleByPage(currentPage, account);
+		
+		String limit = "where t_article.author_email = '" + account.getEmail() + "' and t_article.author_email = t_account.email ";
+		Msg msgArticle = articleDAO.getUserArticleByPage(currentPage, limit);
+
+		map.put("articleCount", msgCount.getMessage());
+		map.put("articleList", msgArticle.getMessage());
+		return new Msg(msgArticle.getResult(), map);
+	}
+	
+	//获取关注的文章
+	public Msg getFollowArticle(String currentPage, Account account) {
+		Map map = new HashMap();
+		Msg msgCount = getArticleCount("t_article, t_follow where t_follow.user_email = " + "'" + account.getEmail() + "'"
+				+ " and t_article.author_email = t_follow.follow_email ");
+		
+		String limit = ", t_follow where t_follow.user_email = '" 
+						+ account.getEmail() 
+						+ "' and t_article.author_email = t_follow.follow_email "
+						+ "and t_article.author_email = t_account.email ";
+		Msg msgArticle = articleDAO.getUserArticleByPage(currentPage, limit);
 
 		map.put("articleCount", msgCount.getMessage());
 		map.put("articleList", msgArticle.getMessage());
@@ -101,7 +120,7 @@ public class ArticleService {
 		return new Msg("删除失败", null);
 	}
 
-	// 通过当前页数获取用户收藏转发的文章
+	// 通过当前页数获取用户收藏转发点赞的文章
 	public Msg getCollectArticleByPage(String currentPage, Account account, String method) {
 		Map map = new HashMap();
 		Msg msgCount = getArticleCount("t_article_info where " + method + " = 1 and user_email = '" + account.getEmail() + "'");
