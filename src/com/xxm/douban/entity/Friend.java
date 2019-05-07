@@ -6,7 +6,7 @@ public class Friend {
 	
 	private String host_email;//主邮箱
 	
-	private String guest_email;//副邮箱
+	private String guest_email;//对方的邮箱
 	
 	private String msg;//信息
 	
@@ -14,9 +14,13 @@ public class Friend {
 	
 	private String statue;//状态
 	
-	private String type;//类型
-	
 	private String table;//要操作的表
+	
+	private String name;//名字
+	
+	private String avatar;//头像
+	
+	private String sign;//签名
 
 	public String getId() {
 		return id;
@@ -66,14 +70,6 @@ public class Friend {
 		this.statue = statue;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getTable() {
 		return table;
 	}
@@ -81,7 +77,30 @@ public class Friend {
 	public void setTable(String table) {
 		this.table = table;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
 	
 
 }

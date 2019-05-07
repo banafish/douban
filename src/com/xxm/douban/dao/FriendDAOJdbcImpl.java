@@ -129,7 +129,7 @@ public class FriendDAOJdbcImpl implements FriendDAO{
 					+ friend.getTable()
 					+ " (host_email, guest_email, msg, time, statue) "
 					+ "VALUES (?, ?, ?, ?, ?)  "
-					+ "ON DUPLICATE KEY UPDATE msg = ?";
+					+ "ON DUPLICATE KEY UPDATE msg = ?, statue = ?";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, friend.getHost_email());
 			stmt.setString(2, friend.getGuest_email());
@@ -137,6 +137,7 @@ public class FriendDAOJdbcImpl implements FriendDAO{
 			stmt.setString(4, friend.getTime());
 			stmt.setString(5, friend.getStatue());
 			stmt.setString(6, friend.getMsg());
+			stmt.setString(7, friend.getStatue());
 			
 			// 判断执行插入语句后受影响语句是否大于0
 			if (stmt.executeUpdate() > 0) {
@@ -183,6 +184,75 @@ public class FriendDAOJdbcImpl implements FriendDAO{
 			}
 		}
 		return new Msg("获得分组失败", null);
+	}
+
+	//取得朋友申请，朋友列表，豆邮
+	@Override
+	public Msg getFriend(String currentPage, String limit) {
+		try {
+			Friend friend = null;					
+			List<Friend> list = new ArrayList<>();
+			con = dataSource.getConnection();
+			String sql = "SELECT t_friend.host_email, t_friend.guest_email, t_friend.msg, t_friend.time, "
+					+ "t_account.`name`, t_account.avatar, t_account.sign FROM "
+					+ limit
+					+ " LIMIT ?, 6";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, (Integer.valueOf(currentPage) - 1) * 6);// 每页6条记录
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				friend = new Friend();
+				friend.setHost_email(rs.getString("host_email"));
+				friend.setGuest_email(rs.getString("guest_email"));
+				friend.setMsg(rs.getString("msg"));
+				friend.setTime(rs.getString("time"));
+				friend.setName(rs.getString("name"));
+				friend.setAvatar(rs.getString("avatar"));
+				friend.setSign(rs.getString("sign"));
+				list.add(friend);
+			}
+			if (list.isEmpty()) {
+				return new Msg("无信息", null);
+			} else {
+				return new Msg("操作成功", list);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("操作失败", null);
+	}
+
+	//删除好友
+	@Override
+	public Msg deleteFriend(String host_email, String guest_email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "delete from t_friend where host_email = ? and guest_email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, host_email);
+			stmt.setString(2, guest_email);
+
+			// 判断执行删除语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("删除好友成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("删除好友失败", null);
 	}
 
 }

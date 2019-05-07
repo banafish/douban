@@ -28,12 +28,43 @@ public class FriendService {
 
 	// 跟好友有关的操作
 	public Msg insertFriend(Friend friend) {
+		if (friend.getMsg() == null || friend.getMsg().equals("")) {
+			friend.setMsg("好友");//默认设为好友
+		}
 		return friendDAO.insertFriend(friend);
 	}
 	
 	//取得分组
 	public Msg getGroup(String host_email) {
 		return friendDAO.getGroup(host_email);
+	}
+	
+	//取得朋友列表
+	public Msg getFriendList(String currentPage, String user_email) {
+		String limit = " t_friend, t_account WHERE t_friend.host_email = '" + user_email + "' AND t_friend.guest_email = t_account.email "
+				+ "AND t_friend.statue = 0 "
+				+ " ORDER BY t_friend.time DESC";
+		return friendDAO.getFriend(currentPage, limit);
+	}
+	//通过分类取得朋友列表
+	public Msg getFriendByGroup(String currentPage, String user_email, String group) {
+		String limit = " t_friend, t_account WHERE t_friend.host_email = '" + user_email + "' AND t_friend.guest_email = t_account.email "
+				+ "AND t_friend.statue = 0 AND t_friend.msg = '" + group + "'"
+				+ " ORDER BY t_friend.time DESC";
+		return friendDAO.getFriend(currentPage, limit);
+	}
+
+	//取得好友申请
+	public Msg getApply(String currentPage, String user_email) {
+		String limit = " t_friend, t_account WHERE t_friend.guest_email = '" + user_email + "' AND t_friend.host_email = t_account.email "
+				+ "AND t_friend.statue = 1 "
+				+ " ORDER BY t_friend.time DESC";
+		return friendDAO.getFriend(currentPage, limit);
+	}
+	
+	//删除好友
+	public Msg deleteFriend(String host_email, String guest_email) {
+		return friendDAO.deleteFriend(host_email, guest_email);
 	}
 
 }

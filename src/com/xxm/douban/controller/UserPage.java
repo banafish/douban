@@ -33,7 +33,7 @@ public class UserPage extends HttpServlet {
 
 	private Account account;
 
-	private String id;// 文章id
+	private String id;// 操作对象的id
 
 	private String currentPage;// 当前页数
 

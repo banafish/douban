@@ -79,6 +79,15 @@
 				$(".edit-sign").attr("style", "display: none");
 			}
 		});
+
+		//好友申请输入框
+		$(".allow_apply_a").click(function() {
+			$(".edit-group").attr("style", "display: inline");
+		});
+		$(".cancel-group").click(function() {
+			$(".edit-group").attr("style", "display: none");
+		});
+
 	});
 	//搜索
 	function validateForm() {
@@ -233,10 +242,11 @@
 								<li><a id="" href="userPage?p=1">我的文章</a></li>
 								<li><a id="" href="userPage?p=1&method=getFollowArticle">关注的文章</a></li>
 								<li><a id="" href="userPage?p=1&method=getFollow">关注的人</a></li>
-								<li><a id="" href="#">好友</a></li>
+								<li><a id="" href="friendServlet?p=1&method=getFriendList">好友</a></li>
 								<li><a id="" href="userPage?p=1&method=getCollect">收藏</a></li>
 								<li><a id="" href="userPage?p=1&method=getForword">转发的文章</a></li>
 								<li><a id="" href="userPage?p=1&method=getGood">赞过的文章</a></li>
+								<li><a id="" href="friendServlet?p=1&method=getApply">申请</a></li>
 							</ul>
 						</div>
 					</div>
@@ -247,8 +257,8 @@
 
 					<div id="statuses">
 
-						<div class="stream-item">
-							
+						<div class="stream-item">														
+
 							<%--文章--%>
 							<c:forEach var="article" items="${requestScope.list}">
 								<div class="new-item-wrapper">
@@ -315,6 +325,94 @@
 												</h4>
 												<span style="float: right"><a
 													href="userPage?method=cancelFollow&id=${account.email}">取消关注</a><span>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+							
+							<%--好友组别--%>
+							<c:forEach var="group" items="${requestScope.groupFriend}">
+								<a style="margin-right: 10px" href="friendServlet?p=1&method=getFriendByGroup&group=${group}">${group}</a>								
+							</c:forEach>
+
+							<%--朋友--%>
+							<c:forEach var="friend" items="${requestScope.friendList}">
+								<div class="new-item-wrapper" style="height: 135px">
+									<div class="new-item">
+										<div class="new-item-up">
+											<div class="user-pic">
+												<img src="${friend.avatar}"></img>
+											</div>
+											<div class="user-name">
+												<a href="javascript:void(0)" target="_blank">${friend.name}</a>
+											</div>
+
+										</div>
+
+										<div class="new-item-down">
+											<div class="new-item-down-content">
+												<h4 class="new-item-down-title">
+													<a href="javascript:void(0)" title="${friend.sign}"
+														target="_blank" class="title-link">${friend.sign}</a> <br>
+													<span>${friend.msg}</span>
+												</h4>
+												<span style="float: right"><a
+													href="friendServlet?method=deleteFriend&guest_email=${friend.guest_email}">删除好友</a>
+													<br>
+												<a href="#">聊天</a> <br>
+												<a href="#">拉黑</a> <span>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+
+							<%--好友申请--%>
+							<c:forEach var="apply" items="${requestScope.applyList}">
+								<div class="new-item-wrapper" style="height: 130px">
+									<div class="new-item">
+										<div class="new-item-up">
+											<div class="user-pic">
+												<img src="${apply.avatar}"></img>
+											</div>
+											<div class="user-name">
+												<a href="javascript:void(0)" target="_blank">${apply.name}</a>
+											</div>
+										</div>
+
+										<div class="new-item-down">
+											<div class="new-item-down-content">
+												<h4 class="new-item-down-title">
+													<a href="javascript:void(0)" title="${apply.sign}"
+														target="_blank" class="title-link">${apply.sign}</a>
+												</h4>
+												<%--分组输入框--%>
+												<form method="get" action="friendServlet">
+													<div style="display: none;" class="edit-group">
+														<input name="method" value="allow" type="hidden">
+														<input name="applyGroup" value="${apply.msg}"
+															type="hidden"> <input name="guest_email"
+															value="${apply.host_email}" type="hidden"> <input
+															type="text" size="30" maxlength="30" name="msg"
+															placeholder="请输入分类，默认为好友" list="groups"> <input
+															class="submit1" type="submit" value="确定"> <input
+															class="cancel-group" type="button" value="取消">
+													</div>
+													<%--好友分组信息--%>
+													<datalist id="groups">
+														<c:forEach var="group" items="${requestScope.groups}">
+															<option value="${group}">
+														</c:forEach>
+													</datalist>
+												</form>
+												<span style="float: right"><a
+													href="javascript:void(0)" class="allow_apply_a">同意申请</a> <span><a
+														href="friendServlet?method=denyApply&guest_email=${apply.host_email}">拒绝申请</a></span>
+													<br> <br>
+													<h6>${apply.time}</h6> </span>
 											</div>
 
 										</div>
