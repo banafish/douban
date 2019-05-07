@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Account;
 import com.xxm.douban.entity.Article;
+import com.xxm.douban.entity.Friend;
 import com.xxm.douban.util.DbUtil;
 
 public class FriendDAOJdbcImpl implements FriendDAO{
@@ -117,6 +118,71 @@ public class FriendDAOJdbcImpl implements FriendDAO{
 			}
 		}
 		return new Msg("取消关注失败", null);
+	}
+
+	//跟好友有关的操作
+	@Override
+	public Msg insertFriend(Friend friend) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "INSERT INTO "
+					+ friend.getTable()
+					+ " (host_email, guest_email, msg, time, statue) "
+					+ "VALUES (?, ?, ?, ?, ?)  "
+					+ "ON DUPLICATE KEY UPDATE msg = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, friend.getHost_email());
+			stmt.setString(2, friend.getGuest_email());
+			stmt.setString(3, friend.getMsg());
+			stmt.setString(4, friend.getTime());
+			stmt.setString(5, friend.getStatue());
+			stmt.setString(6, friend.getMsg());
+			
+			// 判断执行插入语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("操作成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("操作失败", null);
+	}
+
+	//取得分组
+	@Override
+	public Msg getGroup(String host_email) {
+		try {
+			List<String> list = new ArrayList<>();
+			con = dataSource.getConnection();
+			String sql = "SELECT DISTINCT msg FROM t_friend WHERE host_email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, host_email);		
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				list.add(rs.getString(1));
+			}
+			if (list.isEmpty()) {
+				return new Msg("无分组", null);
+			} else {
+				return new Msg("获得分组成功", list);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获得分组失败", null);
 	}
 
 }

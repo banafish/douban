@@ -25,6 +25,26 @@
 				moreItems.flag = 0;
 			}
 		});
+		//关闭好友申请输入框
+		$(".cancel").click(function() {
+			$(".edit-sign").attr("style", "display: none");
+		});
+		//提交好友申请
+		$(".submit").click(function() {
+			var group = $(".signature").val();
+			if (group.length == 0) {
+				alert("分类不能为空");
+			} else {
+				$.get("friendServlet", {
+					method : "applyFriend",
+					msg : group,
+					guest_email : $(".signature").attr("id")
+				}, function(data) {
+					alert(data);
+				});
+				$(".edit-sign").attr("style", "display: none");
+			}
+		});
 
 	});
 	//搜索
@@ -35,6 +55,10 @@
 		} else {
 			return true;
 		}
+	}
+	//好友申请输入框
+	function apply() {
+		$(".edit-sign").attr("style", "display: inline");
 	}
 </script>
 </head>
@@ -158,7 +182,7 @@
 										</div>
 										<div class="user-name">
 											<a href="#" target="_blank">${requestScope.article.name}</a>
-											<span style="margin-left: 10px; color:red">${requestScope.msg.result}</span>
+											<span style="margin-left: 10px; color: red">${requestScope.msg.result}</span>
 										</div>
 
 									</div>
@@ -166,25 +190,40 @@
 									<div class="new-item-down">
 										<div class="new-item-down-content">
 											<span class="new-item-down-type">
-												${requestScope.article.type} 	
-																			
-												<c:if test="${sessionScope.account.email != requestScope.article.author_email}">
-													<span class="add-friend"><a	href="javascript:void(0)">加好友</a></span> 
-													<span class="follow"><a	href="articleInfoServlet?method=follow&author_email=${requestScope.article.author_email}&id=${requestScope.article.id}">关注</a></span> 
-													
+												${requestScope.article.type} <c:if
+													test="${sessionScope.account.email != requestScope.article.author_email}">
+													<span class="add-friend"><a
+														href="javascript:apply()">加好友</a></span>
+													<div style="display: none;" class="edit-sign">
+														<input id="${requestScope.article.author_email}"
+															class="signature" type="text" size="30" maxlength="30"
+															placeholder="请输入分类" list="groups"> <input
+															class="submit" type="submit" value="申请"> <input
+															class="cancel" type="button" value="取消">
+													</div>
+													<%--好友分组信息--%>
+													<datalist id="groups">
+														<c:forEach var="group" items="${requestScope.groups}">
+															<option value="${group}">
+														</c:forEach>
+													</datalist>
+
+													<span class="follow"><a
+														href="articleInfoServlet?method=follow&author_email=${requestScope.article.author_email}&id=${requestScope.article.id}">关注</a></span>
+
 													<c:choose>
 														<c:when test="${sessionScope.account.role == 'admin'}">
-															<span class="report"><a	href="articleInfoServlet?method=delete&id=${requestScope.article.id}">删除</a></span>
+															<span class="report"><a
+																href="articleInfoServlet?method=delete&id=${requestScope.article.id}">删除</a></span>
 														</c:when>
 														<c:otherwise>
-															<span class="report"><a	href="javascript:void(0)">举报</a></span>
+															<span class="report"><a href="javascript:void(0)">举报</a></span>
 														</c:otherwise>
 													</c:choose>
-													
+
+
 												</c:if>
-											</span>
-											
-											<br>
+											</span> <br>
 											<h3 class="new-item-down-title">
 												<a href="#" title="${requestScope.article.title}"
 													target="_blank" class="title-link">${requestScope.article.title}</a>
@@ -201,61 +240,65 @@
 
 											<h6>${requestScope.article.modify_time}
 												<c:if test="${requestScope.article.hot == 1}">
-													<span style="color: red">(热)</span>													
+													<span style="color: red">(热)</span>
 												</c:if>
-												
-												<%--显示是否置顶--%>											
-													<c:choose>
-														<c:when test="${sessionScope.account.role == 'admin' && requestScope.article.hot == 1}">
-															<span class="report"><a	href="articleInfoServlet?method=cancelHot&id=${requestScope.article.id}">取消置顶</a></span>
-														</c:when>
-														<c:when test="${sessionScope.account.role == 'admin' && requestScope.article.hot != 1}">
-															<span class="report"><a	href="articleInfoServlet?method=setHot&id=${requestScope.article.id}">置顶</a></span>
-														</c:when>
-														<c:otherwise>															
-														</c:otherwise>
-													</c:choose>
-												
+
+												<%--显示是否置顶--%>
+												<c:choose>
+													<c:when
+														test="${sessionScope.account.role == 'admin' && requestScope.article.hot == 1}">
+														<span class="report"><a
+															href="articleInfoServlet?method=cancelHot&id=${requestScope.article.id}">取消置顶</a></span>
+													</c:when>
+													<c:when
+														test="${sessionScope.account.role == 'admin' && requestScope.article.hot != 1}">
+														<span class="report"><a
+															href="articleInfoServlet?method=setHot&id=${requestScope.article.id}">置顶</a></span>
+													</c:when>
+													<c:otherwise>
+													</c:otherwise>
+												</c:choose>
+
 
 												<%--显示数量，已点的不能再点--%>
-												<span class="new-item-down-menu"> 
-													<c:choose>
+												<span class="new-item-down-menu"> <c:choose>
 														<%--为1就是已经点赞了，不能再点--%>
-														<c:when test="${requestScope.article.articleInfo.good == 1}">
+														<c:when
+															test="${requestScope.article.articleInfo.good == 1}">
 															<span class="like" style="color: red">赞<em>(${requestScope.articleInfoDetail.good})</em></span>
 														</c:when>
 														<c:otherwise>
-															<span class="like"><a href="articleInfoServlet?method=good&id=${requestScope.article.id}">赞<em>(${requestScope.articleInfoDetail.good})</em></a></span>
+															<span class="like"><a
+																href="articleInfoServlet?method=good&id=${requestScope.article.id}">赞<em>(${requestScope.articleInfoDetail.good})</em></a></span>
 														</c:otherwise>
-													</c:choose>
-													 
-													<c:choose>
-														<c:when test="${requestScope.article.articleInfo.collect == 1}">
+													</c:choose> <c:choose>
+														<c:when
+															test="${requestScope.article.articleInfo.collect == 1}">
 															<span class="like" style="color: red">收藏<em>(${requestScope.articleInfoDetail.collect})</em></span>
 														</c:when>
 														<c:otherwise>
-															<span class="like"><a href="articleInfoServlet?method=collect&id=${requestScope.article.id}">收藏<em>(${requestScope.articleInfoDetail.collect})</em></a></span>
+															<span class="like"><a
+																href="articleInfoServlet?method=collect&id=${requestScope.article.id}">收藏<em>(${requestScope.articleInfoDetail.collect})</em></a></span>
 														</c:otherwise>
-													</c:choose> 
-													
-													<c:choose>
-														<c:when test="${requestScope.article.articleInfo.reply == 1}">
+													</c:choose> <c:choose>
+														<c:when
+															test="${requestScope.article.articleInfo.reply == 1}">
 															<span class="like" style="color: red">回复<em>(${requestScope.articleInfoDetail.reply})</em></span>
 														</c:when>
 														<c:otherwise>
 															<span class="like"><a href="javascript:void(0)">回复<em>(${requestScope.articleInfoDetail.reply})</em></a></span>
 														</c:otherwise>
-													</c:choose> 
-													
-													<c:choose>
-														<c:when test="${requestScope.article.articleInfo.forword == 1}">
+													</c:choose> <c:choose>
+														<c:when
+															test="${requestScope.article.articleInfo.forword == 1}">
 															<span class="like" style="color: red">转发<em>(${requestScope.articleInfoDetail.forword})</em></span>
 														</c:when>
 														<c:otherwise>
-															<span class="like"><a href="articleInfoServlet?method=forword&id=${requestScope.article.id}">转发<em>(${requestScope.articleInfoDetail.forword})</em></a></span>
+															<span class="like"><a
+																href="articleInfoServlet?method=forword&id=${requestScope.article.id}">转发<em>(${requestScope.articleInfoDetail.forword})</em></a></span>
 														</c:otherwise>
-													</c:choose> 
-									
+													</c:choose>
+
 												</span>
 
 											</h6>

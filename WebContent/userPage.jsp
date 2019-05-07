@@ -168,9 +168,9 @@
 							<legend>搜索：</legend>
 							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
 							<div class="inp">
-							    <input name="method" value="getSearchArticleByPage" type="hidden">
-								<input name="p" value="1" type="hidden"> <input
-									id="intp-query" name="q" size="22" maxlength="60"
+								<input name="method" value="getSearchArticleByPage"
+									type="hidden"> <input name="p" value="1" type="hidden">
+								<input id="intp-query" name="q" size="22" maxlength="60"
 									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
 							</div>
 							<div class="inp-btn">
@@ -248,7 +248,7 @@
 					<div id="statuses">
 
 						<div class="stream-item">
-
+							
 							<%--文章--%>
 							<c:forEach var="article" items="${requestScope.list}">
 								<div class="new-item-wrapper">
@@ -266,7 +266,8 @@
 										<div class="new-item-down">
 											<div class="new-item-down-content">
 												<h4 class="new-item-down-title">
-													<a href="articleInfoServlet?id=${article.id}" title="${article.title}" target="_blank"
+													<a href="articleInfoServlet?id=${article.id}"
+														title="${article.title}" target="_blank"
 														class="title-link">${article.title}</a>
 												</h4>
 												<h5 class="content-some">${article.content}</h5>
@@ -281,7 +282,8 @@
 														<span style="color: red">(热)</span>
 													</c:if>
 													<c:if test="${requestScope.delete != null}">
-														<span class="report""><a href="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
+														<span class="report""><a
+															href="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
 													</c:if>
 												</h6>
 											</div>
@@ -290,7 +292,7 @@
 									</div>
 								</div>
 							</c:forEach>
-							
+
 							<%--关注的人--%>
 							<c:forEach var="account" items="${requestScope.followList}">
 								<div class="new-item-wrapper" style="height: 130px">
@@ -308,16 +310,18 @@
 										<div class="new-item-down">
 											<div class="new-item-down-content">
 												<h4 class="new-item-down-title">
-													<a href="javascript:void(0)" title="${account.sign}" target="_blank"
-														class="title-link">${account.sign}</a>
+													<a href="javascript:void(0)" title="${account.sign}"
+														target="_blank" class="title-link">${account.sign}</a>
 												</h4>
-												<span style="float: right"><a href="userPage?method=cancelFollow&id=${account.email}">取消关注</a><span>
+												<span style="float: right"><a
+													href="userPage?method=cancelFollow&id=${account.email}">取消关注</a><span>
 											</div>
 
 										</div>
 									</div>
 								</div>
-							</c:forEach>							
+							</c:forEach>
+
 
 						</div>
 					</div>

@@ -1,6 +1,8 @@
 package com.xxm.douban.controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -147,10 +149,14 @@ public class ArticleInfoServlet extends HttpServlet {
 		if (account != null) {
 			user_email = account.getEmail();
 		}
-		
+		//文章信息
 		msg = articleInfoService.getArticleInfo(id, user_email);
 		Article article = (Article) msg.getMessage();
 		request.setAttribute("article", article);
+		//用户好友分组信息
+		msg = friendService.getGroup(user_email);
+		List<String> groups = (List<String>) msg.getMessage();
+		request.setAttribute("groups", groups);
 
 		// 统计文章点赞等数量
 		msg = articleInfoService.getArticleInfoDetail(id);
