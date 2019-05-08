@@ -17,5 +17,11 @@ public interface FriendDAO {
 	Msg getFriend(String currentPage, String limit);//取得朋友申请，朋友列表，豆邮
 	
 	Msg deleteFriend(String host_email, String guest_email);//删除好友
+	
+	Msg getFriendByGroup(String currentPage, String host_email, String group);//通过分类获取好友列表
+	
+	Msg getFriendGroupCount(String host_email, String group);//分类获取好友列表的好友总数
+	
+	Msg setBlack(Friend friend);//设置黑名单
 
 }

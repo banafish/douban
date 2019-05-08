@@ -21,6 +21,10 @@ public class Friend {
 	private String avatar;//头像
 	
 	private String sign;//签名
+	
+	private String host_black;//黑名单
+	
+	private String guest_black;//黑名单
 
 	public String getId() {
 		return id;
@@ -101,6 +105,21 @@ public class Friend {
 	public void setSign(String sign) {
 		this.sign = sign;
 	}
-	
+
+	public String getHost_black() {
+		return host_black;
+	}
+
+	public void setHost_black(String host_black) {
+		this.host_black = host_black;
+	}
+
+	public String getGuest_black() {
+		return guest_black;
+	}
+
+	public void setGuest_black(String guest_black) {
+		this.guest_black = guest_black;
+	}
 
 }

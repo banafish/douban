@@ -245,8 +245,9 @@
 								<li><a id="" href="friendServlet?p=1&method=getFriendList">好友</a></li>
 								<li><a id="" href="userPage?p=1&method=getCollect">收藏</a></li>
 								<li><a id="" href="userPage?p=1&method=getForword">转发的文章</a></li>
-								<li><a id="" href="userPage?p=1&method=getGood">赞过的文章</a></li>
-								<li><a id="" href="friendServlet?p=1&method=getApply">申请</a></li>
+								<li><a id="" href="userPage?p=1&method=getGood">赞过的文章</a></li><br>
+								<li><a id="" href="friendServlet?p=1&method=getApply">好友申请</a></li>
+								<li><a id="" href="friendServlet?p=1&method=getBlack">黑名单</a></li>
 							</ul>
 						</div>
 					</div>
@@ -337,7 +338,7 @@
 								<a style="margin-right: 10px" href="friendServlet?p=1&method=getFriendByGroup&group=${group}">${group}</a>								
 							</c:forEach>
 
-							<%--朋友--%>
+							<%--朋友和黑名单--%>
 							<c:forEach var="friend" items="${requestScope.friendList}">
 								<div class="new-item-wrapper" style="height: 135px">
 									<div class="new-item">
@@ -362,7 +363,37 @@
 													href="friendServlet?method=deleteFriend&guest_email=${friend.guest_email}">删除好友</a>
 													<br>
 												<a href="#">聊天</a> <br>
-												<a href="#">拉黑</a> <span>
+												<a href="friendServlet?method=setBlack&guest_email=${friend.guest_email}">拉黑</a> <span>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+							
+							<%--黑名单--%>
+							<c:forEach var="black" items="${requestScope.blackList}">
+								<div class="new-item-wrapper" style="height: 135px">
+									<div class="new-item">
+										<div class="new-item-up">
+											<div class="user-pic">
+												<img src="${black.avatar}"></img>
+											</div>
+											<div class="user-name">
+												<a href="javascript:void(0)" target="_blank">${black.name}</a>
+											</div>
+
+										</div>
+
+										<div class="new-item-down">
+											<div class="new-item-down-content">
+												<h4 class="new-item-down-title">
+													<a href="javascript:void(0)" title="${black.sign}"
+														target="_blank" class="title-link">${black.sign}</a> <br>
+													<span>${black.msg}</span>
+												</h4>
+												<span style="float: right">
+												<a href="friendServlet?method=cancelBlack&guest_email=${black.guest_email}">移除</a> <span>
 											</div>
 
 										</div>
