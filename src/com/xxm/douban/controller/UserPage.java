@@ -122,17 +122,6 @@ public class UserPage extends HttpServlet {
 			}
 		}
 
-		// 查看关注的人
-		if (method.equals("getFollow")) {
-			getFollow(request, response);			
-			return;
-		}
-		//取消关注
-		if (method.equals("cancelFollow")) {
-			msg = friendService.cancelFollow(account.getEmail(), id);
-			getFollow(request, response);
-			return;
-		}
 		//修改文章
 		if (method.equals("modifyArticle")) {
 			msg = articleInfoService.getArticleInfo(id, account.getEmail());
@@ -152,19 +141,6 @@ public class UserPage extends HttpServlet {
 
 	}
 
-	// 查看关注的人
-	private void getFollow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		msg = articleService.getArticleCount("t_follow where user_email = '" + account.getEmail() + "'");
-		totalCounts = (int) msg.getMessage();
-		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
-		
-		msg = friendService.getFollow(currentPage, account.getEmail());
-		
-		request.setAttribute("followList", (List)msg.getMessage());
-		request.setAttribute("totalPages", totalPages);
-		request.setAttribute("target", "userPage?method=getFollow&");
-		request.getRequestDispatcher("userPage.jsp").forward(request, response);
-	}
 
 	// 查看关注的文章
 	private void getFollowArticle(HttpServletRequest request) {

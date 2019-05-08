@@ -26,15 +26,15 @@ import com.xxm.douban.util.DateUtil;
 public class FriendServlet extends HttpServlet {
 	private FriendService friendService;
 
-	private ArticleService articleService;
-
 	private Friend friend;
 
 	private String guest_email;
 
 	private Account account;
 
-	private Msg result;
+	private Msg result;// 好友
+
+	private Msg resultCount;// 总数
 
 	private String msg;// 信息
 
@@ -46,12 +46,13 @@ public class FriendServlet extends HttpServlet {
 
 	private int totalPages;// 总页数，每页四条
 
+	private List<String> groups;// 分组
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		response.setCharacterEncoding("utf-8");
 		friendService = (FriendService) getServletContext().getAttribute("friendService");
-		articleService = (ArticleService) getServletContext().getAttribute("articleService");
 
 		// 获取当前页数
 		currentPage = request.getParameter("p");
@@ -70,42 +71,48 @@ public class FriendServlet extends HttpServlet {
 			method = "";
 		}
 
-		// 申请好友
-		if (method.equals("applyFriend")) {
-			applyFriend(request, response);
-			return;
-		}
-
 		// 查看朋友
 		if (method.equals("getFriendList")) {
 			getFriendList(request, response);
-			return;
 		}
 		// 分类查看朋友
 		if (method.equals("getFriendByGroup")) {
 			getFriendByGroup(request, response);
-			return;
 		}
 		// 查看好友申请
 		if (method.equals("getApply")) {
 			getApply(request, response);
-			return;
+		}
+		// 查看黑名单
+		if (method.equals("getBlack")) {
+			getBlack(request, response);
+		}
+		// 查看关注的人
+		if (method.equals("getFollow")) {
+			getFollow(request, response);
+		}
+
+		// 取消关注
+		if (method.equals("cancelFollow")) {
+			friendService.cancelFollow(account.getEmail(), guest_email);
+			getFollow(request, response);
+		}
+		// 申请好友
+		if (method.equals("applyFriend")) {
+			applyFriend(request, response);
 		}
 		// 通过好友申请
 		if (method.equals("allow")) {
 			allowApply(request, response);
-			return;
 		}
 		// 删除好友
 		if (method.equals("deleteFriend")) {
 			deleteFriend(request, response);
-			return;
 		}
 		// 拒绝好友申请
 		if (method.equals("denyApply")) {
 			friendService.deleteFriend(guest_email, account.getEmail());// 删除对方的好友申请
 			getApply(request, response);
-			return;
 		}
 		// 拉黑
 		if (method.equals("setBlack")) {
@@ -124,7 +131,6 @@ public class FriendServlet extends HttpServlet {
 			friendService.setBlack(friend);
 
 			getFriendList(request, response);
-			return;
 		}
 		// 取消拉黑
 		if (method.equals("cancelBlack")) {
@@ -143,31 +149,78 @@ public class FriendServlet extends HttpServlet {
 			friendService.setBlack(friend);
 
 			getBlack(request, response);
-			return;
-		}
-		// 查看黑名单
-		if (method.equals("getBlack")) {
-			getBlack(request, response);
-			return;
 		}
 
+		totalCounts = (int) resultCount.getMessage();
+		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
+		request.setAttribute("groups", groups);
+		request.setAttribute("friendList", (List<String>) result.getMessage());
+		request.setAttribute("totalPages", totalPages);
+		request.getRequestDispatcher("userPage.jsp").forward(request, response);
+
+	}
+
+	// 查看关注的人
+	private void getFollow(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		resultCount = friendService.getFollowCount(account.getEmail());
+		result = friendService.getFollow(currentPage, account.getEmail());
+
+		request.setAttribute("show", "follow");
+		request.setAttribute("target", "friendServlet?method=getFollow&");
 	}
 
 	// 查看黑名单
 	private void getBlack(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		result = articleService.getArticleCount(
-				"t_friend where host_email = '" + account.getEmail() + "' and statue = 0 and host_black = 0");
-		totalCounts = (int) result.getMessage();
-		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
-
+		resultCount = friendService.getBlackCount(account.getEmail());
 		result = friendService.getBlack(currentPage, account.getEmail());
 
+		request.setAttribute("show", "black");
 		request.setAttribute("target", "friendServlet?method=getBlack&");
-		request.setAttribute("blackList", (List<Friend>) result.getMessage());
-		request.setAttribute("totalPages", totalPages);
-		request.getRequestDispatcher("userPage.jsp").forward(request, response);
+	}
 
+	// 查看好友申请
+	private void getApply(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		resultCount = friendService.getApplyCount(account.getEmail());
+		result = friendService.getApply(currentPage, account.getEmail());
+
+		// 用户好友分组信息
+		Msg msgGroups = friendService.getGroup(account.getEmail());
+		groups = (List<String>) msgGroups.getMessage();
+
+		request.setAttribute("show", "apply");
+		request.setAttribute("target", "friendServlet?method=getApply&");
+	}
+
+	// 查看朋友
+	private void getFriendList(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		resultCount = friendService.getFriendCount(account.getEmail());
+		result = friendService.getFriendList(currentPage, account.getEmail());
+
+		// 用户好友分组信息
+		Msg msgGroups = friendService.getGroup(account.getEmail());
+		groups = (List<String>) msgGroups.getMessage();
+
+		request.setAttribute("show", "friend");
+		request.setAttribute("target", "friendServlet?method=getFriendList&");
+	}
+
+	// 通过分类取得朋友列表
+	private void getFriendByGroup(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String group = request.getParameter("group");
+		resultCount = friendService.getFriendGroupCount(account.getEmail(), group);
+		result = friendService.getFriendByGroup(currentPage, account.getEmail(), group);
+
+		// 用户好友分组信息
+		Msg msgGroups = friendService.getGroup(account.getEmail());
+		groups = (List<String>) msgGroups.getMessage();
+
+		request.setAttribute("show", "friend");
+		request.setAttribute("target", "friendServlet?method=getFriendByGroup&group=" + group + "&");
 	}
 
 	// 删除好友
@@ -199,66 +252,6 @@ public class FriendServlet extends HttpServlet {
 
 		// 响应
 		getApply(request, response);
-	}
-
-	// 查看好友申请
-	private void getApply(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		result = articleService
-				.getArticleCount("t_friend where guest_email = '" + account.getEmail() + "' and statue = 1");
-		totalCounts = (int) result.getMessage();
-		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
-
-		result = friendService.getApply(currentPage, account.getEmail());
-		// 用户好友分组信息
-		Msg msgGroups = friendService.getGroup(account.getEmail());
-		List<String> groups = (List<String>) msgGroups.getMessage();
-
-		request.setAttribute("groups", groups);
-		request.setAttribute("target", "friendServlet?method=getApply&");
-		request.setAttribute("applyList", (List<Friend>) result.getMessage());
-		request.setAttribute("totalPages", totalPages);
-		request.getRequestDispatcher("userPage.jsp").forward(request, response);
-	}
-
-	// 查看朋友
-	private void getFriendList(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		result = articleService.getArticleCount("t_friend where host_email = '" + account.getEmail()
-				+ "' and statue = 0 and host_black = 0 and guest_black = 0");
-		totalCounts = (int) result.getMessage();
-		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
-
-		result = friendService.getFriendList(currentPage, account.getEmail());
-		// 用户好友分组信息
-		Msg msgGroups = friendService.getGroup(account.getEmail());
-		List<String> groupFriend = (List<String>) msgGroups.getMessage();
-
-		request.setAttribute("groupFriend", groupFriend);
-		request.setAttribute("target", "friendServlet?method=getFriendList&");
-		request.setAttribute("friendList", (List<Friend>) result.getMessage());
-		request.setAttribute("totalPages", totalPages);
-		request.getRequestDispatcher("userPage.jsp").forward(request, response);
-	}
-
-	// 通过分类取得朋友列表
-	private void getFriendByGroup(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String group = request.getParameter("group");
-		result = friendService.getFriendGroupCount(account.getEmail(), group);
-		totalCounts = (int) result.getMessage();
-		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
-
-		result = friendService.getFriendByGroup(currentPage, account.getEmail(), group);
-		// 用户好友分组信息
-		Msg msgGroups = friendService.getGroup(account.getEmail());
-		List<String> groupFriend = (List<String>) msgGroups.getMessage();
-
-		request.setAttribute("groupFriend", groupFriend);
-		request.setAttribute("target", "friendServlet?method=getFriendByGroup&group=" + group + "&");
-		request.setAttribute("friendList", (List<Friend>) result.getMessage());
-		request.setAttribute("totalPages", totalPages);
-		request.getRequestDispatcher("userPage.jsp").forward(request, response);
 	}
 
 	// 申请好友

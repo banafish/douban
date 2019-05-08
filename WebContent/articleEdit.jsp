@@ -153,7 +153,7 @@
 		<div class="content-nav">
 			<section title="言论">
 				<div class="roundedTwo">
-					<input type="checkbox" value="言论" id="roundedTwo1" name="check" <c:if test="${fn:contains(requestScope.article.type, 言论)}">checked</c:if> />
+					<input type="checkbox" value="言论" id="roundedTwo1" name="check" />
 					<label for="roundedTwo1"></label>
 				</div>
 			</section>

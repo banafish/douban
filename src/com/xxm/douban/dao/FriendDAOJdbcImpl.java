@@ -58,8 +58,8 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 	@Override
 	public Msg getFollow(String currentPage, String user_email) {
 		try {
-			Account account = null;
-			List<Account> list = new ArrayList<>();
+			Friend friend = null;
+			List<Friend> list = new ArrayList<>();
 			con = dataSource.getConnection();
 			String sql = "select t_account.* from t_follow, t_account where t_follow.user_email = ? "
 					+ "and t_follow.follow_email = t_account.email limit ?, 6";
@@ -68,12 +68,12 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 			stmt.setInt(2, (Integer.valueOf(currentPage) - 1) * 6);// 每页6条记录
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				account = new Account();
-				account.setEmail(rs.getString("email"));
-				account.setSign(rs.getString("sign"));
-				account.setAvatar(rs.getString("avatar"));
-				account.setName(rs.getString("name"));
-				list.add(account);
+				friend = new Friend();
+				friend.setGuest_email(rs.getString("email"));
+				friend.setSign(rs.getString("sign"));
+				friend.setAvatar(rs.getString("avatar"));
+				friend.setName(rs.getString("name"));
+				list.add(friend);
 			}
 			if (list.isEmpty()) {
 				return new Msg("无关注的人", null);
@@ -223,6 +223,61 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("操作失败", null);
 	}
 
+	// 获得朋友，好友申请，黑名单总数
+	@Override
+	public Msg getFriendCount(String email, String statue, String host_black, String guest_black) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select count(*) from t_friend "
+					+ "where host_email = ? and statue = ? and host_black = ? and guest_black = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			stmt.setString(2, statue);
+			stmt.setString(3, host_black);
+			stmt.setString(4, guest_black);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("获得朋友总数成功", rs.getInt(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获得朋友总数失败", null);
+	}
+
+	// 获得关注的人总数
+	@Override
+	public Msg getFollowCount(String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select count(*) from t_follow where user_email = ? ";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("获得关注的人总数成功", rs.getInt(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获得关注的人总数失败", null);
+	}
+
 	// 删除好友
 	@Override
 	public Msg deleteFriend(String host_email, String guest_email) {
@@ -260,7 +315,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 					+ "t_account.`name`, t_account.avatar, t_account.sign FROM "
 					+ "t_friend, t_account WHERE t_friend.host_email = ? AND t_friend.guest_email = t_account.email "
 					+ "AND t_friend.statue = 0 AND t_friend.msg = ? "
-					+ "AND t_friend.host_black = 0 AND t_friend.guest_black = 0 " 
+					+ "AND t_friend.host_black = 0 AND t_friend.guest_black = 0 "
 					+ " ORDER BY t_friend.time DESC LIMIT ?, 6";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, host_email);
@@ -295,8 +350,8 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		}
 		return new Msg("通过分类获取好友列表失败", null);
 	}
-	
-	//分类获取好友列表的好友总数
+
+	// 分类获取好友列表的好友总数
 	@Override
 	public Msg getFriendGroupCount(String host_email, String group) {
 		try {
@@ -323,7 +378,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("分类获取好友列表的好友总数失败", null);
 	}
 
-	//设置黑名单
+	// 设置黑名单
 	@Override
 	public Msg setBlack(Friend friend) {
 		try {

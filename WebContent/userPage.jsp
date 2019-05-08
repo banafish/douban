@@ -241,7 +241,7 @@
 							<ul>
 								<li><a id="" href="userPage?p=1">我的文章</a></li>
 								<li><a id="" href="userPage?p=1&method=getFollowArticle">关注的文章</a></li>
-								<li><a id="" href="userPage?p=1&method=getFollow">关注的人</a></li>
+								<li><a id="" href="friendServlet?p=1&method=getFollow">关注的人</a></li>
 								<li><a id="" href="friendServlet?p=1&method=getFriendList">好友</a></li>
 								<li><a id="" href="userPage?p=1&method=getCollect">收藏</a></li>
 								<li><a id="" href="userPage?p=1&method=getForword">转发的文章</a></li>
@@ -297,7 +297,8 @@
 														<span class="report""><a
 															href="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
 													</c:if>
-													<c:if test="${article.author_email == sessionScope.account.email}">
+													<c:if
+														test="${article.author_email == sessionScope.account.email}">
 														<span class="report""><a
 															href="userPage?method=modifyArticle&id=${article.id}">修改</a></span>
 													</c:if>
@@ -307,44 +308,17 @@
 										</div>
 									</div>
 								</div>
-							</c:forEach>
-
-							<%--关注的人--%>
-							<c:forEach var="account" items="${requestScope.followList}">
-								<div class="new-item-wrapper" style="height: 130px">
-									<div class="new-item">
-										<div class="new-item-up">
-											<div class="user-pic">
-												<img src="${account.avatar}"></img>
-											</div>
-											<div class="user-name">
-												<a href="javascript:void(0)" target="_blank">${account.name}</a>
-											</div>
-
-										</div>
-
-										<div class="new-item-down">
-											<div class="new-item-down-content">
-												<h4 class="new-item-down-title">
-													<a href="javascript:void(0)" title="${account.sign}"
-														target="_blank" class="title-link">${account.sign}</a>
-												</h4>
-												<span style="float: right"><a
-													href="userPage?method=cancelFollow&id=${account.email}">取消关注</a><span>
-											</div>
-
-										</div>
-									</div>
-								</div>
-							</c:forEach>
+							</c:forEach>						
 
 							<%--好友组别--%>
-							<c:forEach var="group" items="${requestScope.groupFriend}">
-								<a style="margin-right: 10px"
-									href="friendServlet?p=1&method=getFriendByGroup&group=${group}">${group}</a>
-							</c:forEach>
+							<c:if test="${requestScope.show == 'friend'}">
+								<c:forEach var="group" items="${requestScope.groups}">
+									<a style="margin-right: 10px"
+										href="friendServlet?p=1&method=getFriendByGroup&group=${group}">${group}</a>
+								</c:forEach>
+							</c:if>
 
-							<%--朋友和黑名单--%>
+							<%--跟好友有关的界面--%>
 							<c:forEach var="friend" items="${requestScope.friendList}">
 								<div class="new-item-wrapper" style="height: 135px">
 									<div class="new-item">
@@ -363,105 +337,72 @@
 												<h4 class="new-item-down-title">
 													<a href="javascript:void(0)" title="${friend.sign}"
 														target="_blank" class="title-link">${friend.sign}</a> <br>
-													<span>${friend.msg}</span>
+													<c:if test="${requestScope.show == 'black' || requestScope.show == 'friend'}">
+														<span>${friend.msg}</span>
+													</c:if>
 												</h4>
-												<span style="float: right"><a
-													href="friendServlet?method=deleteFriend&guest_email=${friend.guest_email}">删除好友</a>
-													<br> <a href="#">聊天</a> <br> <a
-													href="friendServlet?method=setBlack&guest_email=${friend.guest_email}">拉黑</a>
-													<span>
+
+												<%--关注的人的选项--%>
+												<c:if test="${requestScope.show == 'follow'}">
+													<<span style="float: right"><a
+													href="friendServlet?method=cancelFollow&guest_email=${friend.guest_email}">取消关注</a><span>
+												</c:if>
+
+												<%--好友的选项--%>
+												<c:if test="${requestScope.show == 'friend'}">
+													<span style="float: right"><a
+														href="friendServlet?method=deleteFriend&guest_email=${friend.guest_email}">删除好友</a>
+														<br> <a href="#">聊天</a> <br> <a
+														href="friendServlet?method=setBlack&guest_email=${friend.guest_email}">拉黑</a>
+													</span>
+												</c:if>
+
+												<%--黑名单的选项--%>
+												<c:if test="${requestScope.show == 'black'}">
+													<span style="float: right"> <a
+														href="friendServlet?method=cancelBlack&guest_email=${friend.guest_email}">移除</a>
+														<span>
+												</c:if>
+
+												<%--好友申请的选项--%>
+												<c:if test="${requestScope.show == 'apply'}">
+													<%--分组输入框--%>
+													<form method="get" action="friendServlet">
+														<div style="display: none;" class="edit-group">
+															<input name="method" value="allow" type="hidden">
+															<input name="applyGroup" value="${friend.msg}"
+																type="hidden"> <input name="guest_email"
+																value="${friend.host_email}" type="hidden"> <input
+																type="text" size="30" maxlength="30" name="msg"
+																placeholder="请输入分类，默认为好友" list="groups"> <input
+																class="submit1" type="submit" value="确定"> <input
+																class="cancel-group" type="button" value="取消">
+														</div>
+														<%--好友分组信息--%>
+														<datalist id="groups">
+															<c:forEach var="group" items="${requestScope.groups}">
+																<option value="${group}">
+															</c:forEach>
+														</datalist>
+													</form>
+													<span style="float: right"><a
+														href="javascript:void(0)" class="allow_apply_a">同意申请</a> <span><a
+															href="friendServlet?method=denyApply&guest_email=${friend.host_email}">拒绝申请</a></span>
+														<br> <br>
+														<h6>${friend.time}</h6> </span>
+												</c:if>
+
 											</div>
 
 										</div>
 									</div>
 								</div>
 							</c:forEach>
-
-							<%--黑名单--%>
-							<c:forEach var="black" items="${requestScope.blackList}">
-								<div class="new-item-wrapper" style="height: 135px">
-									<div class="new-item">
-										<div class="new-item-up">
-											<div class="user-pic">
-												<img src="${black.avatar}"></img>
-											</div>
-											<div class="user-name">
-												<a href="javascript:void(0)" target="_blank">${black.name}</a>
-											</div>
-
-										</div>
-
-										<div class="new-item-down">
-											<div class="new-item-down-content">
-												<h4 class="new-item-down-title">
-													<a href="javascript:void(0)" title="${black.sign}"
-														target="_blank" class="title-link">${black.sign}</a> <br>
-													<span>${black.msg}</span>
-												</h4>
-												<span style="float: right"> <a
-													href="friendServlet?method=cancelBlack&guest_email=${black.guest_email}">移除</a>
-													<span>
-											</div>
-
-										</div>
-									</div>
-								</div>
-							</c:forEach>
-
-							<%--好友申请--%>
-							<c:forEach var="apply" items="${requestScope.applyList}">
-								<div class="new-item-wrapper" style="height: 130px">
-									<div class="new-item">
-										<div class="new-item-up">
-											<div class="user-pic">
-												<img src="${apply.avatar}"></img>
-											</div>
-											<div class="user-name">
-												<a href="javascript:void(0)" target="_blank">${apply.name}</a>
-											</div>
-										</div>
-
-										<div class="new-item-down">
-											<div class="new-item-down-content">
-												<h4 class="new-item-down-title">
-													<a href="javascript:void(0)" title="${apply.sign}"
-														target="_blank" class="title-link">${apply.sign}</a>
-												</h4>
-												<%--分组输入框--%>
-												<form method="get" action="friendServlet">
-													<div style="display: none;" class="edit-group">
-														<input name="method" value="allow" type="hidden">
-														<input name="applyGroup" value="${apply.msg}"
-															type="hidden"> <input name="guest_email"
-															value="${apply.host_email}" type="hidden"> <input
-															type="text" size="30" maxlength="30" name="msg"
-															placeholder="请输入分类，默认为好友" list="groups"> <input
-															class="submit1" type="submit" value="确定"> <input
-															class="cancel-group" type="button" value="取消">
-													</div>
-													<%--好友分组信息--%>
-													<datalist id="groups">
-														<c:forEach var="group" items="${requestScope.groups}">
-															<option value="${group}">
-														</c:forEach>
-													</datalist>
-												</form>
-												<span style="float: right"><a
-													href="javascript:void(0)" class="allow_apply_a">同意申请</a> <span><a
-														href="friendServlet?method=denyApply&guest_email=${apply.host_email}">拒绝申请</a></span>
-													<br> <br>
-													<h6>${apply.time}</h6> </span>
-											</div>
-
-										</div>
-									</div>
-								</div>
-							</c:forEach>
-
 
 						</div>
 					</div>
 
+					<%--页码--%>
 					<div class="paginator">
 						<%--根据当前页数来初始化页码--%>
 						<c:choose>
