@@ -211,6 +211,8 @@
 													<span class="follow"><a
 														href="articleInfoServlet?method=follow&author_email=${requestScope.article.author_email}&id=${requestScope.article.id}">关注</a></span>
 
+													<span class="report"><a href="douyou.jsp?guest_email=${requestScope.article.author_email}">发豆邮</a></span>
+
 													<c:choose>
 														<c:when test="${sessionScope.account.role == 'admin'}">
 															<span class="report"><a

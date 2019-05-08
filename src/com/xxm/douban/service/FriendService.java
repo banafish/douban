@@ -96,6 +96,11 @@ public class FriendService {
 		return friendDAO.setBlack(friend);
 	}
 
+	// 判断在不在黑名单
+	public Msg inBlack(String host_email, String guest_email) {
+		return friendDAO.inBlack(host_email, guest_email);
+	}
+
 	// 查看黑名单
 	public Msg getBlack(String currentPage, String user_email) {
 		String limit = " t_friend, t_account WHERE t_friend.host_email = '" + user_email

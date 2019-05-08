@@ -27,5 +27,7 @@ public interface FriendDAO {
 	Msg getFriendGroupCount(String host_email, String group);//分类获取好友列表的好友总数
 	
 	Msg setBlack(Friend friend);//设置黑名单
+	
+	Msg inBlack(String host_email, String guest_email);//判断在不在黑名单
 
 }

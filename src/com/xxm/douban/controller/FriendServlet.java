@@ -44,7 +44,7 @@ public class FriendServlet extends HttpServlet {
 
 	private int totalCounts;// 数据总数
 
-	private int totalPages;// 总页数，每页四条
+	private int totalPages;// 总页数，每页6条
 
 	private List<String> groups;// 分组
 

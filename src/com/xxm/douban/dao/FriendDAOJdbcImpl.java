@@ -409,4 +409,31 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("设置黑名单失败", null);
 	}
 
+	//判断在不在黑名单
+	@Override
+	public Msg inBlack(String host_email, String guest_email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select id from t_friend "
+					+ "where host_email = ? and guest_email = ? and (host_black = 1 or guest_black = 1)";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, host_email);
+			stmt.setString(2, guest_email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("在黑名单", null);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("不在黑名单", null);
+	}
+
 }
