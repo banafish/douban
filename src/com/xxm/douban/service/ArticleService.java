@@ -28,6 +28,15 @@ public class ArticleService {
 
 	}
 
+	public Msg modifyArticle(Article article) {
+		// 判断是否有图片
+		if (article.getPicture_urls().length() > 0) {
+			UploadPicDAO uploadPicDAO = new UploadPicDAO();
+			article.setPicture_urls(uploadPicDAO.uploadPic(article.getPicture_urls(), article.getAuthor_email()));
+		}
+		return articleDAO.modifyArticle(article);
+	}
+
 	// 在限制条件下获取文章总数
 	public Msg getArticleCount(String limit) {
 		return articleDAO.getArticleCount(limit);
@@ -51,25 +60,25 @@ public class ArticleService {
 	public Msg getUserArticleByPage(String currentPage, Account account) {
 		Map map = new HashMap();
 		Msg msgCount = getArticleCount("t_article where author_email = " + "'" + account.getEmail() + "'");
-		
-		String limit = "where t_article.author_email = '" + account.getEmail() + "' and t_article.author_email = t_account.email ";
+
+		String limit = "where t_article.author_email = '" + account.getEmail()
+				+ "' and t_article.author_email = t_account.email ";
 		Msg msgArticle = articleDAO.getUserArticleByPage(currentPage, limit);
 
 		map.put("articleCount", msgCount.getMessage());
 		map.put("articleList", msgArticle.getMessage());
 		return new Msg(msgArticle.getResult(), map);
 	}
-	
-	//获取关注的文章
+
+	// 获取关注的文章
 	public Msg getFollowArticle(String currentPage, Account account) {
 		Map map = new HashMap();
-		Msg msgCount = getArticleCount("t_article, t_follow where t_follow.user_email = " + "'" + account.getEmail() + "'"
-				+ " and t_article.author_email = t_follow.follow_email ");
-		
-		String limit = ", t_follow where t_follow.user_email = '" 
-						+ account.getEmail() 
-						+ "' and t_article.author_email = t_follow.follow_email "
-						+ "and t_article.author_email = t_account.email ";
+		Msg msgCount = getArticleCount("t_article, t_follow where t_follow.user_email = " + "'" + account.getEmail()
+				+ "'" + " and t_article.author_email = t_follow.follow_email ");
+
+		String limit = ", t_follow where t_follow.user_email = '" + account.getEmail()
+				+ "' and t_article.author_email = t_follow.follow_email "
+				+ "and t_article.author_email = t_account.email ";
 		Msg msgArticle = articleDAO.getUserArticleByPage(currentPage, limit);
 
 		map.put("articleCount", msgCount.getMessage());
@@ -123,11 +132,13 @@ public class ArticleService {
 	// 通过当前页数获取用户收藏转发点赞的文章
 	public Msg getCollectArticleByPage(String currentPage, Account account, String method) {
 		Map map = new HashMap();
-		Msg msgCount = getArticleCount("t_article_info where " + method + " = 1 and user_email = '" + account.getEmail() + "'");
+		Msg msgCount = getArticleCount(
+				"t_article_info where " + method + " = 1 and user_email = '" + account.getEmail() + "'");
 		Msg msgArticle = articleDAO.getCollectArticleByPage(currentPage, account, method);
 
 		map.put("articleCount", msgCount.getMessage());
 		map.put("articleList", msgArticle.getMessage());
 		return new Msg(msgArticle.getResult(), map);
 	}
+
 }

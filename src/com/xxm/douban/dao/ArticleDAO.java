@@ -28,5 +28,7 @@ public interface ArticleDAO {
 	Msg getArticlePics(String id);// 获取删除文章的图片路径
 	
 	Msg getCollectArticleByPage(String currentPage, Account account, String method);//获取收藏转发的文章
+	
+	Msg modifyArticle(Article article);//修改文章
 
 }

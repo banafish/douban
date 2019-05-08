@@ -133,6 +133,13 @@ public class UserPage extends HttpServlet {
 			getFollow(request, response);
 			return;
 		}
+		//修改文章
+		if (method.equals("modifyArticle")) {
+			msg = articleInfoService.getArticleInfo(id, account.getEmail());
+			request.setAttribute("article", (Article)msg.getMessage());
+			request.getRequestDispatcher("articleEdit.jsp").forward(request, response);
+			return;
+		}
 
 		list = (List<Article>) resultMap.get("articleList");// 数据
 		totalCounts = (int) resultMap.get("articleCount");// 数据总数

@@ -1,4 +1,5 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,6 +67,7 @@
 				alert("标题和内容不能为空");
 			} else {
 				$.post("addArticle", {
+					id: "${requestScope.article.id}",
 					title: $(".content-title-input").val(),
 					contentType : type,
 					content : $("#editor").html(),
@@ -84,7 +86,7 @@
 <body>
 	<div class="content">
 		<div class="content-title">
-			<textarea class="content-title-input" placeholder="添加标题"></textarea>
+			<textarea class="content-title-input" placeholder="添加标题">${requestScope.article.title}</textarea>
 		</div>
 		<div class="container-fluid">
 			<div id='pad-wrapper'>
@@ -134,7 +136,7 @@
 						</div>
 					</div>
 
-					<div id='editor' class='span9' style='' contenteditable></div>
+					<div id='editor' class='span9' style='' contenteditable>${requestScope.article.content}</div>
 
 				</div>
 			</div>
@@ -151,7 +153,7 @@
 		<div class="content-nav">
 			<section title="言论">
 				<div class="roundedTwo">
-					<input type="checkbox" value="言论" id="roundedTwo1" name="check" />
+					<input type="checkbox" value="言论" id="roundedTwo1" name="check" <c:if test="${fn:contains(requestScope.article.type, 言论)}">checked</c:if> />
 					<label for="roundedTwo1"></label>
 				</div>
 			</section>

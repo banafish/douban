@@ -448,4 +448,34 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return new Msg("获取收藏转发的文章失败", null);
 	}
 
+	//修改文章信息
+	@Override
+	public Msg modifyArticle(Article article) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "update t_article set title = ?, type = ?, content = ?, picture_urls = ?, modify_time = ? where id = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, article.getTitle());
+			stmt.setString(2, article.getType());
+			stmt.setString(3, article.getContent());
+			stmt.setString(4, article.getPicture_urls());
+			stmt.setString(5, article.getModify_time());
+			stmt.setString(6, article.getId());
+
+			// 判断执行删除语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("修改文章信息成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("修改文章信息失败", null);
+	}
+
 }

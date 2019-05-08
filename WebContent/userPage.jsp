@@ -245,7 +245,8 @@
 								<li><a id="" href="friendServlet?p=1&method=getFriendList">好友</a></li>
 								<li><a id="" href="userPage?p=1&method=getCollect">收藏</a></li>
 								<li><a id="" href="userPage?p=1&method=getForword">转发的文章</a></li>
-								<li><a id="" href="userPage?p=1&method=getGood">赞过的文章</a></li><br>
+								<li><a id="" href="userPage?p=1&method=getGood">赞过的文章</a></li>
+								<br>
 								<li><a id="" href="friendServlet?p=1&method=getApply">好友申请</a></li>
 								<li><a id="" href="friendServlet?p=1&method=getBlack">黑名单</a></li>
 							</ul>
@@ -258,7 +259,7 @@
 
 					<div id="statuses">
 
-						<div class="stream-item">														
+						<div class="stream-item">
 
 							<%--文章--%>
 							<c:forEach var="article" items="${requestScope.list}">
@@ -296,6 +297,10 @@
 														<span class="report""><a
 															href="userPage?method=${requestScope.delete}&id=${article.id}">删除</a></span>
 													</c:if>
+													<c:if test="${article.author_email == sessionScope.account.email}">
+														<span class="report""><a
+															href="userPage?method=modifyArticle&id=${article.id}">修改</a></span>
+													</c:if>
 												</h6>
 											</div>
 
@@ -332,10 +337,11 @@
 									</div>
 								</div>
 							</c:forEach>
-							
+
 							<%--好友组别--%>
 							<c:forEach var="group" items="${requestScope.groupFriend}">
-								<a style="margin-right: 10px" href="friendServlet?p=1&method=getFriendByGroup&group=${group}">${group}</a>								
+								<a style="margin-right: 10px"
+									href="friendServlet?p=1&method=getFriendByGroup&group=${group}">${group}</a>
 							</c:forEach>
 
 							<%--朋友和黑名单--%>
@@ -361,16 +367,16 @@
 												</h4>
 												<span style="float: right"><a
 													href="friendServlet?method=deleteFriend&guest_email=${friend.guest_email}">删除好友</a>
-													<br>
-												<a href="#">聊天</a> <br>
-												<a href="friendServlet?method=setBlack&guest_email=${friend.guest_email}">拉黑</a> <span>
+													<br> <a href="#">聊天</a> <br> <a
+													href="friendServlet?method=setBlack&guest_email=${friend.guest_email}">拉黑</a>
+													<span>
 											</div>
 
 										</div>
 									</div>
 								</div>
 							</c:forEach>
-							
+
 							<%--黑名单--%>
 							<c:forEach var="black" items="${requestScope.blackList}">
 								<div class="new-item-wrapper" style="height: 135px">
@@ -392,8 +398,9 @@
 														target="_blank" class="title-link">${black.sign}</a> <br>
 													<span>${black.msg}</span>
 												</h4>
-												<span style="float: right">
-												<a href="friendServlet?method=cancelBlack&guest_email=${black.guest_email}">移除</a> <span>
+												<span style="float: right"> <a
+													href="friendServlet?method=cancelBlack&guest_email=${black.guest_email}">移除</a>
+													<span>
 											</div>
 
 										</div>
