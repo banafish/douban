@@ -42,28 +42,7 @@ public class DouYou extends HttpServlet {
 	private int totalCounts;// 数据总数
 
 	private int totalPages;// 总页数，每页四条
-
-	/*protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		friendService = (FriendService) getServletContext().getAttribute("friendService");
-
-		// 获取用户属性
-		account = (Account) session.getAttribute("account");
-		// 获取对方的邮箱
-		guest_email = request.getParameter("guest_email");
-		// 获取当前页数
-		currentPage = request.getParameter("p");
-		if (currentPage == null) {
-			currentPage = "1";// 如果为空默认请求第一页数据
-		}
-		// 获取方法
-		String method = request.getParameter("method");
-		if (method == null) {
-			method = "";
-		}
-	}*/
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
@@ -75,7 +54,7 @@ public class DouYou extends HttpServlet {
 		guest_email = request.getParameter("guest_email");
 		// 获取信息
 		msg = request.getParameter("msg");
-		System.out.println(msg);
+		
 		result = friendService.inBlack(account.getEmail(), guest_email);
 		if (result.getResult().equals("不在黑名单")) {
 			friend = new Friend();
@@ -92,5 +71,41 @@ public class DouYou extends HttpServlet {
 		}
 		request.getRequestDispatcher("douyou.jsp").forward(request, response);
 	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		friendService = (FriendService) getServletContext().getAttribute("friendService");
+
+		// 获取用户属性
+		account = (Account) session.getAttribute("account");
+		// 获取对方的邮箱
+		guest_email = request.getParameter("guest_email");
+		// 获取当前页数
+		currentPage = request.getParameter("p");
+		if (currentPage == null) {
+			currentPage = "1";// 如果为空默认请求第一页数据
+		}
+		// 获取方法
+		String method = request.getParameter("method");
+		if (method == null) {
+			getDouYou(request, response);
+			method = "";
+		}
+		
+		totalCounts = (int) resultCount.getMessage();
+		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
+		request.setAttribute("douYouList", (List<Friend>) result.getMessage());
+		request.setAttribute("totalPages", totalPages);
+		request.getRequestDispatcher("douyou.jsp").forward(request, response);
+	}
+
+	//豆邮列表
+	private void getDouYou(HttpServletRequest request, HttpServletResponse response) {
+		resultCount = friendService.getDouYouCount(account.getEmail());
+		result = friendService.getDouYou(currentPage, account.getEmail());
+		request.setAttribute("target", "douYou?");
+	}
+
 
 }

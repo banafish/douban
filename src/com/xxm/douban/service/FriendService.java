@@ -108,5 +108,15 @@ public class FriendService {
 				+ "AND t_friend.statue = 0 and t_friend.host_black = 1" + " ORDER BY t_friend.time DESC";
 		return friendDAO.getFriend(currentPage, limit);
 	}
+	
+	//获取豆邮
+	public Msg getDouYou(String currentPage, String email) {
+		return friendDAO.getDouYou(currentPage, email);
+	}
+	
+	// 获取豆邮总数
+	public Msg getDouYouCount(String email) {
+		return friendDAO.getDouYouCount(email);
+	}
 
 }

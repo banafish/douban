@@ -154,7 +154,7 @@ public class FriendServlet extends HttpServlet {
 		totalCounts = (int) resultCount.getMessage();
 		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
 		request.setAttribute("groups", groups);
-		request.setAttribute("friendList", (List<String>) result.getMessage());
+		request.setAttribute("friendList", (List<Friend>) result.getMessage());
 		request.setAttribute("totalPages", totalPages);
 		request.getRequestDispatcher("userPage.jsp").forward(request, response);
 

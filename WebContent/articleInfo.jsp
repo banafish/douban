@@ -68,7 +68,7 @@
 
 			<div class="top-nav-info">
 				<ul>
-					<li><a id="top-nav-doumail-link" href="#">豆邮</a></li>
+					<li><a id="top-nav-doumail-link" href="douYou?p=1">豆邮</a></li>
 					<li class="nav-user-account"><a class="bn-more" rel="off">
 							<span>${account.name}的帐号</span><span class="arrow"></span>
 					</a>
@@ -211,7 +211,7 @@
 													<span class="follow"><a
 														href="articleInfoServlet?method=follow&author_email=${requestScope.article.author_email}&id=${requestScope.article.id}">关注</a></span>
 
-													<span class="report"><a href="douyou.jsp?guest_email=${requestScope.article.author_email}">发豆邮</a></span>
+													<span class="report"><a href="douYou?p=1&guest_email=${requestScope.article.author_email}">发豆邮</a></span>
 
 													<c:choose>
 														<c:when test="${sessionScope.account.role == 'admin'}">

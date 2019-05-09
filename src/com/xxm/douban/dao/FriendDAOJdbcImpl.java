@@ -182,7 +182,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("获得分组失败", null);
 	}
 
-	// 取得朋友申请，朋友列表，豆邮
+	// 取得朋友申请，朋友列表
 	@Override
 	public Msg getFriend(String currentPage, String limit) {
 		try {
@@ -434,6 +434,74 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 			}
 		}
 		return new Msg("不在黑名单", null);
+	}
+
+	//获取豆邮
+	@Override
+	public Msg getDouYou(String currentPage, String email) {
+		try {
+			Friend friend = null;
+			List<Friend> list = new ArrayList<>();
+			con = dataSource.getConnection();
+			String sql = "SELECT t_douyou.host_email, t_douyou.guest_email, t_douyou.msg, t_douyou.time, "
+					+ "t_account.`name`, t_account.avatar FROM t_douyou, t_account "
+					+ "WHERE t_douyou.guest_email = ? AND t_douyou.host_email = t_account.email "
+					+ "ORDER BY t_douyou.time DESC LIMIT ?, 6 ";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			stmt.setInt(2, (Integer.valueOf(currentPage) - 1) * 6);// 每页6条记录
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				friend = new Friend();
+				friend.setHost_email(rs.getString("host_email"));
+				friend.setGuest_email(rs.getString("guest_email"));
+				friend.setMsg(rs.getString("msg"));
+				friend.setTime(rs.getString("time"));
+				friend.setName(rs.getString("name"));
+				friend.setAvatar(rs.getString("avatar"));
+				list.add(friend);
+			}
+			if (list.isEmpty()) {
+				return new Msg("无豆邮", null);
+			} else {
+				return new Msg("获取豆邮成功", list);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获取豆邮失败", null);
+	}
+
+	//获取豆邮总数
+	@Override
+	public Msg getDouYouCount(String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "SELECT count(*) FROM t_douyou WHERE guest_email = ? ";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("获取豆邮总数成功", rs.getInt(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获取豆邮总数失败", null);
 	}
 
 }

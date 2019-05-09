@@ -16,7 +16,7 @@ public interface FriendDAO {
 	
 	Msg getGroup(String host_email);//取得分组
 	
-	Msg getFriend(String currentPage, String limit);//取得朋友申请，朋友列表，豆邮
+	Msg getFriend(String currentPage, String limit);//取得朋友申请，朋友列表
 	
 	Msg getFriendCount(String email, String statue, String host_black, String guest_black);// 获得朋友，好友申请，黑名单总数
 	
@@ -29,5 +29,9 @@ public interface FriendDAO {
 	Msg setBlack(Friend friend);//设置黑名单
 	
 	Msg inBlack(String host_email, String guest_email);//判断在不在黑名单
+	
+	Msg getDouYou(String currentPage, String email);//获取豆邮
+	
+	Msg getDouYouCount(String email);//获取豆邮总数
 
 }

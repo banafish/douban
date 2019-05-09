@@ -107,7 +107,7 @@
 
 			<div class="top-nav-info">
 				<ul>
-					<li><a id="top-nav-doumail-link" href="#">豆邮</a></li>
+					<li><a id="top-nav-doumail-link" href="douYou?p=1">豆邮</a></li>
 					<li class="nav-user-account"><a class="bn-more" rel="off">
 							<span>${sessionScope.account.name}的帐号</span><span class="arrow"></span>
 					</a>

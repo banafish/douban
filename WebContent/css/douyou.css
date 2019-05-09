@@ -27,3 +27,51 @@
 	width: 400px;
 	height: 200px
 }
+
+/*页脚*/
+.paginator {
+	width: 100%;
+	zoom: 1;
+	font: 14px Arial, Helvetica, sans-serif;
+	color: #aaa;
+	margin: 20px 0;
+	line-height: 150%;
+	text-align: center
+}
+
+.paginator a, .thispage, .break {
+	padding: 0 4px;
+	margin: 2px
+}
+
+.paginator .prev {
+	margin-right: 20px
+}
+
+.paginator .next {
+	margin-left: 20px
+}
+
+.paginator .next a, .paginator .prev a {
+	padding: 0;
+	margin: 0
+}
+
+.paginator .count {
+	margin-left: 20px;
+	font-size: 14px
+}
+
+.paginator .thispage {
+	color: #fff;
+	background: #83bf73
+}
+
+.paginator .break {
+	color: #999
+}
+
+.paginator a:hover, .paginator a:active {
+	background-color: #60c537;
+	color: #f8f3f3
+}

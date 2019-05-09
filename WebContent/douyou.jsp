@@ -24,7 +24,7 @@
 			}
 		});
 	})
-		
+
 	//搜索
 	function validateForm() {
 		if ($("#intp-query").val().length == 0) {
@@ -140,19 +140,85 @@
 
 	<div id="wrapper">
 		<div id="content">
-		<h1>豆邮</h1>
+			<h1>豆邮</h1>
 			<div class="grid-16-8 clearfix">
 
 				<div class="article">
 
 					<div id="statuses">
-					<form action="douYou" method="post">
-						<h5>${requestScope.result}</h5>
-						<h3>to:${param.guest_email}</h3>
-						<input name="guest_email" value="${param.guest_email}" type="hidden">
-						<textarea class="content-input" placeholder="输入内容" name="msg"></textarea>
-						<br><input type="submit" value="发送"/>
-					</form>	
+						<form action="douYou" method="post">
+							<h5>${requestScope.result}</h5>
+							<h3>
+								to:
+								<textarea name="guest_email" placeholder="对方的邮箱" style="height: 15px">${param.guest_email}</textarea>
+							</h3>
+							<textarea class="content-input" placeholder="输入内容" name="msg"></textarea>
+							<br> <input type="submit" value="发送" />
+						</form>
+					</div>
+
+					<%--豆邮--%>
+					<c:forEach var="douyou" items="${requestScope.douYouList}">
+						<br>
+						<div class="douyou-read">
+							<h3>
+								<img src="${douyou.avatar}" style="width: 20px; height: 20px">
+								${douyou.name}
+							</h3>
+							<p>${douyou.msg}</p>
+							<h6>${douyou.time}</h6>
+						</div>
+					</c:forEach>
+
+					<%--页码--%>
+					<div class="paginator">
+						<%--根据当前页数来初始化页码--%>
+						<c:choose>
+							<c:when test="${param.p == 1}">
+								<span class="prev"> &lt;前页 </span>
+							</c:when>
+							<c:otherwise>
+								<a href="${requestScope.target}p=${param.p - 1}">&lt;前页</a>
+							</c:otherwise>
+						</c:choose>
+						<%--初始化起始页码--%>
+						<c:choose>
+							<c:when test="${param.p - 5 > 0}">
+								<c:set var="begin" value="${1 + param.p - 5}" />
+							</c:when>
+							<c:otherwise>
+								<c:set var="begin" value="1" />
+							</c:otherwise>
+						</c:choose>
+						<%--初始化终止页码--%>
+						<c:choose>
+							<c:when test="${begin + 8 < requestScope.totalPages}">
+								<c:set var="end" value="${begin + 8}" />
+							</c:when>
+							<c:otherwise>
+								<c:set var="end" value="${requestScope.totalPages}" />
+							</c:otherwise>
+						</c:choose>
+
+						<c:forEach var="i" begin="${begin}" end="${end}" step="1">
+							<c:choose>
+								<c:when test="${param.p == i}">
+									<span class="thispage">${i}</span>
+								</c:when>
+								<c:otherwise>
+									<a href="${requestScope.target}p=${i}">${i}</a>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						<span class="break">...</span>
+						<c:choose>
+							<c:when test="${param.p >= requestScope.totalPages}">
+								<span class="next">后页 &gt; </span>
+							</c:when>
+							<c:otherwise>
+								<a href="${requestScope.target}p=${param.p + 1}">后页&gt;</a>
+							</c:otherwise>
+						</c:choose>
 					</div>
 
 				</div>
