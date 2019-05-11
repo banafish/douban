@@ -289,10 +289,10 @@ h1 a {
 .account-form-error {
 	position: absolute;
 	top: 8px;
-	right: 10
 }
 
 .account-form-error span {
+	font-size:14px;
 	color: #fe2617
 }
 

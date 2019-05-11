@@ -64,6 +64,7 @@ public class AccountDAOJdbcImpl implements AccountDAO {
 					account.setName(rs.getString("name"));
 					account.setAvatar(rs.getNString("avatar"));
 					account.setSign(rs.getNString("sign"));
+					account.setPassword(null);
 					return new Msg("登录成功", account);
 				}
 				return new Msg("密码错误", null);

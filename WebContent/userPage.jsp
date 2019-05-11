@@ -92,7 +92,8 @@
 	}
 	//好友申请输入框显示关闭
 	function openAllow(dom) {
-		$(dom).parent().prev().children(":first").attr("style", "display: inline");
+		$(dom).parent().prev().children(":first").attr("style",
+				"display: inline");
 	}
 	function closeAllow(dom) {
 		$(dom).parent().attr("style", "display: none");
@@ -126,7 +127,7 @@
 										<td><a target="_blank" href="#">帐号管理</a></td>
 									</tr>
 									<tr>
-										<td><a href="index.jsp">退出登录</a></td>
+										<td><a href="logout">退出登录</a></td>
 									</tr>
 								</tbody>
 							</table>
@@ -248,6 +249,9 @@
 								<br>
 								<li><a id="" href="friendServlet?p=1&method=getApply">好友申请</a></li>
 								<li><a id="" href="friendServlet?p=1&method=getBlack">黑名单</a></li>
+								<c:if test="${sessionScope.account.role == 'admin'}">
+									<li><a id="" href="friendServlet?p=1&method=getReport">举报名单</a></li>
+								</c:if>
 							</ul>
 						</div>
 					</div>
@@ -307,7 +311,7 @@
 										</div>
 									</div>
 								</div>
-							</c:forEach>						
+							</c:forEach>
 
 							<%--好友组别--%>
 							<c:if test="${requestScope.show == 'friend'}">
@@ -336,7 +340,8 @@
 												<h4 class="new-item-down-title">
 													<a href="javascript:void(0)" title="${friend.sign}"
 														target="_blank" class="title-link">${friend.sign}</a> <br>
-													<c:if test="${requestScope.show == 'black' || requestScope.show == 'friend'}">
+													<c:if
+														test="${requestScope.show == 'black' || requestScope.show == 'friend'}">
 														<span>${friend.msg}</span>
 													</c:if>
 												</h4>
@@ -344,14 +349,16 @@
 												<%--关注的人的选项--%>
 												<c:if test="${requestScope.show == 'follow'}">
 													<<span style="float: right"><a
-													href="friendServlet?method=cancelFollow&guest_email=${friend.guest_email}">取消关注</a><span>
+														href="friendServlet?method=cancelFollow&guest_email=${friend.guest_email}">取消关注</a><span>
 												</c:if>
 
 												<%--好友的选项--%>
 												<c:if test="${requestScope.show == 'friend'}">
 													<span style="float: right"><a
 														href="friendServlet?method=deleteFriend&guest_email=${friend.guest_email}">删除好友</a>
-														<br> <a href="#">聊天</a> <br> <a
+														<br> <a
+														href="friendServlet?method=report&guest_email=${friend.guest_email}&name=${friend.name}">举报</a>
+														<br> <a
 														href="friendServlet?method=setBlack&guest_email=${friend.guest_email}">拉黑</a>
 													</span>
 												</c:if>
@@ -361,6 +368,21 @@
 													<span style="float: right"> <a
 														href="friendServlet?method=cancelBlack&guest_email=${friend.guest_email}">移除</a>
 														<span>
+												</c:if>
+
+												<%--举报名单的选项--%>
+												<c:if test="${requestScope.show == 'report'}">
+													<h6>邮箱：${friend.guest_email}</h6>
+													<form action="friendServlet" method="get">
+														<input type="hidden" name="method" value="setReport"/>
+														<input type="hidden" name="guest_email"
+															value="${friend.guest_email}" /> 请选择封到什么时候：<input
+															type="datetime-local" value="" name="end_time" /> <input
+															type="submit" value="封号" />
+													</form>
+													<span style="float: right"><a
+														href="friendServlet?method=deleteReport&guest_email=${friend.guest_email}">删除</a><span>
+															<h6>${friend.time}</h6>
 												</c:if>
 
 												<%--好友申请的选项--%>
@@ -375,7 +397,8 @@
 																type="text" size="30" maxlength="30" name="msg"
 																placeholder="请输入分类，默认为好友" list="groups"> <input
 																class="submit1" type="submit" value="确定"> <input
-																class="cancel-group" type="button" value="取消" onclick="closeAllow(this)">
+																class="cancel-group" type="button" value="取消"
+																onclick="closeAllow(this)">
 														</div>
 														<%--好友分组信息--%>
 														<datalist id="groups">
@@ -385,7 +408,8 @@
 														</datalist>
 													</form>
 													<span style="float: right"><a
-														href="javascript: openAllow(this)" class="allow_apply_a">同意申请</a> <span><a
+														href="javascript: void(0)" onclick="openAllow(this)"
+														class="allow_apply_a">同意申请</a> <span><a
 															href="friendServlet?method=denyApply&guest_email=${friend.host_email}">拒绝申请</a></span>
 														<br> <br>
 														<h6>${friend.time}</h6> </span>

@@ -1,6 +1,7 @@
 package com.xxm.douban.view;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,7 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebFilter(
-    urlPatterns = { "/userPage", "/userPage.sjp"}, 
+    urlPatterns = { "/userPage", "/userPage.jsp","/articleEdit.jsp", "/douyou.jsp", "/articleInfo",
+    		"/addArticle", "/douYou", "/friendServlet"}, 
     initParams = { @WebInitParam(name = "LOGIN_VIEW", value = "index.jsp") })
 public class MemberFilter implements Filter {
     private String LOGIN_VIEW;
@@ -22,8 +24,9 @@ public class MemberFilter implements Filter {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request; 
+            FilterChain chain) throws IOException, ServletException {		
+		
+		HttpServletRequest req = (HttpServletRequest) request; 
         if(req.getSession().getAttribute("account") != null) {
             chain.doFilter(request, response);
         }

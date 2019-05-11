@@ -10,9 +10,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.xxm.douban.bean.Msg;
-import com.xxm.douban.entity.Account;
-import com.xxm.douban.entity.Article;
 import com.xxm.douban.entity.Friend;
+import com.xxm.douban.util.DateUtil;
 import com.xxm.douban.util.DbUtil;
 
 public class FriendDAOJdbcImpl implements FriendDAO {
@@ -502,6 +501,173 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 			}
 		}
 		return new Msg("获取豆邮总数失败", null);
+	}
+
+	//举报
+	@Override
+	public Msg report(String email, String name) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "INSERT INTO t_report (report_email, report_name, time) "
+					+ "VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE time = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			stmt.setString(2, name);
+			stmt.setString(3, DateUtil.currentTime());
+			stmt.setString(4, DateUtil.currentTime());
+
+			// 判断执行插入语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("举报成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("举报失败", null);
+	}
+
+	//获取举报列表
+	@Override
+	public Msg getReport(String currentPage) {
+		try {
+			Friend friend = null;
+			List<Friend> list = new ArrayList<>();
+			con = dataSource.getConnection();
+			String sql = "SELECT * FROM t_report WHERE statue = 0 ORDER BY time DESC LIMIT ?, 6";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, (Integer.valueOf(currentPage) - 1) * 6);// 每页6条记录
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				friend = new Friend();
+				friend.setId(rs.getString("id"));
+				friend.setGuest_email(rs.getString("report_email"));
+				friend.setName(rs.getString("report_name"));
+				friend.setTime(rs.getString("time"));
+				list.add(friend);
+			}
+			if (list.isEmpty()) {
+				return new Msg("无信息", null);
+			} else {
+				return new Msg("获取举报列表成功", list);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获取举报列表失败", null);
+	}
+
+	//获得举报总数
+	@Override
+	public Msg getReportCount() {
+		try {
+			con = dataSource.getConnection();
+			String sql = "SELECT count(*) FROM t_report WHERE statue = 0 ";
+			stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("获得举报总数成功", rs.getInt(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获得举报总数失败", null);
+	}
+
+	//删除举报
+	@Override
+	public Msg deleteReport(String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "delete from t_report where report_email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+
+			// 判断执行删除语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("删除举报成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("删除举报失败", null);
+	}
+
+	//封号
+	@Override
+	public Msg setReport(String email, String end_time) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "update t_report set statue = ?, end_time = ? where report_email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, 1);
+			stmt.setString(2, end_time);
+			stmt.setString(3, email);
+
+			// 判断执行插入语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("设置成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("设置失败", null);
+	}
+
+	//判断是否被封号
+	@Override
+	public Msg isReport(String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select end_time from t_report where report_email = ? and statue = 1 and end_time > NOW()";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("被封号", rs.getString(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("不被封号", null);
 	}
 
 }

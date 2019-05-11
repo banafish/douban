@@ -108,15 +108,45 @@ public class FriendService {
 				+ "AND t_friend.statue = 0 and t_friend.host_black = 1" + " ORDER BY t_friend.time DESC";
 		return friendDAO.getFriend(currentPage, limit);
 	}
-	
-	//获取豆邮
+
+	// 获取豆邮
 	public Msg getDouYou(String currentPage, String email) {
 		return friendDAO.getDouYou(currentPage, email);
 	}
-	
+
 	// 获取豆邮总数
 	public Msg getDouYouCount(String email) {
 		return friendDAO.getDouYouCount(email);
+	}
+
+	// 举报
+	public Msg report(String email, String name) {
+		return friendDAO.report(email, name);
+	}
+
+	// 获取举报列表
+	public Msg getReport(String currentPage) {
+		return friendDAO.getReport(currentPage);
+	}
+
+	// 获得举报总数
+	public Msg getReportCount() {
+		return friendDAO.getReportCount();
+	}
+
+	// 删除举报
+	public Msg deleteReport(String email) {
+		return friendDAO.deleteReport(email);
+	}
+
+	// 封号
+	public Msg setReport(String id, String end_time) {
+		return friendDAO.setReport(id, end_time);
+	}
+
+	// 判断是否被封号
+	public Msg isReport(String email) {
+		return friendDAO.isReport(email);
 	}
 
 }

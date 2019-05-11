@@ -70,7 +70,7 @@ public class FriendServlet extends HttpServlet {
 		if (method == null) {
 			method = "";
 		}
-
+		
 		// 查看朋友
 		if (method.equals("getFriendList")) {
 			getFriendList(request, response);
@@ -150,6 +150,25 @@ public class FriendServlet extends HttpServlet {
 
 			getBlack(request, response);
 		}
+		// 举报
+		if (method.equals("report")) {
+			friendService.report(guest_email, request.getParameter("name"));
+			getFriendList(request, response);
+		}
+		//获取举报名单
+		if (method.equals("getReport")) {
+			getReport(request, response);
+		}
+		//删除黑名单
+		if (method.equals("deleteReport")) {
+			friendService.deleteReport(guest_email);
+			getReport(request, response);
+		}
+		//封号
+		if (method.equals("setReport")) {
+			friendService.setReport(guest_email, request.getParameter("end_time"));
+			getReport(request, response);
+		}
 
 		totalCounts = (int) resultCount.getMessage();
 		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
@@ -158,6 +177,15 @@ public class FriendServlet extends HttpServlet {
 		request.setAttribute("totalPages", totalPages);
 		request.getRequestDispatcher("userPage.jsp").forward(request, response);
 
+	}
+
+	
+	//获取举报名单
+	private void getReport(HttpServletRequest request, HttpServletResponse response) {
+		resultCount = friendService.getReportCount();
+		result = friendService.getReport(currentPage);
+		request.setAttribute("show", "report");
+		request.setAttribute("target", "friendServlet?method=getReport&");
 	}
 
 	// 查看关注的人

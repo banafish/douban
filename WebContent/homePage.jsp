@@ -78,7 +78,7 @@
 										<td><a target="_blank" href="#">帐号管理</a></td>
 									</tr>
 									<tr>
-										<td><a href="index.jsp">退出登录</a></td>
+										<td><a href="logout">退出登录</a></td>
 									</tr>
 								</tbody>
 							</table>

@@ -33,5 +33,17 @@ public interface FriendDAO {
 	Msg getDouYou(String currentPage, String email);//获取豆邮
 	
 	Msg getDouYouCount(String email);//获取豆邮总数
+	
+	Msg report(String email, String name);//举报
+	
+	Msg getReport(String currentPage);//获取举报列表
+	
+	Msg getReportCount();//获得举报总数
+	
+	Msg deleteReport(String email);//删除举报
+	
+	Msg setReport(String email, String end_time);//封号
+	
+	Msg isReport(String email);//判断是否被封号
 
 }
