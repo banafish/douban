@@ -80,14 +80,6 @@
 			}
 		});
 
-		//好友申请输入框
-		$(".allow_apply_a").click(function() {
-			$(".edit-group").attr("style", "display: inline");
-		});
-		$(".cancel-group").click(function() {
-			$(".edit-group").attr("style", "display: none");
-		});
-
 	});
 	//搜索
 	function validateForm() {
@@ -97,6 +89,13 @@
 		} else {
 			return true;
 		}
+	}
+	//好友申请输入框显示关闭
+	function openAllow(dom) {
+		$(dom).parent().prev().children(":first").attr("style", "display: inline");
+	}
+	function closeAllow(dom) {
+		$(dom).parent().attr("style", "display: none");
 	}
 </script>
 </head>
@@ -376,7 +375,7 @@
 																type="text" size="30" maxlength="30" name="msg"
 																placeholder="请输入分类，默认为好友" list="groups"> <input
 																class="submit1" type="submit" value="确定"> <input
-																class="cancel-group" type="button" value="取消">
+																class="cancel-group" type="button" value="取消" onclick="closeAllow(this)">
 														</div>
 														<%--好友分组信息--%>
 														<datalist id="groups">
@@ -386,7 +385,7 @@
 														</datalist>
 													</form>
 													<span style="float: right"><a
-														href="javascript:void(0)" class="allow_apply_a">同意申请</a> <span><a
+														href="javascript: openAllow(this)" class="allow_apply_a">同意申请</a> <span><a
 															href="friendServlet?method=denyApply&guest_email=${friend.host_email}">拒绝申请</a></span>
 														<br> <br>
 														<h6>${friend.time}</h6> </span>

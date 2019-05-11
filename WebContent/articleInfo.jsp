@@ -1,7 +1,8 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
-<html>
+<html>																
 <head>
 <meta charset="UTF-8">
 <title>豆瓣</title>
@@ -46,6 +47,23 @@
 			}
 		});
 
+		//评论文章
+		$(".submit-comment").click(function() {
+			var commentInput = $(".comment-input").val();
+			var articleId = "${requestScope.article.id}";
+			if (commentInput.length == 0) {
+				alert("评论不能为空");
+			} else {
+				$.post("articleInfoServlet", {
+					method : "comment",
+					id : articleId,
+					content : commentInput
+				}, function(data) {
+					alert(data);					
+				});
+			}
+		});
+
 	});
 	//搜索
 	function validateForm() {
@@ -59,6 +77,50 @@
 	//好友申请输入框
 	function apply() {
 		$(".edit-sign").attr("style", "display: inline");
+	}
+	//回复框
+	function reply(dom) {
+		$(dom).parent().append("<span><input type='text' size='30' maxlength='30' class='reply-input'>" 
+				+ "<input class='submit-reply' type='button' value='回复' onclick='replySubmit(this)'> "
+				+ "<input class='cancel-reply' type='button' value='取消' onclick='remove(this)'></span>");
+	}
+	//去除回复框
+	function remove(dom) {
+		$(dom).parent().remove();
+	}
+	//提交回复
+	function replySubmit(dom){
+		var but = $(dom);
+		var ipt = but.parent().prev();
+		if (but.prev().val().length == 0) {
+			alert("回复不能为空");
+		} else {
+			$.post("articleInfoServlet", {
+				method : "reply",
+				id : ipt.attr("id"),
+				reply_email : ipt.attr("class"),
+				reply_name : ipt.attr("name"),
+				content : but.prev().val()
+			}, function(data) {
+				alert(data);
+				if (data == "回复成功") {
+					ipt.parent().parent().append("<div class='reply-wrap'><h4>${sessionScope.account.name}：" + but.prev().val() +"</h4>	"
+					+ "<h6>刚刚 <a href='javascript:void(0)'>赞</a> <a href='javascript:void(0)'>回复</a></h6></div><br>");						
+				}
+			});
+		}
+	}
+	//点赞回复
+	function goodReply(dom) {
+		var a = $(dom);
+		$.get("articleInfoServlet", {
+			method : "goodReply",
+			id : a.attr("id"),
+			count : a.attr("class")
+		}, function(data) {
+			a.attr("class", data);
+			a.children().text("(" + data + ")");
+		});
 	}
 </script>
 </head>
@@ -211,7 +273,8 @@
 													<span class="follow"><a
 														href="articleInfoServlet?method=follow&author_email=${requestScope.article.author_email}&id=${requestScope.article.id}">关注</a></span>
 
-													<span class="report"><a href="douYou?p=1&guest_email=${requestScope.article.author_email}">发豆邮</a></span>
+													<span class="report"><a
+														href="douYou?p=1&guest_email=${requestScope.article.author_email}">发豆邮</a></span>
 
 													<c:choose>
 														<c:when test="${sessionScope.account.role == 'admin'}">
@@ -284,14 +347,6 @@
 														</c:otherwise>
 													</c:choose> <c:choose>
 														<c:when
-															test="${requestScope.article.articleInfo.reply == 1}">
-															<span class="like" style="color: red">回复<em>(${requestScope.articleInfoDetail.reply})</em></span>
-														</c:when>
-														<c:otherwise>
-															<span class="like"><a href="javascript:void(0)">回复<em>(${requestScope.articleInfoDetail.reply})</em></a></span>
-														</c:otherwise>
-													</c:choose> <c:choose>
-														<c:when
 															test="${requestScope.article.articleInfo.forword == 1}">
 															<span class="like" style="color: red">转发<em>(${requestScope.articleInfoDetail.forword})</em></span>
 														</c:when>
@@ -299,12 +354,107 @@
 															<span class="like"><a
 																href="articleInfoServlet?method=forword&id=${requestScope.article.id}">转发<em>(${requestScope.articleInfoDetail.forword})</em></a></span>
 														</c:otherwise>
-													</c:choose>
-
+													</c:choose> <span class="like" style="color: red">评论<em>(${requestScope.commentCount})</em></span>
 												</span>
 
 											</h6>
 										</div>
+										<textarea class="comment-input" placeholder="输入内容" name="msg"></textarea>
+										<input type="button" value="评论" class="submit-comment" /><br>
+
+										<%--评论--%>
+										<c:forEach var="comment" items="${requestScope.comments}">
+											<br>
+											<div class="comment-read">
+												<h3>
+													<img src="${comment.avatar}"
+														style="width: 20px; height: 20px"> ${comment.name}
+												</h3>
+												<h6>
+													${comment.time}<a
+														href="articleInfoServlet?method=goodComment&comment_id=${comment.id}&id=${requestScope.article.id}&counts=${comment.good_count}">
+														赞<em>(${comment.good_count})</em>
+													</a> <a
+														href="javascript: void(0)" onclick="reply(this)">
+														回复<em>(${fn:length(comment.replys)})</em>
+													</a>
+													<input type="hidden" class="${comment.user_email}" id="${comment.id}" name="${comment.name}">
+												</h6>
+												<span>${comment.content}</span>
+												
+												<%--回复--%>
+												<c:forEach var="reply" items="${comment.replys}">
+												<div class="reply-wrap">
+													<c:choose>
+														<c:when test="${reply.reply_email == comment.user_email}">
+															<h4>${reply.replyer_name}：${reply.content}</h4>															
+														</c:when>
+														<c:otherwise>
+															<h4>${reply.replyer_name}<a href="javascript:void(0)">//</a>@${reply.reply_name}：${reply.content}</h4>	
+														</c:otherwise>
+													</c:choose>
+													<h6>${reply.time} 
+																<a href="javascript:void(0)" onclick="goodReply(this)" id="${reply.id}" class="${reply.good_count}">赞<em>(${reply.good_count})</em></a>
+																<a href="javascript: void(0)" onclick="reply(this)">回复</a>
+																<input type="hidden" class="${reply.replyer_email}" id="${comment.id}" name="${reply.replyer_name}">
+															</h6>
+												</div><br>
+												</c:forEach>
+												
+											</div>
+										</c:forEach>
+
+										<%--页码--%>
+										<div class="paginator">
+											<%--根据当前页数来初始化页码--%>
+											<c:choose>
+												<c:when test="${param.p == 1}">
+													<span class="prev"> &lt;前页 </span>
+												</c:when>
+												<c:otherwise>
+													<a href="${requestScope.target}p=${param.p - 1}">&lt;前页</a>
+												</c:otherwise>
+											</c:choose>
+											<%--初始化起始页码--%>
+											<c:choose>
+												<c:when test="${param.p - 5 > 0}">
+													<c:set var="begin" value="${1 + param.p - 5}" />
+												</c:when>
+												<c:otherwise>
+													<c:set var="begin" value="1" />
+												</c:otherwise>
+											</c:choose>
+											<%--初始化终止页码--%>
+											<c:choose>
+												<c:when test="${begin + 8 < requestScope.totalPages}">
+													<c:set var="end" value="${begin + 8}" />
+												</c:when>
+												<c:otherwise>
+													<c:set var="end" value="${requestScope.totalPages}" />
+												</c:otherwise>
+											</c:choose>
+
+											<c:forEach var="i" begin="${begin}" end="${end}" step="1">
+												<c:choose>
+													<c:when test="${param.p == i}">
+														<span class="thispage">${i}</span>
+													</c:when>
+													<c:otherwise>
+														<a href="${requestScope.target}p=${i}">${i}</a>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
+											<span class="break">...</span>
+											<c:choose>
+												<c:when test="${param.p >= requestScope.totalPages}">
+													<span class="next">后页 &gt; </span>
+												</c:when>
+												<c:otherwise>
+													<a href="${requestScope.target}p=${param.p + 1}">后页&gt;</a>
+												</c:otherwise>
+											</c:choose>
+										</div>
+
 
 									</div>
 								</div>

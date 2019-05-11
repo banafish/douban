@@ -14,9 +14,12 @@ import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Account;
 import com.xxm.douban.entity.Article;
 import com.xxm.douban.entity.ArticleInfo;
+import com.xxm.douban.entity.Comment;
+import com.xxm.douban.entity.Reply;
 import com.xxm.douban.service.ArticleInfoService;
 import com.xxm.douban.service.ArticleService;
 import com.xxm.douban.service.FriendService;
+import com.xxm.douban.util.DateUtil;
 
 /**
  * Servlet implementation class ArticleServlet
@@ -24,9 +27,9 @@ import com.xxm.douban.service.FriendService;
 @WebServlet("/articleInfoServlet")
 public class ArticleInfoServlet extends HttpServlet {
 	private ArticleInfoService articleInfoService;
-	
+
 	private ArticleService articleService;
-	
+
 	private FriendService friendService;
 
 	private Msg msg;
@@ -34,8 +37,62 @@ public class ArticleInfoServlet extends HttpServlet {
 	private Account account;
 
 	private String id;// 文章id
-	
+
 	private String author_email;
+
+	private String currentPage;// 当前页码
+
+	private int totalCounts;// 数据总数
+
+	private int totalPages;// 总页数
+
+	private List<Comment> comments;// 评论
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		articleInfoService = (ArticleInfoService) getServletContext().getAttribute("articleInfoService");
+		response.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
+
+		// 获取用户属性
+		account = (Account) session.getAttribute("account");
+		// 获取id
+		id = request.getParameter("id");
+		String content = request.getParameter("content");
+		String method = request.getParameter("method");
+
+		if (method != null && method.equals("comment")) {
+			Comment comment = new Comment();
+			comment.setArticle_id(id);
+			comment.setUser_email(account.getEmail());
+			comment.setContent(content);
+			comment.setTime(DateUtil.currentTime());
+
+			msg = articleInfoService.setComment(comment);
+
+			response.getWriter().write(msg.getResult());
+		}
+		
+		if (method != null && method.equals("reply")) {
+			Reply reply = new Reply();
+			reply.setReply_email(request.getParameter("reply_email"));
+			reply.setReplyer_email(account.getEmail());
+			reply.setComment_id(id);
+			reply.setContent(content);
+			reply.setTime(DateUtil.currentTime());
+			reply.setReply_name(request.getParameter("reply_name"));
+			reply.setReplyer_name(account.getName());
+			
+			msg = articleInfoService.setReply(reply);
+			
+			if (msg.getResult().equals("回复成功")) {
+				response.getWriter().write("回复成功");
+			} else {
+				response.getWriter().write("回复失败");
+			}
+		}
+
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -49,9 +106,15 @@ public class ArticleInfoServlet extends HttpServlet {
 
 		// 获取文章id
 		id = request.getParameter("id");
-		
-		//获取作者email
-		author_email =  request.getParameter("author_email");
+
+		// 获取作者email
+		author_email = request.getParameter("author_email");
+
+		// 获取当前页数
+		currentPage = request.getParameter("p");
+		if (currentPage == null) {
+			currentPage = "1";// 如果为空默认请求第一页数据
+		}
 
 		String method = request.getParameter("method");
 		String realMethod = null;// 真实method,防止sql注入
@@ -61,14 +124,14 @@ public class ArticleInfoServlet extends HttpServlet {
 			getArticleInfo(request, response);
 			return;
 		}
-		
-		//删除文章
+
+		// 删除文章
 		if (method.equals("delete")) {
 			deleteArticle(request, response);
 			return;
 		}
-		
-		//关注
+
+		// 关注
 		if (method.equals("follow")) {
 			setFollow(request, response);
 			return;
@@ -81,6 +144,19 @@ public class ArticleInfoServlet extends HttpServlet {
 		}
 		if (method.equals("cancelHot")) {
 			setArticleHot(request, response, 0);// 0代表取消置顶
+			return;
+		}
+		// 赞评论
+		if (method.equals("goodComment")) {
+			goodComment(request, response);// 0代表取消置顶
+			return;
+		}
+		// 赞回复
+		if (method.equals("goodReply")) {
+			msg = articleInfoService.setReplyGood(id, request.getParameter("count"));
+			if (msg.getResult().equals("赞回复成功")) {
+				response.getWriter().write((String)msg.getMessage());
+			}
 			return;
 		}
 
@@ -97,27 +173,35 @@ public class ArticleInfoServlet extends HttpServlet {
 		setArticleInfoGCF(request, response, realMethod);
 
 	}
-	
-	//设置关注
-	private void setFollow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		msg = friendService.setFollow(account.getEmail(), author_email);
-		
-		request.setAttribute("msg", msg);
-		
+
+	// 赞评论
+	private void goodComment(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		articleInfoService.setCommentGood(request.getParameter("comment_id"), request.getParameter("counts"));
 		getArticleInfo(request, response);
 	}
 
-	//删除文章
-	private void deleteArticle(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	// 设置关注
+	private void setFollow(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		msg = friendService.setFollow(account.getEmail(), author_email);
+
+		request.setAttribute("msg", msg);
+
+		getArticleInfo(request, response);
+	}
+
+	// 删除文章
+	private void deleteArticle(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		msg = articleService.deleteArticle(id);
-		
+
 		if (msg.getResult().equals("删除文章成功")) {
 			request.setAttribute("msg", msg);
 			// 响应
 			getArticleInfo(request, response);
 		}
 	}
-
 
 	// 点赞收藏转发
 	private void setArticleInfoGCF(HttpServletRequest request, HttpServletResponse response, String method)
@@ -149,11 +233,11 @@ public class ArticleInfoServlet extends HttpServlet {
 		if (account != null) {
 			user_email = account.getEmail();
 		}
-		//文章信息
+		// 文章信息
 		msg = articleInfoService.getArticleInfo(id, user_email);
 		Article article = (Article) msg.getMessage();
 		request.setAttribute("article", article);
-		//用户好友分组信息
+		// 用户好友分组信息
 		msg = friendService.getGroup(user_email);
 		List<String> groups = (List<String>) msg.getMessage();
 		request.setAttribute("groups", groups);
@@ -161,8 +245,21 @@ public class ArticleInfoServlet extends HttpServlet {
 		// 统计文章点赞等数量
 		msg = articleInfoService.getArticleInfoDetail(id);
 		ArticleInfo articleInfoDetail = (ArticleInfo) msg.getMessage();
-		request.setAttribute("articleInfoDetail", articleInfoDetail);
 
+		// 评论数量
+		msg = articleInfoService.getCommentCount(id);
+		totalCounts = (int) msg.getMessage();
+		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
+
+		// 评论信息
+		msg = articleInfoService.getComment(currentPage, id);
+		comments = (List<Comment>) msg.getMessage();
+
+		request.setAttribute("comments", comments);
+		request.setAttribute("target", "articleInfoServlet?id=" + id + "&");
+		request.setAttribute("commentCount", totalCounts);
+		request.setAttribute("totalPages", totalPages);
+		request.setAttribute("articleInfoDetail", articleInfoDetail);
 		request.getRequestDispatcher("articleInfo.jsp").forward(request, response);
 	}
 

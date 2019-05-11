@@ -9,7 +9,7 @@ public class ArticleInfo {
 	
 	private String collect;//收藏
 	
-	private String reply;//回复
+	private String comment;//评论
 	
 	private String forword;//转发
 
@@ -46,12 +46,12 @@ public class ArticleInfo {
 		this.collect = collect;
 	}
 
-	public String getReply() {
-		return reply;
+	public String getComment() {
+		return comment;
 	}
 
-	public void setReply(String reply) {
-		this.reply = reply;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public String getForword() {
