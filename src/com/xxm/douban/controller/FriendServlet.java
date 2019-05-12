@@ -16,6 +16,7 @@ import com.xxm.douban.entity.Account;
 import com.xxm.douban.entity.Article;
 import com.xxm.douban.entity.Friend;
 import com.xxm.douban.service.ArticleService;
+import com.xxm.douban.service.ChatService;
 import com.xxm.douban.service.FriendService;
 import com.xxm.douban.util.DateUtil;
 
@@ -25,6 +26,8 @@ import com.xxm.douban.util.DateUtil;
 @WebServlet("/friendServlet")
 public class FriendServlet extends HttpServlet {
 	private FriendService friendService;
+	
+	private ChatService chatService;
 
 	private Friend friend;
 
@@ -53,6 +56,7 @@ public class FriendServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		response.setCharacterEncoding("utf-8");
 		friendService = (FriendService) getServletContext().getAttribute("friendService");
+		chatService = (ChatService) getServletContext().getAttribute("chatService");
 
 		// 获取当前页数
 		currentPage = request.getParameter("p");
@@ -169,6 +173,10 @@ public class FriendServlet extends HttpServlet {
 			friendService.setReport(guest_email, request.getParameter("end_time"));
 			getReport(request, response);
 		}
+		//获取密友列表
+		if (method.equals("getChatFriend")) {			
+			getChatFriend(request, response);
+		}
 
 		totalCounts = (int) resultCount.getMessage();
 		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
@@ -180,6 +188,13 @@ public class FriendServlet extends HttpServlet {
 	}
 
 	
+	//获取密友列表
+	private void getChatFriend(HttpServletRequest request, HttpServletResponse response) {
+		resultCount = new Msg("", 1);//总页数为1
+		result = chatService.getChatFriend(account.getEmail());
+		request.setAttribute("show", "chat");
+	}
+
 	//获取举报名单
 	private void getReport(HttpServletRequest request, HttpServletResponse response) {
 		resultCount = friendService.getReportCount();

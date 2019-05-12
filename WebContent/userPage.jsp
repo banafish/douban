@@ -249,6 +249,7 @@
 								<br>
 								<li><a id="" href="friendServlet?p=1&method=getApply">好友申请</a></li>
 								<li><a id="" href="friendServlet?p=1&method=getBlack">黑名单</a></li>
+								<li><a id="" href="friendServlet?p=1&method=getChatFriend">密友</a></li>
 								<c:if test="${sessionScope.account.role == 'admin'}">
 									<li><a id="" href="friendServlet?p=1&method=getReport">举报名单</a></li>
 								</c:if>
@@ -367,6 +368,13 @@
 												<c:if test="${requestScope.show == 'black'}">
 													<span style="float: right"> <a
 														href="friendServlet?method=cancelBlack&guest_email=${friend.guest_email}">移除</a>
+														<span>
+												</c:if>
+												
+												<%--密友的选项--%>
+												<c:if test="${requestScope.show == 'chat'}">
+													<span style="float: right"> <a
+														href="chat.jsp?email=${friend.guest_email}&avatar=${friend.avatar}&name=${friend.name}">实时聊天</a>
 														<span>
 												</c:if>
 

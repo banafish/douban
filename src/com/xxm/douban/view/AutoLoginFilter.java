@@ -50,9 +50,6 @@ public class AutoLoginFilter implements Filter {
 		}
 
 		// 判断值是否为off，如果是就不自动登录
-		if (value.equals("off")) {
-			chain.doFilter(request, response);
-		}
 		if (!value.equals("") && !value.equals("off")) {
 			String[] values = value.split(",");
 			account = new Account();
@@ -62,8 +59,9 @@ public class AutoLoginFilter implements Filter {
 
 			req.getSession().setAttribute("account", account);
 			resp.sendRedirect(HOME_VIEW);// 重定向
-		}
-
+		} 
+		chain.doFilter(request, response);
+			
 	}
 
 	public void destroy() {
