@@ -1,4 +1,4 @@
-package com.xxm.douban.view;
+package com.xxm.douban.web;
 
 import java.io.UnsupportedEncodingException;
 
