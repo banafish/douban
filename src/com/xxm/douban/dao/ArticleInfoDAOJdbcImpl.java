@@ -264,15 +264,14 @@ public class ArticleInfoDAOJdbcImpl implements ArticleInfoDAO {
 
 	//获取回复
 	@Override
-	public Msg getReply(String id, String reply_email) {
+	public Msg getReply(String id) {
 		try {
 			Reply reply = null;
 			List<Reply> list = new ArrayList<>();
 			con = dataSource.getConnection();
-			String sql = "select * from t_reply where comment_id = ? and reply_email = ? order by time desc ";
+			String sql = "select * from t_reply where comment_id = ? order by time desc ";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, id);
-			stmt.setString(2, reply_email);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				reply = new Reply();

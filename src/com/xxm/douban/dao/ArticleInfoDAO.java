@@ -19,7 +19,7 @@ public interface ArticleInfoDAO {
 	
 	Msg setCommentGood(String id, String counts);//点赞评论
 	
-	Msg getReply(String id, String reply_email);//获取回复
+	Msg getReply(String id);//获取回复
 	
 	Msg setReply(Reply reply);//回复
 	

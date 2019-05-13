@@ -177,6 +177,16 @@ public class FriendServlet extends HttpServlet {
 		if (method.equals("getChatFriend")) {			
 			getChatFriend(request, response);
 		}
+		//搜人
+		if (method.equals("searchPeople")) {			
+			searchPeople(request, response);
+		}
+		//关注
+		if (method.equals("fellow")) {			
+			result = friendService.setFollow(account.getEmail(), guest_email);
+			response.getWriter().write(result.getResult());
+			return;
+		}
 
 		totalCounts = (int) resultCount.getMessage();
 		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条
@@ -188,6 +198,15 @@ public class FriendServlet extends HttpServlet {
 	}
 
 	
+	//搜人
+	private void searchPeople(HttpServletRequest request, HttpServletResponse response) {
+		String key = request.getParameter("keyWord");
+		resultCount = friendService.searchPeopleCount(key);
+		result = friendService.searchPeople(currentPage, key);
+		request.setAttribute("show", "search");
+		request.setAttribute("target", "friendServlet?method=searchPeople&keyWord=" + key + "&");
+	}
+
 	//获取密友列表
 	private void getChatFriend(HttpServletRequest request, HttpServletResponse response) {
 		resultCount = new Msg("", 1);//总页数为1

@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
-<html>																
+<html>
 <head>
 <meta charset="UTF-8">
 <title>豆瓣</title>
@@ -59,7 +59,7 @@
 					id : articleId,
 					content : commentInput
 				}, function(data) {
-					alert(data);					
+					alert(data);
 				});
 			}
 		});
@@ -80,34 +80,36 @@
 	}
 	//回复框
 	function reply(dom) {
-		$(dom).parent().append("<span><input type='text' size='30' maxlength='30' class='reply-input'>" 
-				+ "<input class='submit-reply' type='button' value='回复' onclick='replySubmit(this)'> "
-				+ "<input class='cancel-reply' type='button' value='取消' onclick='remove(this)'></span>");
+		$(dom).parent().append("<span><input type='text' size='30' maxlength='30' class='reply-input'>"
+								+ "<input class='submit-reply' type='button' value='回复' onclick='replySubmit(this)'> "
+								+ "<input class='cancel-reply' type='button' value='取消' onclick='remove(this)'></span>");
 	}
 	//去除回复框
 	function remove(dom) {
 		$(dom).parent().remove();
 	}
 	//提交回复
-	function replySubmit(dom){
+	function replySubmit(dom) {
 		var but = $(dom);
 		var ipt = but.parent().prev();
 		if (but.prev().val().length == 0) {
 			alert("回复不能为空");
 		} else {
-			$.post("articleInfoServlet", {
-				method : "reply",
-				id : ipt.attr("id"),
-				reply_email : ipt.attr("class"),
-				reply_name : ipt.attr("name"),
-				content : but.prev().val()
-			}, function(data) {
-				alert(data);
-				if (data == "回复成功") {
-					ipt.parent().parent().append("<div class='reply-wrap'><h4>${sessionScope.account.name}：" + but.prev().val() +"</h4>	"
-					+ "<h6>刚刚 <a href='javascript:void(0)'>赞</a> <a href='javascript:void(0)'>回复</a></h6></div><br>");						
-				}
-			});
+			$.post("articleInfoServlet",{method : "reply",
+								id : ipt.attr("id"),
+								reply_email : ipt.attr("class"),
+								reply_name : ipt.attr("name"),
+								content : but.prev().val()
+							},
+							function(data) {
+								alert(data);
+								if (data == "回复成功") {
+									ipt.parent().parent().append("<div class='reply-wrap'><h4>${sessionScope.account.name}："
+															+ but.prev().val()
+															+ "</h4>	"
+															+ "<h6>刚刚 <a href='javascript:void(0)'>赞</a> <a href='javascript:void(0)'>回复</a></h6></div><br>");
+								}
+							});
 		}
 	}
 	//点赞回复
@@ -198,12 +200,12 @@
 						onsubmit="return validateForm();">
 						<fieldset>
 							<legend>搜索：</legend>
-							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
+							<label for="inp-query" style="display: none;">搜索你感兴趣的内容...</label>
 							<div class="inp">
 								<input name="method" value="getSearchArticleByPage"
 									type="hidden"> <input name="p" value="1" type="hidden">
 								<input id="intp-query" name="q" size="22" maxlength="60"
-									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
+									autocomplete="off" placeholder="搜索你感兴趣的内容...">
 							</div>
 							<div class="inp-btn">
 								<input type="submit" value="搜索">
@@ -276,16 +278,10 @@
 													<span class="report"><a
 														href="douYou?p=1&guest_email=${requestScope.article.author_email}">发豆邮</a></span>
 
-													<c:choose>
-														<c:when test="${sessionScope.account.role == 'admin'}">
-															<span class="report"><a
-																href="articleInfoServlet?method=delete&id=${requestScope.article.id}">删除</a></span>
-														</c:when>
-														<c:otherwise>
-															<span class="report"><a href="javascript:void(0)">举报</a></span>
-														</c:otherwise>
-													</c:choose>
-
+													<c:if test="${sessionScope.account.role == 'admin'}">
+														<span class="report"><a
+															href="articleInfoServlet?method=delete&id=${requestScope.article.id}">删除</a></span>
+													</c:if>
 
 												</c:if>
 											</span> <br>
@@ -374,33 +370,37 @@
 													${comment.time}<a
 														href="articleInfoServlet?method=goodComment&comment_id=${comment.id}&id=${requestScope.article.id}&counts=${comment.good_count}">
 														赞<em>(${comment.good_count})</em>
-													</a> <a
-														href="javascript: void(0)" onclick="reply(this)">
+													</a> <a href="javascript: void(0)" onclick="reply(this)">
 														回复<em>(${fn:length(comment.replys)})</em>
-													</a>
-													<input type="hidden" class="${comment.user_email}" id="${comment.id}" name="${comment.name}">
+													</a> <input type="hidden" class="${comment.user_email}"
+														id="${comment.id}" name="${comment.name}">
 												</h6>
 												<span>${comment.content}</span>
-												
+
 												<%--回复--%>
 												<c:forEach var="reply" items="${comment.replys}">
-												<div class="reply-wrap">
-													<c:choose>
-														<c:when test="${reply.reply_email == comment.user_email}">
-															<h4>${reply.replyer_name}：${reply.content}</h4>															
-														</c:when>
-														<c:otherwise>
-															<h4>${reply.replyer_name}<a href="javascript:void(0)">//</a>@${reply.reply_name}：${reply.content}</h4>	
-														</c:otherwise>
-													</c:choose>
-													<h6>${reply.time} 
-																<a href="javascript:void(0)" onclick="goodReply(this)" id="${reply.id}" class="${reply.good_count}">赞<em>(${reply.good_count})</em></a>
-																<a href="javascript: void(0)" onclick="reply(this)">回复</a>
-																<input type="hidden" class="${reply.replyer_email}" id="${comment.id}" name="${reply.replyer_name}">
-															</h6>
-												</div><br>
+													<div class="reply-wrap">
+														<c:choose>
+															<c:when test="${reply.reply_email == comment.user_email}">
+																<h4>${reply.replyer_name}：${reply.content}</h4>
+															</c:when>
+															<c:otherwise>
+																<h4>${reply.replyer_name}<a
+																		href="javascript:void(0)">//</a>@${reply.reply_name}：${reply.content}
+																</h4>
+															</c:otherwise>
+														</c:choose>
+														<h6>${reply.time}
+															<a href="javascript:void(0)" onclick="goodReply(this)"
+																id="${reply.id}" class="${reply.good_count}">赞<em>(${reply.good_count})</em></a>
+															<a href="javascript: void(0)" onclick="reply(this)">回复</a>
+															<input type="hidden" class="${reply.replyer_email}"
+																id="${comment.id}" name="${reply.replyer_name}">
+														</h6>
+													</div>
+													<br>
 												</c:forEach>
-												
+
 											</div>
 										</c:forEach>
 

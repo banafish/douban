@@ -44,8 +44,8 @@ public class ArticleInfoService {
 		
 		//获取回复
 		for (int i = 0; i < comments.size(); i++) {
-			getReply(comments.get(i).getId(), comments.get(i).getUser_email());
-			comments.get(i).setReplys(totalReply);
+			Msg msg = getReply(comments.get(i).getId());
+			comments.get(i).setReplys((List<Reply>) msg.getMessage());
 		}
 		return new Msg("获取评论成功", comments);
 	}
@@ -87,31 +87,8 @@ public class ArticleInfoService {
 	}
 	
 	//获取回复
-	List<Reply> totalReply;//保存数据
-	private void getReply(String id, String reply_email) {
-		totalReply = new ArrayList<>();
-		List<Reply> replys = new ArrayList<>();
-		Reply reply = new Reply();//构造个开头
-		reply.setComment_id(id);
-		reply.setReplyer_email(reply_email);
-		replys.add(reply);
-		getReplys(replys);
-	}
-	//从数据库中递归获取回复
-	private void getReplys(List<Reply> replys) {
-		List<Reply> list;//保存每一次连接数据库取出来的值
-		List<Reply> newList = new ArrayList<>();//保存每一层的数据
-		for (int i = 0; i < replys.size(); i++) {
-			list = (List<Reply>)articleInfoDAO.getReply(replys.get(i).getComment_id(), replys.get(i).getReplyer_email()).getMessage();
-			if (list != null) {
-				newList.addAll(list);
-			}			
-		}
-		if (!newList.isEmpty()) {
-			totalReply.addAll(newList);
-			getReplys(newList);
-		}
-		return;
+	private Msg getReply(String id) {
+		return articleInfoDAO.getReply(id);
 	}
 	
 }

@@ -98,6 +98,16 @@
 	function closeAllow(dom) {
 		$(dom).parent().attr("style", "display: none");
 	}
+
+	//关注人
+	function fellow(dom) {
+		$.get("friendServlet", {
+			guest_email : $(dom).attr("class"),
+			method : "fellow"
+		}, function(data) {
+			alert(data);
+		});
+	}
 </script>
 </head>
 <body>
@@ -171,16 +181,16 @@
 				</div>
 
 				<div class="nav-search">
-					<form action="homePage" method="get"
+					<form action="friendServlet" method="get"
 						onsubmit="return validateForm();">
 						<fieldset>
 							<legend>搜索：</legend>
-							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
+							<label for="inp-query" style="display: none;">搜索你感兴趣的人...</label>
 							<div class="inp">
-								<input name="method" value="getSearchArticleByPage"
-									type="hidden"> <input name="p" value="1" type="hidden">
-								<input id="intp-query" name="q" size="22" maxlength="60"
-									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
+								<input name="method" value="searchPeople" type="hidden">
+								<input name="p" value="1" type="hidden"> <input
+									id="intp-query" name="keyWord" size="22" maxlength="60"
+									autocomplete="off" placeholder="搜索你感兴趣的人...">
 							</div>
 							<div class="inp-btn">
 								<input type="submit" value="搜索">
@@ -368,22 +378,33 @@
 												<c:if test="${requestScope.show == 'black'}">
 													<span style="float: right"> <a
 														href="friendServlet?method=cancelBlack&guest_email=${friend.guest_email}">移除</a>
-														<span>
+														</span>
 												</c:if>
-												
+
 												<%--密友的选项--%>
 												<c:if test="${requestScope.show == 'chat'}">
 													<span style="float: right"> <a
 														href="chat.jsp?email=${friend.guest_email}&avatar=${friend.avatar}&name=${friend.name}">实时聊天</a>
-														<span>
+														</span>
+												</c:if>
+
+												<%--搜人的选项--%>
+												<c:if test="${requestScope.show == 'search'}">
+													<span style="float: right"> <a
+														href="javascript: void(0)" onclick="fellow(this)"
+														class="${friend.guest_email}">关注</a> 
+														</span><br>													
+													<span style="float: right">	<a
+														href="douYou?p=1&guest_email=${friend.guest_email}">发豆邮</a>
+														</span>
 												</c:if>
 
 												<%--举报名单的选项--%>
 												<c:if test="${requestScope.show == 'report'}">
 													<h6>邮箱：${friend.guest_email}</h6>
 													<form action="friendServlet" method="get">
-														<input type="hidden" name="method" value="setReport"/>
-														<input type="hidden" name="guest_email"
+														<input type="hidden" name="method" value="setReport" /> <input
+															type="hidden" name="guest_email"
 															value="${friend.guest_email}" /> 请选择封到什么时候：<input
 															type="datetime-local" value="" name="end_time" /> <input
 															type="submit" value="封号" />
@@ -417,10 +438,10 @@
 													</form>
 													<span style="float: right"><a
 														href="javascript: void(0)" onclick="openAllow(this)"
-														class="allow_apply_a">同意申请</a> <span><a
-															href="friendServlet?method=denyApply&guest_email=${friend.host_email}">拒绝申请</a></span>
+														class="allow_apply_a">同意申请</a> <span> <a
+																	href="friendServlet?method=denyApply&guest_email=${friend.host_email}">拒绝申请</a></span>
 														<br> <br>
-														<h6>${friend.time}</h6> </span>
+														<h6>${friend.time}</h6> </span>												
 												</c:if>
 
 											</div>

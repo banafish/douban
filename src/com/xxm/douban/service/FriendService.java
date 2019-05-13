@@ -148,5 +148,15 @@ public class FriendService {
 	public Msg isReport(String email) {
 		return friendDAO.isReport(email);
 	}
+	
+	//搜人
+	public Msg searchPeople(String currentPage, String keyWord){
+		return friendDAO.searchPeople(currentPage, keyWord);
+	}
+	
+	//搜人的总数
+	public Msg searchPeopleCount(String keyWord) {
+		return friendDAO.searchPeopleCount(keyWord);
+	}
 
 }

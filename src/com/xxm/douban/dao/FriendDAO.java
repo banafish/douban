@@ -45,5 +45,9 @@ public interface FriendDAO {
 	Msg setReport(String email, String end_time);//封号
 	
 	Msg isReport(String email);//判断是否被封号
+	
+	Msg searchPeople(String currentPage, String keyWord);//搜人
+	
+	Msg searchPeopleCount(String keyWord);//搜人的总数
 
 }

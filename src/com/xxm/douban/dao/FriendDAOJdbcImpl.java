@@ -10,6 +10,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.xxm.douban.bean.Msg;
+import com.xxm.douban.entity.Article;
 import com.xxm.douban.entity.Friend;
 import com.xxm.douban.util.DateUtil;
 import com.xxm.douban.util.DbUtil;
@@ -668,6 +669,72 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 			}
 		}
 		return new Msg("不被封号", null);
+	}
+
+	//搜人
+	@Override
+	public Msg searchPeople(String currentPage, String keyWord) {
+		try {
+			Friend friend = null;
+			List<Friend> list = new ArrayList<>();
+			con = dataSource.getConnection();
+			String sql = " select * from t_account where email like concat('%',?,'%') or name like concat('%',?,'%') limit ?, 6";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, keyWord);
+			stmt.setString(2, keyWord);
+			stmt.setInt(3, (Integer.valueOf(currentPage) - 1) * 6);// 每页6条记录
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				friend = new Friend();
+				friend.setId(rs.getString("id"));
+				friend.setGuest_email(rs.getString("email"));
+				friend.setName(rs.getString("name"));
+				friend.setAvatar(rs.getString("avatar"));
+				friend.setSign(rs.getString("sign"));
+				list.add(friend);
+			}
+			if (list.isEmpty()) {
+				return new Msg("无人", null);
+			} else {
+				return new Msg("搜人成功", list);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("搜人失败", null);
+	}
+
+	//搜人的总数
+	@Override
+	public Msg searchPeopleCount(String keyWord) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "select count(*) from t_account where email like concat('%',?,'%') or name like concat('%',?,'%')";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, keyWord);
+			stmt.setString(2, keyWord);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Msg("获取搜人的总数成功", rs.getInt(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("获取搜人的总数失败", null);
 	}
 
 }

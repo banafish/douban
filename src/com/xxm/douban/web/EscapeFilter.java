@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 @WebFilter(urlPatterns ={"/accountInfo", "/articleInfoServlet", "/chatServlet", "/douYou",
-	"/forgetPassword", "/forgetPasswordAction", "/friendServlet", "/homePage",
+	"/forgetPassword", "/forgetPasswordAction", "/friendServlet1", "/homePage",
 	"/login", "/logout", "/register", "/resetPassword", "/userPage"})
 public class EscapeFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
