@@ -12,7 +12,10 @@ public class EscapeWrapper extends HttpServletRequestWrapper {
     
     @Override
     public String getParameter(String name) {
-        String value = getRequest().getParameter(name);
-        return StringEscapeUtils.escapeHtml(value);
+    	//保证中文不被转义
+        String str1 = getRequest().getParameter(name);
+        String str2 = StringEscapeUtils.escapeJava(str1);
+        String str3 = StringEscapeUtils.escapeHtml(str2);
+        return StringEscapeUtils.unescapeJava(str3);
     }
 }

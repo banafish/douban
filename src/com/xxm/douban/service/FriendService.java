@@ -119,6 +119,11 @@ public class FriendService {
 		return friendDAO.getDouYouCount(email);
 	}
 
+	// 删除豆邮
+	public Msg deleteDouYou(String id, String email) {
+		return friendDAO.deleteDouYou(id, email);
+	}
+
 	// 举报
 	public Msg report(String email, String name) {
 		return friendDAO.report(email, name);
@@ -148,13 +153,13 @@ public class FriendService {
 	public Msg isReport(String email) {
 		return friendDAO.isReport(email);
 	}
-	
-	//搜人
-	public Msg searchPeople(String currentPage, String keyWord){
+
+	// 搜人
+	public Msg searchPeople(String currentPage, String keyWord) {
 		return friendDAO.searchPeople(currentPage, keyWord);
 	}
-	
-	//搜人的总数
+
+	// 搜人的总数
 	public Msg searchPeopleCount(String keyWord) {
 		return friendDAO.searchPeopleCount(keyWord);
 	}

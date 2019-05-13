@@ -239,7 +239,7 @@
 													<c:if test="${article.hot == 1}">
 														<span style="color: red">(热)</span>
 													</c:if>
-													<c:if test="${article.author_email != article.origin_author}">
+													<c:if test="${article.origin_author != null && article.author_email != article.origin_author}">
 														<span>(转自账号：${article.origin_author})</span>
 													</c:if>
 												</h6>

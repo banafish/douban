@@ -92,6 +92,11 @@ public class DouYou extends HttpServlet {
 			getDouYou(request, response);
 			method = "";
 		}
+		//删除豆邮
+		if (method.equals("deleteDouYou")) {
+			friendService.deleteDouYou(request.getParameter("id"), account.getEmail());
+			getDouYou(request, response);
+		}
 		
 		totalCounts = (int) resultCount.getMessage();
 		totalPages = ((totalCounts % 6 == 0) ? (totalCounts / 6) : (totalCounts / 6 + 1));// 总页数，每页6条

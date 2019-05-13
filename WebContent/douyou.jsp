@@ -111,12 +111,12 @@
 						onsubmit="return validateForm();">
 						<fieldset>
 							<legend>搜索：</legend>
-							<label for="inp-query" style="display: none;">搜索你感兴趣的内容和人...</label>
+							<label for="inp-query" style="display: none;">搜索你感兴趣的内容...</label>
 							<div class="inp">
 								<input name="method" value="getSearchArticleByPage"
 									type="hidden"> <input name="p" value="1" type="hidden">
 								<input id="intp-query" name="q" size="22" maxlength="60"
-									autocomplete="off" placeholder="搜索你感兴趣的内容和人...">
+									autocomplete="off" placeholder="搜索你感兴趣的内容...">
 							</div>
 							<div class="inp-btn">
 								<input type="submit" value="搜索">
@@ -166,7 +166,7 @@
 								${douyou.name}
 							</h3>
 							<p>${douyou.msg}</p>
-							<h6>${douyou.time}</h6>
+							<h6>${douyou.time}<a href="douYou?method=deleteDouYou&id=${douyou.id}">删除</a></h6>
 						</div>
 					</c:forEach>
 

@@ -260,7 +260,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 			String sql = "select count(*) from t_follow where user_email = ? ";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, email);
-			
+
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				return new Msg("获得关注的人总数成功", rs.getInt(1));
@@ -409,7 +409,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("设置黑名单失败", null);
 	}
 
-	//判断在不在黑名单
+	// 判断在不在黑名单
 	@Override
 	public Msg inBlack(String host_email, String guest_email) {
 		try {
@@ -436,14 +436,14 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("不在黑名单", null);
 	}
 
-	//获取豆邮
+	// 获取豆邮
 	@Override
 	public Msg getDouYou(String currentPage, String email) {
 		try {
 			Friend friend = null;
 			List<Friend> list = new ArrayList<>();
 			con = dataSource.getConnection();
-			String sql = "SELECT t_douyou.host_email, t_douyou.guest_email, t_douyou.msg, t_douyou.time, "
+			String sql = "SELECT t_douyou.id, t_douyou.host_email, t_douyou.guest_email, t_douyou.msg, t_douyou.time, "
 					+ "t_account.`name`, t_account.avatar FROM t_douyou, t_account "
 					+ "WHERE t_douyou.guest_email = ? AND t_douyou.host_email = t_account.email "
 					+ "ORDER BY t_douyou.time DESC LIMIT ?, 6 ";
@@ -453,6 +453,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				friend = new Friend();
+				friend.setId(rs.getString("id"));
 				friend.setHost_email(rs.getString("host_email"));
 				friend.setGuest_email(rs.getString("guest_email"));
 				friend.setMsg(rs.getString("msg"));
@@ -479,7 +480,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("获取豆邮失败", null);
 	}
 
-	//获取豆邮总数
+	// 获取豆邮总数
 	@Override
 	public Msg getDouYouCount(String email) {
 		try {
@@ -504,7 +505,33 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("获取豆邮总数失败", null);
 	}
 
-	//举报
+	// 删除豆邮
+	@Override
+	public Msg deleteDouYou(String id, String email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "delete from t_douyou where id = ? and guest_email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, id);
+			stmt.setString(2, email);
+
+			// 判断执行删除语句后受影响语句是否大于0
+			if (stmt.executeUpdate() > 0) {
+				return new Msg("删除豆邮成功", null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("删除豆邮失败", null);
+	}
+
+	// 举报
 	@Override
 	public Msg report(String email, String name) {
 		try {
@@ -533,7 +560,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("举报失败", null);
 	}
 
-	//获取举报列表
+	// 获取举报列表
 	@Override
 	public Msg getReport(String currentPage) {
 		try {
@@ -570,7 +597,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("获取举报列表失败", null);
 	}
 
-	//获得举报总数
+	// 获得举报总数
 	@Override
 	public Msg getReportCount() {
 		try {
@@ -594,7 +621,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("获得举报总数失败", null);
 	}
 
-	//删除举报
+	// 删除举报
 	@Override
 	public Msg deleteReport(String email) {
 		try {
@@ -619,7 +646,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("删除举报失败", null);
 	}
 
-	//封号
+	// 封号
 	@Override
 	public Msg setReport(String email, String end_time) {
 		try {
@@ -646,7 +673,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("设置失败", null);
 	}
 
-	//判断是否被封号
+	// 判断是否被封号
 	@Override
 	public Msg isReport(String email) {
 		try {
@@ -671,7 +698,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("不被封号", null);
 	}
 
-	//搜人
+	// 搜人
 	@Override
 	public Msg searchPeople(String currentPage, String keyWord) {
 		try {
@@ -711,7 +738,7 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("搜人失败", null);
 	}
 
-	//搜人的总数
+	// 搜人的总数
 	@Override
 	public Msg searchPeopleCount(String keyWord) {
 		try {
