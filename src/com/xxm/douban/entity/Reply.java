@@ -1,5 +1,8 @@
 package com.xxm.douban.entity;
 
+/**
+ * 回复信息实体类
+ */
 public class Reply {
 	
 	private String id;//回复id

@@ -1,5 +1,8 @@
 package com.xxm.douban.entity;
 
+/**
+ * 好友信息实体类
+ */
 public class Friend {
 	
 	private String id;

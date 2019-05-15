@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.xxm.douban.entity.Account;
 
+/**
+ * 身份过滤器，过滤掉不具有管理员身份的用户
+ */
 @WebFilter(
     urlPatterns = { "/articleInfoServlet", "/friendServlet" }, 
     initParams = { @WebInitParam(name = "LOGIN_VIEW", value = "index.jsp") })

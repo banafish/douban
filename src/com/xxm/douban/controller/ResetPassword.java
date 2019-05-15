@@ -16,6 +16,7 @@ import com.xxm.douban.util.EncrypMD5Util;
 
 /**
  * Servlet implementation class ResetPassword
+ * 重置密码
  */
 @WebServlet(urlPatterns = { "/resetPassword" }, initParams = {
 		@WebInitParam(name = "SUCCESS_VIEW", value = "index.jsp"),

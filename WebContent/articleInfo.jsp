@@ -8,123 +8,10 @@
 <title>豆瓣</title>
 <link type="text/css" rel="stylesheet" href="css/dbNav.css">
 <link type="text/css" rel="stylesheet" href="css/articleInfo.css">
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
-	
-</script>
-<script>
-	$(document).ready(function() {
-		//账户菜单
-		var moreItems = document.getElementsByClassName("more-items");
-		moreItems.flag = 0;
-		$(".more-items").hide();
-		$(".bn-more").click(function() {
-			if (!moreItems.flag) {
-				$(".more-items").show();
-				moreItems.flag = 1;
-			} else {
-				$(".more-items").hide();
-				moreItems.flag = 0;
-			}
-		});
-		//关闭好友申请输入框
-		$(".cancel").click(function() {
-			$(".edit-sign").attr("style", "display: none");
-		});
-		//提交好友申请
-		$(".submit").click(function() {
-			var group = $(".signature").val();
-			if (group.length == 0) {
-				alert("分类不能为空");
-			} else {
-				$.get("friendServlet", {
-					method : "applyFriend",
-					msg : group,
-					guest_email : $(".signature").attr("id")
-				}, function(data) {
-					alert(data);
-				});
-				$(".edit-sign").attr("style", "display: none");
-			}
-		});
-
-		//评论文章
-		$(".submit-comment").click(function() {
-			var commentInput = $(".comment-input").val();
-			var articleId = "${requestScope.article.id}";
-			if (commentInput.length == 0) {
-				alert("评论不能为空");
-			} else {
-				$.post("articleInfoServlet", {
-					method : "comment",
-					id : articleId,
-					content : commentInput
-				}, function(data) {
-					alert(data);
-				});
-			}
-		});
-
-	});
-	//搜索
-	function validateForm() {
-		if ($("#intp-query").val().length == 0) {
-			alert("不能为空");
-			return false;
-		} else {
-			return true;
-		}
-	}
-	//好友申请输入框
-	function apply() {
-		$(".edit-sign").attr("style", "display: inline");
-	}
-	//回复框
-	function reply(dom) {
-		$(dom).parent().append("<span><input type='text' size='30' maxlength='30' class='reply-input'>"
-								+ "<input class='submit-reply' type='button' value='回复' onclick='replySubmit(this)'> "
-								+ "<input class='cancel-reply' type='button' value='取消' onclick='remove(this)'></span>");
-	}
-	//去除回复框
-	function remove(dom) {
-		$(dom).parent().remove();
-	}
-	//提交回复
-	function replySubmit(dom) {
-		var but = $(dom);
-		var ipt = but.parent().prev();
-		if (but.prev().val().length == 0) {
-			alert("回复不能为空");
-		} else {
-			$.post("articleInfoServlet",{method : "reply",
-								id : ipt.attr("id"),
-								reply_email : ipt.attr("class"),
-								reply_name : ipt.attr("name"),
-								content : but.prev().val()
-							},
-							function(data) {
-								alert(data);
-								if (data == "回复成功") {
-									ipt.parent().parent().append("<div class='reply-wrap'><h4>${sessionScope.account.name}："
-															+ but.prev().val()
-															+ "</h4>	"
-															+ "<h6>刚刚 <a href='javascript:void(0)'>赞</a> <a href='javascript:void(0)'>回复</a></h6></div><br>");
-								}
-							});
-		}
-	}
-	//点赞回复
-	function goodReply(dom) {
-		var a = $(dom);
-		$.get("articleInfoServlet", {
-			method : "goodReply",
-			id : a.attr("id"),
-			count : a.attr("class")
-		}, function(data) {
-			a.attr("class", data);
-			a.children().text("(" + data + ")");
-		});
-	}
-</script>
+<link rel="icon" type="image/x-icon" href="css/images/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
+<script src="js/jquery.min.js">	</script>
+<script src="js/articleInfo.js"></script>
 </head>
 <body>
 	<div id="db-global-nav" class="global-nav">
@@ -134,6 +21,7 @@
 				<ul>
 					<li><a id="top-nav-doumail-link" href="douYou?p=1">豆邮</a></li>
 					<li class="nav-user-account"><a class="bn-more" rel="off">
+							<input type="hidden" class="user-name" id="${account.name}">
 							<span>${account.name}的帐号</span><span class="arrow"></span>
 					</a>
 						<div class="more-items">
@@ -141,15 +29,6 @@
 								<tbody>
 									<tr>
 										<td><a target="_blank" href="userPage?p=1">个人主页</a></td>
-									</tr>
-									<tr>
-										<td><a>我的订单</a></td>
-									</tr>
-									<tr>
-										<td><a>我的钱包</a></td>
-									</tr>
-									<tr>
-										<td><a target="_blank" href="#">帐号管理</a></td>
 									</tr>
 									<tr>
 										<td><a href="logout">退出登录</a></td>
@@ -160,27 +39,16 @@
 				</ul>
 			</div>
 
-			<div class="top-nav-reminder">
-				<a>提醒</a>
-			</div>
-
-			<div class="top-nav-doubanapp">
-				<a class="lnk-doubanapp">下载豆瓣客户端</a>
-			</div>
-
 			<div class="global-nav-items">
 				<ul>
-					<li class="on"><a>豆瓣</a></li>
-					<li class=""><a>读书</a></li>
-					<li class=""><a>电影</a></li>
-					<li class=""><a>音乐</a></li>
-					<li class=""><a>同城</a></li>
-					<li class=""><a>小组</a></li>
-					<li class=""><a>阅读</a></li>
-					<li class=""><a>FM</a></li>
-					<li class=""><a>时间</a></li>
-					<li class=""><a>豆品</a></li>
-					<li class=""><a>更多</a></li>
+					<li class="on"><a href="homePage?p=1">豆瓣</a></li>
+					<li class=""><a	href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></li>
+					<li class=""><a	href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></li>
 				</ul>
 			</div>
 
@@ -192,7 +60,7 @@
 			<div class="nav-primary">
 
 				<div class="nav-logo">
-					<a href="#">豆瓣社区</a>
+					<a href="homePage?p=1">豆瓣社区</a>
 				</div>
 
 				<div class="nav-search">
@@ -216,10 +84,8 @@
 
 				<div class="nav-items">
 					<ul>
-						<li><a href="#">首页</a></li>
-						<li><a href="#">我的豆瓣</a></li>
-						<li><a href="#"> 浏览发现 </a></li>
-						<li><a href="#"> 话题广场 </a></li>
+						<li><a href="homePage?p=1">首页</a></li>
+						<li><a href="articleEdit.jsp" target="_blank"> 发文章</a></li>						
 					</ul>
 				</div>
 
@@ -260,7 +126,7 @@
 														href="javascript:apply()">加好友</a></span>
 													<div style="display: none;" class="edit-sign">
 														<input id="${requestScope.article.author_email}"
-															class="signature" type="text" size="30" maxlength="30"
+															class="signature" type="text" size="30" maxlength="10"
 															placeholder="请输入分类" list="groups"> <input
 															class="submit" type="submit" value="申请"> <input
 															class="cancel" type="button" value="取消">
@@ -272,21 +138,21 @@
 														</c:forEach>
 													</datalist>
 
-													<span class="follow"><a
-														href="articleInfoServlet?method=follow&author_email=${requestScope.article.author_email}&id=${requestScope.article.id}">关注</a></span>
+													<span class="follow"><a href="javascript: void(0)"
+														class="${requestScope.article.author_email}", id="${requestScope.article.id}">关注</a></span>
 
 													<span class="report"><a
 														href="douYou?p=1&guest_email=${requestScope.article.author_email}">发豆邮</a></span>
 
 													<c:if test="${sessionScope.account.role == 'admin'}">
 														<span class="report"><a
-															href="articleInfoServlet?method=delete&id=${requestScope.article.id}">删除</a></span>
+															href="articleInfoServlet?method=delete&id=${requestScope.article.id}&email=${requestScope.article.author_email}">删除</a></span>
 													</c:if>
 
 												</c:if>
 											</span> <br>
 											<h3 class="new-item-down-title">
-												<a href="#" title="${requestScope.article.title}"
+												<a href="#" id="${requestScope.article.id}" class="article-id"
 													target="_blank" class="title-link">${requestScope.article.title}</a>
 											</h3>
 											<br>
@@ -355,7 +221,7 @@
 
 											</h6>
 										</div>
-										<textarea class="comment-input" placeholder="输入内容" name="msg"></textarea>
+										<textarea class="comment-input" placeholder="输入内容" name="msg" maxlength="225"></textarea>
 										<input type="button" value="评论" class="submit-comment" /><br>
 
 										<%--评论--%>
@@ -372,35 +238,40 @@
 														赞<em>(${comment.good_count})</em>
 													</a> <a href="javascript: void(0)" onclick="reply(this)">
 														回复<em>(${fn:length(comment.replys)})</em>
+													<c:if test="${fn:length(comment.replys) > 0}">
+														<a href="javascript: void(0)" onclick="replyDisplay(this)">查看</a>
+													</c:if>
 													</a> <input type="hidden" class="${comment.user_email}"
 														id="${comment.id}" name="${comment.name}">
 												</h6>
 												<span>${comment.content}</span>
 
 												<%--回复--%>
-												<c:forEach var="reply" items="${comment.replys}">
-													<div class="reply-wrap">
-														<c:choose>
-															<c:when test="${reply.reply_email == comment.user_email}">
-																<h4>${reply.replyer_name}：${reply.content}</h4>
-															</c:when>
-															<c:otherwise>
-																<h4>${reply.replyer_name}<a
-																		href="javascript:void(0)">//</a>@${reply.reply_name}：${reply.content}
-																</h4>
-															</c:otherwise>
-														</c:choose>
-														<h6>${reply.time}
-															<a href="javascript:void(0)" onclick="goodReply(this)"
-																id="${reply.id}" class="${reply.good_count}">赞<em>(${reply.good_count})</em></a>
-															<a href="javascript: void(0)" onclick="reply(this)">回复</a>
-															<input type="hidden" class="${reply.replyer_email}"
-																id="${comment.id}" name="${reply.replyer_name}">
-														</h6>
-													</div>
-													<br>
-												</c:forEach>
-
+												<div class="reply-wrap-all" style="display: none">
+													<c:forEach var="reply" items="${comment.replys}">
+														<div class="reply-wrap">
+															<c:choose>
+																<c:when test="${reply.reply_email == comment.user_email}">
+																	<h4>${reply.replyer_name}：${reply.content}</h4>
+																</c:when>
+																<c:otherwise>
+																	<h4>${reply.replyer_name}<a
+																			href="javascript:void(0)">//</a>@${reply.reply_name}：${reply.content}
+																	</h4>
+																</c:otherwise>
+															</c:choose>
+															<h6>${reply.time}
+																<a href="javascript:void(0)" onclick="goodReply(this)"
+																	id="${reply.id}" class="${reply.good_count}">赞<em>(${reply.good_count})</em></a>
+																<a href="javascript: void(0)" onclick="reply(this)">回复</a>
+																<input type="hidden" class="${reply.replyer_email}"
+																	id="${comment.id}" name="${reply.replyer_name}">
+															</h6>
+														</div>
+														<br>														
+													</c:forEach>
+													<a href="javascript: void(0)" onclick="hideDisplay(this)">收起</a>
+												</div>
 											</div>
 										</c:forEach>
 
@@ -408,7 +279,7 @@
 										<div class="paginator">
 											<%--根据当前页数来初始化页码--%>
 											<c:choose>
-												<c:when test="${param.p == 1}">
+												<c:when test="${param.p == 1 || param.p == null}">
 													<span class="prev"> &lt;前页 </span>
 												</c:when>
 												<c:otherwise>

@@ -26,7 +26,7 @@ public class ChatDAOJdbcImpl implements ChatDAO {
 		this.dataSource = dataSource;
 	}
 
-	//获取密友列表
+	// 获取密友列表
 	@Override
 	public Msg getChatFriend(String user_email) {
 		try {
@@ -37,10 +37,8 @@ public class ChatDAOJdbcImpl implements ChatDAO {
 					+ "( SELECT t_sub1.user_email, t_sub1.follow_email FROM "
 					+ "  ( SELECT * FROM t_follow WHERE user_email = ? ) AS t_sub1 , "
 					+ "  (SELECT * FROM t_follow WHERE follow_email = ? ) AS t_sub2 "
-					+ "   WHERE t_sub1.follow_email = t_sub2.user_email "
-					+ ") AS t_sub "
-					+ "WHERE t_friend.host_email = t_sub.user_email "
-					+ "AND t_sub.follow_email = t_friend.guest_email "
+					+ "   WHERE t_sub1.follow_email = t_sub2.user_email " + ") AS t_sub "
+					+ "WHERE t_friend.host_email = t_sub.user_email " + "AND t_sub.follow_email = t_friend.guest_email "
 					+ "AND t_account.email = t_sub.follow_email ";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, user_email);
@@ -71,7 +69,40 @@ public class ChatDAOJdbcImpl implements ChatDAO {
 		return new Msg("获取密友失败", null);
 	}
 
-	//发信息
+	// 判断是不是密友
+	@Override
+	public Msg isChatFriend(String from_email, String to_email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "SELECT t_friend.id FROM t_friend, t_follow WHERE "
+					+ "t_friend.host_email = ? AND t_friend.guest_email = ? "
+					+ "AND t_follow.user_email = ? AND t_follow.follow_email = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, from_email);
+			stmt.setString(2, to_email);
+			stmt.setString(3, from_email);
+			stmt.setString(4, to_email);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				return new Msg("是", null);
+			} else {
+				return new Msg("不是", null);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("判断失败", null);
+	}
+
+	// 发信息
 	@Override
 	public Msg sendChat(String from_email, String to_email, String msg) {
 		try {
@@ -98,7 +129,7 @@ public class ChatDAOJdbcImpl implements ChatDAO {
 		return new Msg("发送失败", null);
 	}
 
-	//读信息
+	// 读信息
 	@Override
 	public Msg readChat(String from_email, String to_email) {
 		try {
@@ -109,7 +140,7 @@ public class ChatDAOJdbcImpl implements ChatDAO {
 			stmt.setString(1, from_email);
 			stmt.setString(2, to_email);
 			ResultSet rs = stmt.executeQuery();
-			
+
 			if (rs.next()) {
 				map = new HashMap();
 				map.put("id", rs.getString("id"));
@@ -131,7 +162,7 @@ public class ChatDAOJdbcImpl implements ChatDAO {
 		return new Msg("读信息失败", null);
 	}
 
-	//删信息
+	// 删信息
 	@Override
 	public Msg deleteChat(String id) {
 		try {

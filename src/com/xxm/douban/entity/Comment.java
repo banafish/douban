@@ -2,6 +2,9 @@ package com.xxm.douban.entity;
 
 import java.util.List;
 
+/**
+ * 评论信息实体类
+ */
 public class Comment {
 	private String id;//评论id
 	

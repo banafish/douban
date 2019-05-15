@@ -1,5 +1,8 @@
 package com.xxm.douban.entity;
 
+/**
+ * 文章点赞收藏转发实体类
+ */
 public class ArticleInfo {
 	private String user_email;
 	
@@ -8,8 +11,6 @@ public class ArticleInfo {
 	private String good;//点赞
 	
 	private String collect;//收藏
-	
-	private String comment;//评论
 	
 	private String forword;//转发
 
@@ -44,14 +45,6 @@ public class ArticleInfo {
 
 	public void setCollect(String collect) {
 		this.collect = collect;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public String getForword() {

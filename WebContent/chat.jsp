@@ -7,65 +7,10 @@
 <title>个人主页</title>
 <link type="text/css" rel="stylesheet" href="css/dbNav.css">
 <link type="text/css" rel="stylesheet" href="css/chat.css">
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-<script>
-	$(document).ready(function() {
-		//账户菜单
-		var moreItems = document.getElementsByClassName("more-items");
-		moreItems.flag = 0;
-		$(".more-items").hide();
-		$(".bn-more").click(function() {
-			if (!moreItems.flag) {
-				$(".more-items").show();
-				moreItems.flag = 1;
-			} else {
-				$(".more-items").hide();
-				moreItems.flag = 0;
-			}
-		});
-		
-		//发信息
-		$(".but-submit").click(function() {
-			if ($(".content-input").val().length == 0) {
-				alert("不能为空");
-			} else {
-				$.post("chatServlet", {
-					msg : $(".content-input").val(),
-					to_email : "${param.email}"
-				}, function(data) {
-					if (data == "发送成功") {
-						$(".article").append("<p class='chat-me'><span>" + $(".content-input").val() + "：<img src=${sessionScope.account.avatar}><span></p><br><br>");
-						$(".content-input").val("");
-					}
-				});
-			}
-		});
-		
-	})
-
-	//搜索
-	function validateForm() {
-		if ($("#intp-query").val().length == 0) {
-			alert("不能为空");
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	//接收信息
-	setInterval("read()",500);
-	function read() {
-		$.get("chatServlet", {
-			from_email : "${param.email}"
-		}, function(data) {
-			if (data != "") {
-				$(".article").append("<p class='chat-you'><span><img src=${param.avatar}>：" + data + "<span></p>");
-				$(".content-input").val("");
-			}
-		});
-	} 
-</script>
+<link rel="icon" type="image/x-icon" href="css/images/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
+<script src="js/jquery.min.js"></script>
+<script src="js/chat.js"></script>
 </head>
 <body>
 
@@ -74,24 +19,16 @@
 
 			<div class="top-nav-info">
 				<ul>
-					<li><a id="top-nav-doumail-link" href="#">豆邮</a></li>
+					<li><a id="top-nav-doumail-link" href="douYou?p=1">豆邮</a></li>
 					<li class="nav-user-account"><a class="bn-more" rel="off">
+							<input type="hidden" class="user-avatar" id="${sessionScope.account.avatar}">
 							<span>${sessionScope.account.name}的帐号</span><span class="arrow"></span>
 					</a>
 						<div class="more-items">
-							<table cellpadding="0" cellspacing="0">
+							<table>
 								<tbody>
 									<tr>
 										<td><a target="_blank" href="userPage?p=1">个人主页</a></td>
-									</tr>
-									<tr>
-										<td><a>我的订单</a></td>
-									</tr>
-									<tr>
-										<td><a>我的钱包</a></td>
-									</tr>
-									<tr>
-										<td><a target="_blank" href="#">帐号管理</a></td>
 									</tr>
 									<tr>
 										<td><a href="logout">退出登录</a></td>
@@ -102,27 +39,16 @@
 				</ul>
 			</div>
 
-			<div class="top-nav-reminder">
-				<a>提醒</a>
-			</div>
-
-			<div class="top-nav-doubanapp">
-				<a class="lnk-doubanapp">下载豆瓣客户端</a>
-			</div>
-
 			<div class="global-nav-items">
 				<ul>
-					<li class="on"><a>豆瓣</a></li>
-					<li class=""><a>读书</a></li>
-					<li class=""><a>电影</a></li>
-					<li class=""><a>音乐</a></li>
-					<li class=""><a>同城</a></li>
-					<li class=""><a>小组</a></li>
-					<li class=""><a>阅读</a></li>
-					<li class=""><a>FM</a></li>
-					<li class=""><a>时间</a></li>
-					<li class=""><a>豆品</a></li>
-					<li class=""><a>更多</a></li>
+					<li class="on"><a href="homePage?p=1">豆瓣</a></li>
+					<li class=""><a	href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></li>
+					<li class=""><a	href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></li>
 				</ul>
 			</div>
 
@@ -134,7 +60,7 @@
 			<div class="nav-primary">
 
 				<div class="nav-logo">
-					<a href="#">豆瓣社区</a>
+					<a href="homePage?p=1">豆瓣社区</a>
 				</div>
 
 				<div class="nav-search">
@@ -158,10 +84,8 @@
 
 				<div class="nav-items">
 					<ul>
-						<li><a href="#">首页</a></li>
-						<li><a href="#">我的豆瓣</a></li>
-						<li><a href="#"> 浏览发现 </a></li>
-						<li><a href="#"> 话题广场 </a></li>
+						<li><a href="homePage?p=1">首页</a></li>
+						<li><a href="articleEdit.jsp" target="_blank"> 发文章</a></li>						
 					</ul>
 				</div>
 
@@ -173,10 +97,12 @@
 		<div id="content">
 			<h1>聊天</h1>
 			<div class="grid-16-8 clearfix">
-			<br><h4>${param.name}</h4>
+			<input type="hidden" class="to-email" id="${requestScope.email}">
+			<input type="hidden" class="avatar" id="${requestScope.avatar}">
+			<br><h4>${requestScope.name}</h4>
 				<div class="article">	
 				</div>
-				<textarea class="content-input" placeholder="请输入内容"></textarea>
+				<textarea class="content-input" placeholder="请输入内容" maxlength="225"></textarea>
 							<br> <input type="button" value="发送" class="but-submit"/>
 			</div>
 

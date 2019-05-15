@@ -151,6 +151,35 @@ public class FriendDAOJdbcImpl implements FriendDAO {
 		return new Msg("操作失败", null);
 	}
 
+	// 判断是不是好友
+	@Override
+	public Msg isFriend(String host_email, String guest_email) {
+		try {
+			con = dataSource.getConnection();
+			String sql = "SELECT id FROM t_friend WHERE host_email = ? AND guest_email = ? AND statue = 0";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, host_email);
+			stmt.setString(2, guest_email);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				return new Msg("是", null);
+			} else {
+				return new Msg("不是", null);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtil.close(stmt, con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Msg("判断失败", null);
+	}
+
 	// 取得分组
 	@Override
 	public Msg getGroup(String host_email) {

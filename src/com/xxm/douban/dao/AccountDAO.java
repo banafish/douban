@@ -3,6 +3,9 @@ package com.xxm.douban.dao;
 import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Account;
 
+/**
+ * 接口
+ */
 public interface AccountDAO {
 	Msg register(Account account);//注册
 	

@@ -22,11 +22,12 @@ import com.xxm.douban.util.DateUtil;
 
 /**
  * Servlet implementation class FriendServlet
+ * 接收一些跟好友相关的请求
  */
 @WebServlet("/friendServlet")
 public class FriendServlet extends HttpServlet {
 	private FriendService friendService;
-	
+
 	private ChatService chatService;
 
 	private Friend friend;
@@ -74,7 +75,7 @@ public class FriendServlet extends HttpServlet {
 		if (method == null) {
 			method = "";
 		}
-		
+
 		// 查看朋友
 		if (method.equals("getFriendList")) {
 			getFriendList(request, response);
@@ -104,6 +105,7 @@ public class FriendServlet extends HttpServlet {
 		// 申请好友
 		if (method.equals("applyFriend")) {
 			applyFriend(request, response);
+			return;
 		}
 		// 通过好友申请
 		if (method.equals("allow")) {
@@ -159,30 +161,30 @@ public class FriendServlet extends HttpServlet {
 			friendService.report(guest_email, request.getParameter("name"));
 			getFriendList(request, response);
 		}
-		//获取举报名单
+		// 获取举报名单
 		if (method.equals("getReport")) {
 			getReport(request, response);
 		}
-		//删除黑名单
+		// 删除黑名单
 		if (method.equals("deleteReport")) {
 			friendService.deleteReport(guest_email);
 			getReport(request, response);
 		}
-		//封号
+		// 封号
 		if (method.equals("setReport")) {
 			friendService.setReport(guest_email, request.getParameter("end_time"));
 			getReport(request, response);
 		}
-		//获取密友列表
-		if (method.equals("getChatFriend")) {			
+		// 获取密友列表
+		if (method.equals("getChatFriend")) {
 			getChatFriend(request, response);
 		}
-		//搜人
-		if (method.equals("searchPeople")) {			
+		// 搜人
+		if (method.equals("searchPeople")) {
 			searchPeople(request, response);
 		}
-		//关注
-		if (method.equals("fellow")) {			
+		// 关注
+		if (method.equals("fellow")) {
 			result = friendService.setFollow(account.getEmail(), guest_email);
 			response.getWriter().write(result.getResult());
 			return;
@@ -197,24 +199,28 @@ public class FriendServlet extends HttpServlet {
 
 	}
 
-	
-	//搜人
+	// 搜人
 	private void searchPeople(HttpServletRequest request, HttpServletResponse response) {
 		String key = request.getParameter("keyWord");
 		resultCount = friendService.searchPeopleCount(key);
 		result = friendService.searchPeople(currentPage, key);
+
+		// 用户好友分组信息
+		Msg msgGroups = friendService.getGroup(account.getEmail());
+		groups = (List<String>) msgGroups.getMessage();
+		
 		request.setAttribute("show", "search");
 		request.setAttribute("target", "friendServlet?method=searchPeople&keyWord=" + key + "&");
 	}
 
-	//获取密友列表
+	// 获取密友列表
 	private void getChatFriend(HttpServletRequest request, HttpServletResponse response) {
-		resultCount = new Msg("", 1);//总页数为1
+		resultCount = new Msg("", 1);// 总页数为1
 		result = chatService.getChatFriend(account.getEmail());
 		request.setAttribute("show", "chat");
 	}
 
-	//获取举报名单
+	// 获取举报名单
 	private void getReport(HttpServletRequest request, HttpServletResponse response) {
 		resultCount = friendService.getReportCount();
 		result = friendService.getReport(currentPage);
@@ -301,7 +307,7 @@ public class FriendServlet extends HttpServlet {
 		friend.setHost_email(account.getEmail());
 		friend.setGuest_email(guest_email);
 		friend.setMsg(msg);
-		friend.setStatue("0");
+		friend.setStatue("0");//0代表是好友
 		friend.setTable("t_friend");
 		friend.setTime(DateUtil.currentTime());
 		result = friendService.insertFriend(friend);
@@ -318,11 +324,24 @@ public class FriendServlet extends HttpServlet {
 
 	// 申请好友
 	private void applyFriend(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		//判断申请的是不是自己
+		if (account.getEmail().equals(guest_email)) {
+			response.getWriter().write("不能自己申请自己");
+			return;
+		}
+		
+		// 判断是不是好友
+		result = friendService.isFriend(account.getEmail(), guest_email);
+		if (result.getResult().equals("是")) {
+			response.getWriter().write("已经是好友啦");
+			return;
+		}
+		
 		friend = new Friend();
 		friend.setHost_email(account.getEmail());
 		friend.setGuest_email(guest_email);
 		friend.setMsg(msg);
-		friend.setStatue("1");
+		friend.setStatue("1");//1代表还没通过好友申请
 		friend.setTable("t_friend");
 		friend.setTime(DateUtil.currentTime());
 

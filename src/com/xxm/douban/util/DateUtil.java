@@ -6,11 +6,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * 日期工具类，比较时间和将日期转换成指定日期格式字符串
- * 
- * @author 肖学明
- *
  */
-
 public class DateUtil {
 	
 	//获取指定格式的当前时间字符串

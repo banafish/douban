@@ -1,11 +1,8 @@
 package com.xxm.douban.bean;
 
 /**
- * 
- * @author 肖学明
- *
+ * 传递信息
  */
-
 public class Msg {
 
 	private String result;

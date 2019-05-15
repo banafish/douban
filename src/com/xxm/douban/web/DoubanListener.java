@@ -21,6 +21,9 @@ import com.xxm.douban.service.ChatService;
 import com.xxm.douban.service.FriendService;
 import com.xxm.douban.service.UserService;
 
+/**
+ * 整个应用程序监听器
+ */
 @WebListener
 public class DoubanListener implements ServletContextListener{
 

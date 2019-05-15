@@ -87,12 +87,14 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			con = dataSource.getConnection();
 			//sql语句功能：把用户转发的文章也弄进来和其他文章按hot和时间来排序显示
 			String sql = "SELECT * FROM"
-					+ "( SELECT t_article.id, t_article.author_email, t_article.title, t_article.type,t_article.content, t_article.picture_urls, t_article.modify_time, t_article.hot, "
+					+ "( SELECT t_article.id, t_article.author_email, t_article.title, t_article.type, "
+					+ "t_article.content, t_article.picture_urls, t_article.modify_time, t_article.hot, "
 					+ "t_account.name, t_account.avatar, t_article.author_email AS origin_author "
 					+ "FROM t_article, t_account "
 					+ "WHERE t_article.author_email = t_account.email "
 					+ "UNION "
-					+ "SELECT t_article.id, t_article_info.user_email AS author_email, t_article.title, t_article.type, t_article.content, t_article.picture_urls, t_article.modify_time, t_article.hot, "
+					+ "SELECT t_article.id, t_article_info.user_email AS author_email, t_article.title, "
+					+ "t_article.type, t_article.content, t_article.picture_urls, t_article.modify_time, t_article.hot, "
 					+ "t_account.`name`, t_account.avatar, t_article.author_email AS origin_author "
 					+ "FROM t_article, t_account, t_article_info "
 					+ "WHERE t_article_info.forword = 1 "
@@ -352,12 +354,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 	// 删除文章
 	@Override
-	public Msg deleteArticle(String id) {
+	public Msg deleteArticle(String id, String email) {
 		try {
 			con = dataSource.getConnection();
-			String sql = "delete from t_article where id = ?";
+			String sql = "delete from t_article where id = ? and author_email = ?";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, id);
+			stmt.setString(2, email);
 
 			// 判断执行删除语句后受影响语句是否大于0
 			if (stmt.executeUpdate() > 0) {
@@ -377,12 +380,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 	// 获取删除文章的图片路径
 	@Override
-	public Msg getArticlePics(String id) {
+	public Msg getArticlePics(String id, String email) {
 		try {
 			con = dataSource.getConnection();
-			String sql = "select picture_urls from t_article where id = ?";
+			String sql = "select picture_urls from t_article where id = ? and author_email = ?";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, id);
+			stmt.setString(2, email);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				return new Msg("获取删除文章的图片路径成功", rs.getString("picture_urls"));

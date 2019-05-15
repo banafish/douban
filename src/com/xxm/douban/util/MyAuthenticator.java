@@ -3,6 +3,9 @@ package com.xxm.douban.util;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
+/**
+ * 发邮件身份验证
+ */
 public class MyAuthenticator extends Authenticator{  
     String userName=null;  
     String password=null;  

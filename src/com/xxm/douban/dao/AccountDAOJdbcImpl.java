@@ -11,6 +11,9 @@ import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Account;
 import com.xxm.douban.util.DbUtil;
 
+/**
+ * 实现类
+ */
 public class AccountDAOJdbcImpl implements AccountDAO {
 	private DataSource dataSource;
 

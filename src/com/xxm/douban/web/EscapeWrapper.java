@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+/**
+ * 包装类
+ */
 public class EscapeWrapper extends HttpServletRequestWrapper {
     public EscapeWrapper(HttpServletRequest request) {
         super(request);

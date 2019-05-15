@@ -16,6 +16,7 @@ import com.xxm.douban.service.ForgetPasswordService;
 
 /**
  * Servlet implementation class ForgetPasswordAction
+ * 用户在点击邮箱里的链接后，请求该Servlet
  */
 @WebServlet("/forgetPasswordAction")
 public class ForgetPasswordAction extends HttpServlet {
@@ -44,7 +45,7 @@ public class ForgetPasswordAction extends HttpServlet {
 		if (fService.judgeOfTime(time)) {
 			// 把邮箱属性加到session
 			session.setAttribute("email", userEmail);
-			request.setAttribute("flag", "true");
+			request.setAttribute("flag", true);
 			
 		} else {
 			request.setAttribute("msg", "链接已失效，请重新发送");

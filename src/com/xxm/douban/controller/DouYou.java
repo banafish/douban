@@ -18,6 +18,7 @@ import com.xxm.douban.util.DateUtil;
 
 /**
  * Servlet implementation class DouYou
+ * 豆邮
  */
 @WebServlet("/douYou")
 public class DouYou extends HttpServlet {

@@ -1,5 +1,8 @@
 package com.xxm.douban.entity;
 
+/**
+ * 文章信息实体类
+ */
 public class Article {
 	
 	private String id;//文章id

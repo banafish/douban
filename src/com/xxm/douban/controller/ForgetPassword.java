@@ -17,6 +17,7 @@ import com.xxm.douban.service.UserService;
 
 /**
  * Servlet implementation class ForgetPassword
+ * 密码忘记，发送信息到邮箱
  */
 @WebServlet("/forgetPassword")
 public class ForgetPassword extends HttpServlet {

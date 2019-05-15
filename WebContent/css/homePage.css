@@ -19,18 +19,6 @@
 	padding-right: 40px
 }
 
-/*文章上面的两个按钮*/
-.release-type-wrap {
-	height: 30px
-}
-.release-wrap {
-	float: left;
-	margin-rigth:10px
-}
-.type-wrap {
-	float: left
-}
-
 /*文章*/
 .new-item-wrapper {
 	width: 675px;

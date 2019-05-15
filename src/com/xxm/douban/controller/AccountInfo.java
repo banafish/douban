@@ -14,6 +14,7 @@ import com.xxm.douban.service.UserService;
 
 /**
  * Servlet implementation class AccountInfo
+ * 接收用户个人信息
  */
 @WebServlet("/accountInfo")
 public class AccountInfo extends HttpServlet {

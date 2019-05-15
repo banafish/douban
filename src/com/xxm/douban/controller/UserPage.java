@@ -19,7 +19,8 @@ import com.xxm.douban.service.ArticleService;
 import com.xxm.douban.service.FriendService;
 
 /**
- * Servlet implementation class HmoePage
+ * Servlet implementation class UserPage
+ * 处理个人主页中跟文章有关的请求
  */
 @WebServlet("/userPage")
 public class UserPage extends HttpServlet {
@@ -91,7 +92,7 @@ public class UserPage extends HttpServlet {
 
 		// 删除文章
 		if (method.equals("delete")) {
-			msg = articleService.deleteArticle(id);
+			msg = articleService.deleteArticle(id, account.getEmail());
 			if (msg.getResult().equals("删除文章成功")) {
 				// 响应
 				getUserArticleByPage(request);

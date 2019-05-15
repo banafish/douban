@@ -1,40 +1,21 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>豆瓣</title>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/index.css">
-<script type="text/javascript">
-	function refreshcode(){
-	    document.getElementById("verify_image").src="verifyCodeServlet?a="+Math.random()+100;
-	    return true;
-	}
-	function validateForm() {
-		var form = document.getElementById("form");
-		var mail = /^[A-Za-z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-		if (!mail.test(form.email.value)) {
-			document.getElementById("error").innerHTML = "邮箱地址无效";
-			return false;
-		} else if (form.password.value.length < 6) {
-			document.getElementById("error").innerHTML = "密码至少6个字符";
-			return false;
-		} else if (form.num.value.length > 4 || form.num.value.length < 1) {
-			document.getElementById("error").innerHTML = "验证码必须为四位";
-			return false;
-		} else {
-			return true;
-		}
-	}
-</script>
+<link rel="icon" type="image/x-icon" href="css/images/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon"
+	href="css/images/favicon.ico" />
+<script src="js/index.js"></script>
 </head>
-
 <body>
 	<div class="header_up">
 		<h1>
-			<a href="http://www.douban.com">豆瓣</a>
+			<a href="homePage?p=1">豆瓣</a>
 		</h1>
-		<form action="https://www.douban.com/search" method="get">
+		<form action="#" method="get">
 			<span class="input"> <input type="text" name="search"
 				placeholder="书籍、电影、音乐、小站、成员">
 			</span> <span class="search_button"> <input type="submit"
@@ -42,19 +23,14 @@
 			</span>
 		</form>
 		<ul>
-			<li><a href="https://book.douban.com" target="_blank"
-				class="link_book">读书</a></li>
-			<li><a href="https://movie.douban.com" target="_blank"
-				class="link_movie">电影</a></li>
-			<li><a href="https://music.douban.com" target="_blank"
-				class="link_music">音乐</a></li>
-			<li><a href="https://www.douban.com/group" target="_blank"
-				class="link_group">小组</a></li>
-			<li><a href="https://www.douban.com/location" target="_blank"
-				class="link_location">同城</a></li>
-			<li><a href="https://douban.fm" target="_blank" class="link_fm">FM</a></li>
-			<li><a href="#" class="link_time">时间</a></li>
-			<li><a href="#" class="link_market">市集</a></li>
+			<li><a href="javascript:void(0)" class="link_book">读书</a></li>
+			<li><a href="javascript:void(0)" class="link_movie">电影</a></li>
+			<li><a href="javascript:void(0)" class="link_music">音乐</a></li>
+			<li><a href="javascript:void(0)" class="link_group">小组</a></li>
+			<li><a href="javascript:void(0)" class="link_location">同城</a></li>
+			<li><a href="javascript:void(0)" class="link_fm">FM</a></li>
+			<li><a href="javascript:void(0)" class="link_time">时间</a></li>
+			<li><a href="javascript:void(0)" class="link_market">市集</a></li>
 		</ul>
 	</div>
 	<div class="header_down">
@@ -87,17 +63,19 @@
 				<fieldset>
 					<legend>登录</legend>
 					<div class="item item_account">
-						<input type="text" name="email" placeholder="邮箱 ">
+						<input type="text" name="email" placeholder="邮箱 " maxlength="30">
 					</div>
 					<div class="item item_password">
-						<input type="password" name="password" placeholder="密码">
+						<input type="password" name="password" placeholder="密码"
+							maxlength="20">
 						<div class="item_help">
 							<a href="#">帮助</a>
 						</div>
 					</div>
 					<div class="item item_num">
-						<input type="text" name="num" placeholder="验证码 "> 
-						<img src="verifyCodeServlet" id="verify_image" onclick="return refreshcode()"/>
+						<input type="text" name="num" placeholder="验证码 " maxlength="4">
+						<img src="verifyCodeServlet" id="verify_image"
+							onclick="return refreshcode()" />
 					</div>
 					<div class="item_login">
 						<input type="submit" value="登录豆瓣">

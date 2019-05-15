@@ -16,6 +16,7 @@ import com.xxm.douban.service.ArticleService;
 
 /**
  * Servlet implementation class HomePage
+ * 预览文章，主页
  */
 @WebServlet("/homePage")
 public class HomePage extends HttpServlet {

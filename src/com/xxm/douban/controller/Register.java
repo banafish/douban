@@ -16,6 +16,7 @@ import com.xxm.douban.util.EncrypMD5Util;
 
 /**
  * Servlet implementation class Register
+ * 注册
  */
 @WebServlet(urlPatterns = { "/register" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "homePage?p=1"),
 		@WebInitParam(name = "ERROR_VIEW", value = "register.jsp") })

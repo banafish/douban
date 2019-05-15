@@ -9,6 +9,9 @@ import com.xxm.douban.dao.UploadPicDAO;
 import com.xxm.douban.entity.Account;
 import com.xxm.douban.entity.Article;
 
+/**
+ * 文章
+ */
 public class ArticleService {
 	private ArticleDAO articleDAO;
 
@@ -112,19 +115,19 @@ public class ArticleService {
 	}
 
 	// 删除文章
-	public Msg deleteArticle(String id) {
+	public Msg deleteArticle(String id, String email) {
 		UploadPicDAO uploadPicDAO = null;
-		Msg msgPic = articleDAO.getArticlePics(id);
+		Msg msgPic = articleDAO.getArticlePics(id, email);
 
 		if (msgPic.getResult().equals("获取删除文章的图片路径成功")) {
 			if (((String) msgPic.getMessage()).length() > 0) {// 如果有图片
 				uploadPicDAO = new UploadPicDAO();
 				Msg msg = uploadPicDAO.deletePic((String) msgPic.getMessage());
 				if (msg.getResult().equals("删除图片成功")) {
-					return articleDAO.deleteArticle(id);
+					return articleDAO.deleteArticle(id, email);
 				}
 			}
-			return articleDAO.deleteArticle(id);
+			return articleDAO.deleteArticle(id, email);
 		}
 		return new Msg("删除失败", null);
 	}

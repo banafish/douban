@@ -16,6 +16,7 @@ import com.xxm.douban.util.DateUtil;
 
 /**
  * Servlet implementation class AddArticle
+ * 添加文章
  */
 @WebServlet("/addArticle")
 public class AddArticle extends HttpServlet {

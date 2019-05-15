@@ -4,10 +4,7 @@ import java.sql.*;
 
 /**
  * JDBC工具类
- * @author 肖学明
- *
  */
-
 public class DbUtil {
 	
 	/**

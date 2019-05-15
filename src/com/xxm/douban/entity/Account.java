@@ -1,5 +1,8 @@
 package com.xxm.douban.entity;
 
+/**
+ * 用户信息实体类
+ */
 public class Account {
 	private String name;
 	

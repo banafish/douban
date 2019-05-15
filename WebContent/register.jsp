@@ -1,32 +1,13 @@
 <%@page contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-
 <title>注册豆瓣帐号</title>
-
 <link type="text/css" rel="stylesheet" href="css/register.css">
-
-<script type="text/javascript">
-	function validateForm() {
-		var form = document.getElementById("form");
-		var mail = /^[A-Za-z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-		if (!mail.test(form.email.value)) {
-			document.getElementById("error").innerHTML = "邮箱地址无效";
-			return false;
-		} else if (form.password.value.length < 6) {
-			document.getElementById("error").innerHTML = "密码至少6个字符";
-			return false;
-		} else if (form.nick.value.length > 7 || form.nick.value.length < 1) {
-			document.getElementById("error").innerHTML = "昵称过长或为空";
-			return false;
-		} else {
-			return true;
-		}	
-	}
-</script>
-
+<link rel="icon" type="image/x-icon" href="css/images/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
+<script src="js/register.js"></script>
 </head>
 <body>
 	<div id="account">
@@ -53,7 +34,7 @@
 							<label class="account-form-label">输入邮箱：</label>
 							<div class="account-form-field">
 								<input id="email" name="email" type="text"
-									class="account-form-input" placeholder="邮箱" tabindex="2">
+									class="account-form-input" placeholder="邮箱" tabindex="2" maxlength="30">
 								<span class="account-form-field-tip">请输入有效邮箱地址</span>
 							</div>
 
@@ -73,7 +54,7 @@
 							<label class="account-form-label">设置昵称：</label>
 							<div class="account-form-field">
 								<input id="nick" name="nick" type="text"
-									class="account-form-input" maxlength="14" placeholder="昵称"
+									class="account-form-input" maxlength="7" placeholder="昵称"
 									tabindex="1"> <span class="account-form-field-tip">昵称最多7个中文字符</span>
 							</div>
 
@@ -87,13 +68,6 @@
 						</div>
 					</form>
 				</div>
-
-			</div>
-			<div class="account-side">
-
-				<ul class="aside-link">
-					<li><a href="https://www.douban.com/mobile/">&gt; 下载豆瓣App</a></li>
-				</ul>
 
 			</div>
 

@@ -17,6 +17,7 @@ import com.xxm.douban.service.FriendService;
 
 /**
  * Servlet implementation class ChatServlet
+ * 实时聊天
  */
 @WebServlet("/chatServlet")
 public class ChatServlet extends HttpServlet {
@@ -35,6 +36,20 @@ public class ChatServlet extends HttpServlet {
 		// 获取用户属性
 		account = (Account) session.getAttribute("account");
 		
+		//进入聊天
+		String method = request.getParameter("method");
+		if (method != null && method.equals("goChat")) {
+			msg = chatService.isChatFriend(account.getEmail(), request.getParameter("email"));
+			if (msg.getResult().equals("是")) {
+				request.setAttribute("email", request.getParameter("email"));
+				request.setAttribute("name", request.getParameter("name"));
+				request.setAttribute("avatar", request.getParameter("avatar"));
+				request.getRequestDispatcher("chat.jsp").forward(request, response);
+			}
+			return;
+		}
+	
+		//轮询信息
 		msg = chatService.readChat(request.getParameter("from_email"), account.getEmail());
 		Map map = (Map) msg.getMessage();
 		

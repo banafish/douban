@@ -17,6 +17,7 @@ import com.xxm.douban.entity.Account;
 
 /**
  * Servlet Filter implementation class AutoLoginFilter
+ * 自动登录
  */
 @WebFilter(urlPatterns = { "/index.jsp" }, initParams = { @WebInitParam(name = "LOGIN_VIEW", value = "index.jsp"),
 		@WebInitParam(name = "HOME_VIEW", value = "homePage?p=1") })
@@ -50,15 +51,18 @@ public class AutoLoginFilter implements Filter {
 		}
 
 		// 判断值是否为off，如果是就不自动登录
+		//本来打算再进行密码验证，结果改起来bug太多，怕翻车就弄回来了
 		if (!value.equals("") && !value.equals("off")) {
 			String[] values = value.split(",");
-			account = new Account();
-			account.setEmail(values[0]);
-			account.setName(values[1]);
-			account.setAvatar(values[2]);
-
-			req.getSession().setAttribute("account", account);
-			resp.sendRedirect(HOME_VIEW);// 重定向
+			if (values.length == 3) {
+				account = new Account();			
+				account.setEmail(values[0]);
+				account.setName(values[1]);
+				account.setAvatar(values[2]);
+	
+				req.getSession().setAttribute("account", account);
+				resp.sendRedirect(HOME_VIEW);// 重定向
+			}
 		} 
 		chain.doFilter(request, response);
 			

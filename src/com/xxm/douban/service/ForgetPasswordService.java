@@ -7,6 +7,9 @@ import java.util.List;
 import com.xxm.douban.bean.MailSenderInfo;
 import com.xxm.douban.util.SimpleMailSender;
 
+/**
+ * 发重置密码链接
+ */
 public class ForgetPasswordService {
 	/**
 	 * 邮箱发送前的配置
@@ -28,7 +31,7 @@ public class ForgetPasswordService {
 		mailInfo.setMailServerPort(serverPort);
 		mailInfo.setValidate(isValidate);
 		mailInfo.setUserName(userName);
-		mailInfo.setPassword(password);// 您的邮箱密码
+		mailInfo.setPassword(password);
 		mailInfo.setFromAddress(userName);
 		mailInfo.setToAddress(toMailAddress);
 		mailInfo.setSubject(subtitle);
@@ -59,7 +62,7 @@ public class ForgetPasswordService {
 			String serverPort = "25";
 			Boolean isValidate = true;
 			String userName = "1959291663@qq.com";
-			String password = "hgoghmzvjtdebcbc";
+			String password = "pvyiuzhqqkgxdehj";//授权码
 			String toMailAddress = userEmail;
 			String subtitle = "豆瓣注册账号密码找回 ";
 			this.setMail(serverHost, serverPort, isValidate, userName, password, toMailAddress, subtitle, contents);

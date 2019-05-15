@@ -13,9 +13,12 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 过滤掉未登录的用户
+ */
 @WebFilter(
-    urlPatterns = { "/userPage", "/userPage.jsp","/articleEdit.jsp", "/douyou.jsp", "/articleInfo",
-    		"/addArticle", "/douYou", "/friendServlet"}, 
+    urlPatterns = { "/userPage", "/userPage.jsp","/articleEdit.jsp", "/douyou.jsp", "/accountInfo",
+    		"/addArticle", "/douYou", "/friendServlet", "/chat.jsp", "/chatServlet", "/logout"},
     initParams = { @WebInitParam(name = "LOGIN_VIEW", value = "index.jsp") })
 public class MemberFilter implements Filter {
     private String LOGIN_VIEW;

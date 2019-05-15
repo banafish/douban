@@ -7,108 +7,11 @@
 <title>个人主页</title>
 <link type="text/css" rel="stylesheet" href="css/userPage.css">
 <link type="text/css" rel="stylesheet" href="css/dbNav.css">
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-<script>
-	$(document).ready(function() {
-		//账户菜单
-		var moreItems = document.getElementsByClassName("more-items");
-		moreItems.flag = 0;
-		$(".more-items").hide();
-		$(".bn-more").click(function() {
-			if (!moreItems.flag) {
-				$(".more-items").show();
-				moreItems.flag = 1;
-			} else {
-				$(".more-items").hide();
-				moreItems.flag = 0;
-			}
-		});
-
-		//上传头像
-		$(".user-img").click(function() {
-			$("#uploadfile").click();
-		});
-		$("#uploadfile").change(function() {
-
-			var files = $(this)[0].files[0]; //获取文件信息
-			if (files && files.size <= 1120000) {//图片小于1M
-				var reader = new FileReader(); //调用FileReader
-				reader.onload = function(evt) { //读取操作完成时触发。
-					var imgFile = evt.target.result;
-					var newsIndex = imgFile.indexOf(",");
-					var img = imgFile.substr(parseInt(newsIndex + 1));
-
-					$.post("accountInfo", {
-						picture : img
-					}, function(data) {
-						if (data == "上传成功") {
-							$(".user-img").attr("src", imgFile);
-						}
-						alert(data);
-					});
-				}
-				reader.readAsDataURL(files); //将文件读取为 DataURL(base64)
-			} else {
-				alert("上传失败，图片应小于1M");
-			}
-		});
-
-		//签名
-		$(".sign-text").click(function() {
-			$("#edi").attr("style", "display: none");
-			$(".edit-sign").attr("style", "display: inline");
-		});
-		$(".cancel").click(function() {
-			$("#edi").attr("style", "display: inline");
-			$(".edit-sign").attr("style", "display: none");
-		});
-		$(".submit").click(function() {
-			var signature = $(".signature").val();
-			if (signature.length == 0) {
-				alert("签名为空");
-			} else {
-				$.post("accountInfo", {
-					sign : signature
-				}, function(data) {
-					if (data == "签名成功") {
-						$(".sign-text").text(signature);
-					}
-					alert(data);
-				});
-				$("#edi").attr("style", "display: inline");
-				$(".edit-sign").attr("style", "display: none");
-			}
-		});
-
-	});
-	//搜索
-	function validateForm() {
-		if ($("#intp-query").val().length == 0) {
-			alert("不能为空");
-			return false;
-		} else {
-			return true;
-		}
-	}
-	//好友申请输入框显示关闭
-	function openAllow(dom) {
-		$(dom).parent().prev().children(":first").attr("style",
-				"display: inline");
-	}
-	function closeAllow(dom) {
-		$(dom).parent().attr("style", "display: none");
-	}
-
-	//关注人
-	function fellow(dom) {
-		$.get("friendServlet", {
-			guest_email : $(dom).attr("class"),
-			method : "fellow"
-		}, function(data) {
-			alert(data);
-		});
-	}
-</script>
+<link rel="icon" type="image/x-icon" href="css/images/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon"
+	href="css/images/favicon.ico" />
+<script src="js/jquery.min.js"></script>
+<script src="js/userPage.js"></script>
 </head>
 <body>
 
@@ -119,22 +22,13 @@
 				<ul>
 					<li><a id="top-nav-doumail-link" href="douYou?p=1">豆邮</a></li>
 					<li class="nav-user-account"><a class="bn-more" rel="off">
-							<span>${sessionScope.account.name}的帐号</span><span class="arrow"></span>
+							<span>${account.name}的帐号</span><span class="arrow"></span>
 					</a>
 						<div class="more-items">
-							<table cellpadding="0" cellspacing="0">
+							<table>
 								<tbody>
 									<tr>
 										<td><a target="_blank" href="userPage?p=1">个人主页</a></td>
-									</tr>
-									<tr>
-										<td><a>我的订单</a></td>
-									</tr>
-									<tr>
-										<td><a>我的钱包</a></td>
-									</tr>
-									<tr>
-										<td><a target="_blank" href="#">帐号管理</a></td>
 									</tr>
 									<tr>
 										<td><a href="logout">退出登录</a></td>
@@ -145,27 +39,23 @@
 				</ul>
 			</div>
 
-			<div class="top-nav-reminder">
-				<a>提醒</a>
-			</div>
-
-			<div class="top-nav-doubanapp">
-				<a class="lnk-doubanapp">下载豆瓣客户端</a>
-			</div>
-
 			<div class="global-nav-items">
 				<ul>
-					<li class="on"><a>豆瓣</a></li>
-					<li class=""><a>读书</a></li>
-					<li class=""><a>电影</a></li>
-					<li class=""><a>音乐</a></li>
-					<li class=""><a>同城</a></li>
-					<li class=""><a>小组</a></li>
-					<li class=""><a>阅读</a></li>
-					<li class=""><a>FM</a></li>
-					<li class=""><a>时间</a></li>
-					<li class=""><a>豆品</a></li>
-					<li class=""><a>更多</a></li>
+					<li class="on"><a href="homePage?p=1">豆瓣</a></li>
+					<li class=""><a
+						href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></li>
+					<li class=""><a
+						href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></li>
+					<li class=""><a
+						href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></li>
+					<li class=""><a
+						href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></li>
+					<li class=""><a
+						href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></li>
+					<li class=""><a
+						href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></li>
+					<li class=""><a
+						href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></li>
 				</ul>
 			</div>
 
@@ -177,7 +67,7 @@
 			<div class="nav-primary">
 
 				<div class="nav-logo">
-					<a href="#">豆瓣社区</a>
+					<a href="homePage?p=1">豆瓣社区</a>
 				</div>
 
 				<div class="nav-search">
@@ -201,10 +91,8 @@
 
 				<div class="nav-items">
 					<ul>
-						<li><a href="#">首页</a></li>
-						<li><a href="#">我的豆瓣</a></li>
-						<li><a href="#"> 浏览发现 </a></li>
-						<li><a href="#"> 话题广场 </a></li>
+						<li><a href="homePage?p=1">首页</a></li>
+						<li><a href="articleEdit.jsp" target="_blank"> 发文章</a></li>
 					</ul>
 				</div>
 
@@ -359,8 +247,9 @@
 
 												<%--关注的人的选项--%>
 												<c:if test="${requestScope.show == 'follow'}">
-													<<span style="float: right"><a
-														href="friendServlet?method=cancelFollow&guest_email=${friend.guest_email}">取消关注</a><span>
+													<span style="float: right"><a
+														href="friendServlet?method=cancelFollow&guest_email=${friend.guest_email}">取消关注</a><br>
+														<a href="douYou?p=1&guest_email=${friend.guest_email}">发豆邮</a></span>
 												</c:if>
 
 												<%--好友的选项--%>
@@ -368,6 +257,8 @@
 													<span style="float: right"><a
 														href="friendServlet?method=deleteFriend&guest_email=${friend.guest_email}">删除好友</a>
 														<br> <a
+														href="douYou?p=1&guest_email=${friend.guest_email}">发豆邮</a>
+														<a
 														href="friendServlet?method=report&guest_email=${friend.guest_email}&name=${friend.name}">举报</a>
 														<br> <a
 														href="friendServlet?method=setBlack&guest_email=${friend.guest_email}">拉黑</a>
@@ -378,25 +269,30 @@
 												<c:if test="${requestScope.show == 'black'}">
 													<span style="float: right"> <a
 														href="friendServlet?method=cancelBlack&guest_email=${friend.guest_email}">移除</a>
-														</span>
+													</span>
 												</c:if>
 
 												<%--密友的选项--%>
 												<c:if test="${requestScope.show == 'chat'}">
 													<span style="float: right"> <a
-														href="chat.jsp?email=${friend.guest_email}&avatar=${friend.avatar}&name=${friend.name}">实时聊天</a>
-														</span>
+														href="chatServlet?method=goChat&email=${friend.guest_email}&avatar=${friend.avatar}&name=${friend.name}">实时聊天</a>
+													</span>
 												</c:if>
 
 												<%--搜人的选项--%>
 												<c:if test="${requestScope.show == 'search'}">
 													<span style="float: right"> <a
 														href="javascript: void(0)" onclick="fellow(this)"
-														class="${friend.guest_email}">关注</a> 
-														</span><br>													
-													<span style="float: right">	<a
+														class="${friend.guest_email}">关注</a>
+													</span>
+													<br>
+													<span style="float: right"> <a
 														href="douYou?p=1&guest_email=${friend.guest_email}">发豆邮</a>
-														</span>
+													</span>
+													<br>
+													<span style="float: right" class="${friend.guest_email}">
+														<a href="javascript:void(0)" onclick="apply(this)">申请好友</a>
+													</span>
 												</c:if>
 
 												<%--举报名单的选项--%>
@@ -423,33 +319,32 @@
 															<input name="applyGroup" value="${friend.msg}"
 																type="hidden"> <input name="guest_email"
 																value="${friend.host_email}" type="hidden"> <input
-																type="text" size="30" maxlength="30" name="msg"
+																type="text" size="30" maxlength="10" name="msg"
 																placeholder="请输入分类，默认为好友" list="groups"> <input
 																class="submit1" type="submit" value="确定"> <input
 																class="cancel-group" type="button" value="取消"
 																onclick="closeAllow(this)">
 														</div>
-														<%--好友分组信息--%>
-														<datalist id="groups">
-															<c:forEach var="group" items="${requestScope.groups}">
-																<option value="${group}">
-															</c:forEach>
-														</datalist>
 													</form>
 													<span style="float: right"><a
 														href="javascript: void(0)" onclick="openAllow(this)"
 														class="allow_apply_a">同意申请</a> <span> <a
-																	href="friendServlet?method=denyApply&guest_email=${friend.host_email}">拒绝申请</a></span>
+															href="friendServlet?method=denyApply&guest_email=${friend.host_email}">拒绝申请</a></span>
 														<br> <br>
-														<h6>${friend.time}</h6> </span>												
+														<h6>${friend.time}</h6> </span>
 												</c:if>
-
 											</div>
-
 										</div>
 									</div>
 								</div>
 							</c:forEach>
+
+							<%--好友分组信息--%>
+							<datalist id="groups">
+								<c:forEach var="group" items="${requestScope.groups}">
+									<option value="${group}">
+								</c:forEach>
+							</datalist>
 
 						</div>
 					</div>
@@ -458,7 +353,7 @@
 					<div class="paginator">
 						<%--根据当前页数来初始化页码--%>
 						<c:choose>
-							<c:when test="${param.p == 1}">
+							<c:when test="${param.p == 1 || param.p == null}">
 								<span class="prev"> &lt;前页 </span>
 							</c:when>
 							<c:otherwise>

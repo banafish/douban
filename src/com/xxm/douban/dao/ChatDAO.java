@@ -6,6 +6,8 @@ public interface ChatDAO {
 	
 	Msg getChatFriend(String user_email);//获取密友列表
 	
+	Msg isChatFriend(String from_email, String to_email);//判断是不是密友
+	
 	Msg sendChat(String from_email, String to_email, String msg);//发信息
 	
 	Msg readChat(String from_email, String to_email);//读信息

@@ -23,9 +23,9 @@ public interface ArticleDAO {
 	
 	Msg setArticleHot(String id, int hot);// 置顶/取消置顶
 	
-	Msg deleteArticle(String id);// 删除文章
+	Msg deleteArticle(String id, String email);// 删除文章
 	
-	Msg getArticlePics(String id);// 获取删除文章的图片路径
+	Msg getArticlePics(String id, String email);// 获取删除文章的图片路径
 	
 	Msg getCollectArticleByPage(String currentPage, Account account, String method);//获取收藏转发的文章
 	

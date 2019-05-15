@@ -8,6 +8,9 @@ import com.xxm.douban.dao.ArticleInfoDAO;
 import com.xxm.douban.entity.Comment;
 import com.xxm.douban.entity.Reply;
 
+/**
+ * 文章点赞收藏转发
+ */
 public class ArticleInfoService {
 	private ArticleInfoDAO articleInfoDAO;
 

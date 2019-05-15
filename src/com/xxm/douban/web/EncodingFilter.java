@@ -11,6 +11,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 处理get方法提交表单中文数据乱码问题
+ */
 @WebFilter(
 		urlPatterns = { "/*" }, 
 		initParams = { 

@@ -4,6 +4,9 @@ import com.xxm.douban.bean.Msg;
 import com.xxm.douban.dao.FriendDAO;
 import com.xxm.douban.entity.Friend;
 
+/**
+ * 好友
+ */
 public class FriendService {
 	private FriendDAO friendDAO;
 
@@ -37,6 +40,11 @@ public class FriendService {
 			friend.setMsg("好友");// 默认设为好友
 		}
 		return friendDAO.insertFriend(friend);
+	}
+	
+	// 判断是不是好友
+	public Msg isFriend(String host_email, String guest_email) {
+		return friendDAO.isFriend(host_email, guest_email);
 	}
 
 	// 取得分组

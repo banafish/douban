@@ -10,6 +10,9 @@ import java.util.Date;
 import com.xxm.douban.bean.Msg;
 import com.xxm.douban.entity.Article;
 
+/**
+ * 用io流处理图片，存进本地文件夹和删除
+ */
 public class UploadPicDAO {
 
 	// 把图片存到项目的WebContent的images中

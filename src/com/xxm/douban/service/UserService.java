@@ -5,6 +5,9 @@ import com.xxm.douban.dao.AccountDAO;
 import com.xxm.douban.dao.UploadPicDAO;
 import com.xxm.douban.entity.Account;
 
+/**
+ * 用户
+ */
 public class UserService {
 
 	private AccountDAO accountDAO;

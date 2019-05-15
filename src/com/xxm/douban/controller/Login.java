@@ -18,6 +18,7 @@ import com.xxm.douban.util.EncrypMD5Util;
 
 /**
  * Servlet implementation class Login
+ * 登录
  */
 @WebServlet(urlPatterns = { "/login" }, initParams = { @WebInitParam(name = "SUCCESS_VIEW", value = "homePage?p=1"),
 		@WebInitParam(name = "ERROR_VIEW", value = "index.jsp") })

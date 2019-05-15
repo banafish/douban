@@ -7,50 +7,10 @@
 <title>豆瓣</title>
 <link type="text/css" rel="stylesheet" href="css/dbNav.css">
 <link type="text/css" rel="stylesheet" href="css/homePage.css">
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
-	
-</script>
-<script>
-	$(document).ready(function() {
-		//账户菜单
-		var moreItems = document.getElementsByClassName("more-items");
-		moreItems.flag = 0;
-		$(".more-items").hide();
-		$(".bn-more").click(function() {
-			if (!moreItems.flag) {
-				$(".more-items").show();
-				moreItems.flag = 1;
-			} else {
-				$(".more-items").hide();
-				moreItems.flag = 0;
-			}
-		});
-
-		//分类浏览菜单
-		var moreItems = document.getElementsByClassName("more-items1");
-		moreItems.flag = 0;
-		$(".more-items1").hide();
-		$(".bn-more1").click(function() {
-			if (!moreItems.flag) {
-				$(".more-items1").show();
-				moreItems.flag = 1;
-			} else {
-				$(".more-items1").hide();
-				moreItems.flag = 0;
-			}
-		});
-
-	});
-	//搜索
-	function validateForm() {
-		if ($("#intp-query").val().length == 0) {
-			alert("不能为空");
-			return false;
-		} else {
-			return true;
-		}
-	}
-</script>
+<link rel="icon" type="image/x-icon" href="css/images/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
+<script src="js/jquery.min.js"></script>
+<script src="js/homePage.js"></script>
 </head>
 <body>
 	<div id="db-global-nav" class="global-nav">
@@ -69,15 +29,6 @@
 										<td><a target="_blank" href="userPage?p=1">个人主页</a></td>
 									</tr>
 									<tr>
-										<td><a>我的订单</a></td>
-									</tr>
-									<tr>
-										<td><a>我的钱包</a></td>
-									</tr>
-									<tr>
-										<td><a target="_blank" href="#">帐号管理</a></td>
-									</tr>
-									<tr>
 										<td><a href="logout">退出登录</a></td>
 									</tr>
 								</tbody>
@@ -86,27 +37,16 @@
 				</ul>
 			</div>
 
-			<div class="top-nav-reminder">
-				<a>提醒</a>
-			</div>
-
-			<div class="top-nav-doubanapp">
-				<a class="lnk-doubanapp">下载豆瓣客户端</a>
-			</div>
-
 			<div class="global-nav-items">
 				<ul>
-					<li class="on"><a>豆瓣</a></li>
-					<li class=""><a>读书</a></li>
-					<li class=""><a>电影</a></li>
-					<li class=""><a>音乐</a></li>
-					<li class=""><a>同城</a></li>
-					<li class=""><a>小组</a></li>
-					<li class=""><a>阅读</a></li>
-					<li class=""><a>FM</a></li>
-					<li class=""><a>时间</a></li>
-					<li class=""><a>豆品</a></li>
-					<li class=""><a>更多</a></li>
+					<li class="on"><a href="homePage?p=1">豆瓣</a></li>
+					<li class=""><a	href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></li>
+					<li class=""><a	href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></li>
+					<li class=""><a href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></li>
 				</ul>
 			</div>
 
@@ -118,7 +58,7 @@
 			<div class="nav-primary">
 
 				<div class="nav-logo">
-					<a href="#">豆瓣社区</a>
+					<a href="homePage?p=1">豆瓣社区</a>
 				</div>
 
 				<div class="nav-search">
@@ -142,10 +82,8 @@
 
 				<div class="nav-items">
 					<ul>
-						<li><a href="#">首页</a></li>
-						<li><a href="#">我的豆瓣</a></li>
-						<li><a href="#"> 浏览发现 </a></li>
-						<li><a href="#"> 话题广场 </a></li>
+						<li><a href="homePage?p=1">首页</a></li>
+						<li><a href="articleEdit.jsp" target="_blank"> 发文章</a></li>						
 					</ul>
 				</div>
 
@@ -163,51 +101,7 @@
 					<div id="statuses">
 
 						<div class="stream-item">
-							<div class="release-type-wrap">	
-							<div class="release-wrap">
-								<a href="articleEdit.jsp" target="_blank"><button
-										type="button">发文章</button></a>
-							</div>					
-							<div class="type-wrap">
-								<button type="button" class="bn-more1">分类浏览</button>
-
-								<div class="more-items1">
-									<table>
-										<tbody>
-											<tr>
-												<td><a
-													href="homePage?method=getTypeArticleByPage&type=言论&p=1">言论</a></td>
-											</tr>
-											<tr>
-												<td><a
-													href="homePage?method=getTypeArticleByPage&type=情感&p=1">情感</a></td>
-											</tr>
-											<tr>
-												<td><a
-													href="homePage?method=getTypeArticleByPage&type=美食&p=1">美食</a></td>
-											</tr>
-											<tr>
-												<td><a
-													href="homePage?method=getTypeArticleByPage&type=思想&p=1">思想</a></td>
-											</tr>
-											<tr>
-												<td><a
-													href="homePage?method=getTypeArticleByPage&type=读书&p=1">读书</a></td>
-											</tr>
-											<tr>
-												<td><a
-													href="homePage?method=getTypeArticleByPage&type=音乐&p=1">音乐</a></td>
-											</tr>
-											<tr>
-												<td><a
-													href="homePage?method=getTypeArticleByPage&type=社会&p=1">社会</a></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>							
-							
-							</div>
+		
 							<c:forEach var="article" items="${requestScope.list}">
 								<div class="new-item-wrapper">
 									<div class="new-item">
@@ -256,7 +150,7 @@
 					<div class="paginator">
 						<%--根据当前页数来初始化页码--%>
 						<c:choose>
-							<c:when test="${param.p == 1}">
+							<c:when test="${param.p == 1 || param.p == null}">
 								<span class="prev"> &lt;前页 </span>
 							</c:when>
 							<c:otherwise>

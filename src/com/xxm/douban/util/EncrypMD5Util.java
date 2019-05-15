@@ -3,6 +3,9 @@ package com.xxm.douban.util;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
+/**
+ * 加密
+ */
 public class EncrypMD5Util {
 	public static String getMD5String(String str) {
         try {

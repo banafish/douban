@@ -23,6 +23,7 @@ import com.xxm.douban.util.DateUtil;
 
 /**
  * Servlet implementation class ArticleServlet
+ * 接收查看全文请求，以及跟全文有关的操作
  */
 @WebServlet("/articleInfoServlet")
 public class ArticleInfoServlet extends HttpServlet {
@@ -61,6 +62,7 @@ public class ArticleInfoServlet extends HttpServlet {
 		String content = request.getParameter("content");
 		String method = request.getParameter("method");
 
+		//评论
 		if (method != null && method.equals("comment")) {
 			Comment comment = new Comment();
 			comment.setArticle_id(id);
@@ -73,6 +75,7 @@ public class ArticleInfoServlet extends HttpServlet {
 			response.getWriter().write(msg.getResult());
 		}
 		
+		//回复
 		if (method != null && method.equals("reply")) {
 			Reply reply = new Reply();
 			reply.setReply_email(request.getParameter("reply_email"));
@@ -99,6 +102,7 @@ public class ArticleInfoServlet extends HttpServlet {
 		articleInfoService = (ArticleInfoService) getServletContext().getAttribute("articleInfoService");
 		articleService = (ArticleService) getServletContext().getAttribute("articleService");
 		friendService = (FriendService) getServletContext().getAttribute("friendService");
+		response.setCharacterEncoding("utf-8");
 		HttpSession session = request.getSession();
 
 		// 获取用户属性
@@ -142,6 +146,7 @@ public class ArticleInfoServlet extends HttpServlet {
 			setArticleHot(request, response, 1);// 1代表置顶
 			return;
 		}
+		//取消置顶
 		if (method.equals("cancelHot")) {
 			setArticleHot(request, response, 0);// 0代表取消置顶
 			return;
@@ -185,16 +190,13 @@ public class ArticleInfoServlet extends HttpServlet {
 	private void setFollow(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		msg = friendService.setFollow(account.getEmail(), author_email);
-
-		request.setAttribute("msg", msg);
-
-		getArticleInfo(request, response);
+		response.getWriter().write(msg.getResult());
 	}
 
 	// 删除文章
 	private void deleteArticle(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		msg = articleService.deleteArticle(id);
+		msg = articleService.deleteArticle(id, request.getParameter("email"));
 
 		if (msg.getResult().equals("删除文章成功")) {
 			request.setAttribute("msg", msg);

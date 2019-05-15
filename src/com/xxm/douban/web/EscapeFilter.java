@@ -10,6 +10,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 对html敏感字符进行转义
+ */
 @WebFilter(urlPatterns ={"/accountInfo", "/articleInfoServlet", "/chatServlet", "/douYou",
 	"/forgetPassword", "/forgetPasswordAction", "/friendServlet", "/homePage",
 	"/login", "/logout", "/register", "/resetPassword", "/userPage"})
