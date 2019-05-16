@@ -61,8 +61,8 @@ public class ForgetPasswordService {
 			String serverHost = "smtp.qq.com";
 			String serverPort = "25";
 			Boolean isValidate = true;
-			String userName = "1959291663@qq.com";
-			String password = "pvyiuzhqqkgxdehj";//授权码
+			String userName = "";//邮箱
+			String password = "";//授权码
 			String toMailAddress = userEmail;
 			String subtitle = "豆瓣注册账号密码找回 ";
 			this.setMail(serverHost, serverPort, isValidate, userName, password, toMailAddress, subtitle, contents);
